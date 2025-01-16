@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@store/*": [ "./store/*" ],
+      "@requests/*": [ "./shared/requests/*" ],
+      "@validation/*": [ "./shared/infrastructure/validation/*" ],
+      "@validation": [ "./shared/infrastructure/validation" ],
+      "@helpers/*": [ "./shared/infrastructure/helpers/*" ],
+      "@helpers": [ "./shared/infrastructure/helpers" ],
+      "@filters/*": [ "./shared/infrastructure/filters/*" ],
+      "@filters": [ "./shared/infrastructure/filters" ],
+      "@enums/*": [ "./shared/infrastructure/enums/*" ],
+      "@constants/*": [ "./shared/infrastructure/constants/*" ],
+      "@apiClients/*": [ "./shared/infrastructure/apiClients/*" ],
+      "@apiClients": [ "./shared/infrastructure/apiClients" ],
+      "@infrastructure/*": [ "./shared/infrastructure/*" ],
+      "@hooks/*": [ "./shared/hooks/*" ],
+      "@hooks": [ "./shared/hooks" ],
+      "@shared/*": [ "./shared/*" ],
+      "@components/*": [ "./components/*" ],
+      "@assets/*": [ "./assets/*" ],
+      "@base/*": [ "./*" ]
+    }
+  }
+}

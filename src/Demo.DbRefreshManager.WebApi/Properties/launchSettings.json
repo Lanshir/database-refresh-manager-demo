@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "WebAPI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "graphql",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DISABLE_QUARTZ_JOBS": "false",
+        "DB_REFRESH_MANAGER_dbConnectionString": "Data Source=.\\..\\..\\sqlite\\demoapp.db"
+      },
+      "dotnetRunMessages": true,
+      "useSSL": true,
+      "httpPort": 5000,
+      "sslPort": 5001
+    },
+    "WebAPI (Docker)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/graphql",
+      "containerRunArguments": "-v {ProjectDir}\\..\\..\\sqlite:/home/app/sqlite",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DISABLE_QUARTZ_JOBS": "false",
+        "DB_REFRESH_MANAGER_dbConnectionString": "Data Source=/home/app/sqlite/demoapp.db"
+      },
+      "publishAllPorts": false,
+      "useSSL": true,
+      "httpPort": 5000,
+      "sslPort": 5001
+    }
+  },
+  "$schema": "https://json.schemastore.org/launchsettings.json"
+}

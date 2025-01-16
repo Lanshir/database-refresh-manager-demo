@@ -1,0 +1,38 @@
+.db-refresh-logs-page-container {
+    .filter-input {
+        width: 240px;
+    }
+
+    .grid-wrap {
+        height: 75vh;
+        overflow-y: auto;
+
+        .legend-header {
+            padding: 0;
+        }
+
+        .grid-row {
+            position: relative;
+
+            .legend-cell {
+                align-content: start;
+                padding: 0;
+            }
+
+            .refresh-dates-cell {
+                padding: 4px;
+                text-align: right;
+            }
+
+            .rich-text-cell {
+                padding: 0 6px;
+
+                .MuiDataGrid-cellContent {
+                    flex: 1;
+                    max-height: 120px !important;
+                    overflow-y: auto;
+                }
+            }
+        }
+    }
+}

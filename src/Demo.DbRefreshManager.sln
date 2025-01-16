@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DbRefreshManager.WebApi", "Demo.DbRefreshManager.WebApi\Demo.DbRefreshManager.WebApi.csproj", "{A0954379-9AFA-4F49-B07B-09DF82D1D336}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{65357DC5-387B-48B6-BE52-68B0793D8978}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DbRefreshManager.Common", "Demo.DbRefreshManager.Common\Demo.DbRefreshManager.Common.csproj", "{D4D87CBC-2C43-4F0A-9192-005C1B231FC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DbRefreshManager.Dal", "Demo.DbRefreshManager.Dal\Demo.DbRefreshManager.Dal.csproj", "{D6FADFE2-11E0-4228-AB91-97960146DF0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.DbRefreshManager.Services", "Demo.DbRefreshManager.Services\Demo.DbRefreshManager.Services.csproj", "{48AFE46D-B02F-4FB6-B680-736441A3D833}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Demo.DbRefreshManager.WebUI", "Demo.DbRefreshManager.WebUI\Demo.DbRefreshManager.WebUI.esproj", "{5A9F4074-11FA-4072-AECC-97A0A70BACD4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A0954379-9AFA-4F49-B07B-09DF82D1D336}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0954379-9AFA-4F49-B07B-09DF82D1D336}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0954379-9AFA-4F49-B07B-09DF82D1D336}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0954379-9AFA-4F49-B07B-09DF82D1D336}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4D87CBC-2C43-4F0A-9192-005C1B231FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4D87CBC-2C43-4F0A-9192-005C1B231FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4D87CBC-2C43-4F0A-9192-005C1B231FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4D87CBC-2C43-4F0A-9192-005C1B231FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6FADFE2-11E0-4228-AB91-97960146DF0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6FADFE2-11E0-4228-AB91-97960146DF0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6FADFE2-11E0-4228-AB91-97960146DF0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6FADFE2-11E0-4228-AB91-97960146DF0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48AFE46D-B02F-4FB6-B680-736441A3D833}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48AFE46D-B02F-4FB6-B680-736441A3D833}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48AFE46D-B02F-4FB6-B680-736441A3D833}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48AFE46D-B02F-4FB6-B680-736441A3D833}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A9F4074-11FA-4072-AECC-97A0A70BACD4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

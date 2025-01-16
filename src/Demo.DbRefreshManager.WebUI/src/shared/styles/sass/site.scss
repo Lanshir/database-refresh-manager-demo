@@ -1,0 +1,30 @@
+@import "site-variables.scss";
+/* installed with yarn, see https://fontsource.org/fonts/roboto/install */
+@import '@fontsource/roboto/300.css';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/500.css';
+@import '@fontsource/roboto/700.css';
+
+
+/**
+    Глобальные стили сайта.
+*/
+html, body {
+    height: 100%;
+    font-family: Roboto;
+}
+
+body {
+    min-width: 100%;
+    margin: 0;
+    background-color: $site-background;
+    // fix - прыгающих модальных окон Mui.
+    overflow: visible !important;
+    padding: 0 !important;
+}
+
+#root {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}

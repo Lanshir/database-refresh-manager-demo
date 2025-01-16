@@ -1,0 +1,50 @@
+.db-refresh-page-container {
+    .filter-input {
+        width: 240px;
+    }
+
+    .grid-wrap {
+        height: 75vh;
+        overflow-y: auto;
+
+        .legend-header {
+            padding: 0;
+        }
+
+        .grid-row {
+            position: relative;
+
+            .cell-padding {
+                padding: 2px 4px;
+            }
+
+            .legend-cell {
+                align-content: start;
+                padding: 0;
+            }
+
+            .update-db-btn {
+                width: 140px;
+                white-space: nowrap;
+                font-size: 10px;
+
+                .spinner-icon {
+                    font-size: 16px;
+                }
+            }
+
+            .schedule-cell {
+                text-align: right;
+                white-space: pre-wrap;
+            }
+
+            .release-comment-cell {
+                .MuiDataGrid-cellContent {
+                    flex: 1;
+                    max-height: 300px !important;
+                    overflow-y: auto;
+                }
+            }
+        }
+    }
+}

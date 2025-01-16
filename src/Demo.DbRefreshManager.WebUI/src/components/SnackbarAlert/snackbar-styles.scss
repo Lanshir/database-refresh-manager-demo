@@ -1,0 +1,13 @@
+.notistack-SnackbarContainer {
+    white-space: pre-line;
+    bottom: 32px;
+    right: 32px;
+
+    .notistack-MuiContent {
+        padding: 4px 12px;
+
+        .snack-icon {
+            margin-right: 4px;
+        }
+    }
+}

@@ -1,0 +1,10 @@
+# Configs
+*.config.js
+*.config.ts
+
+# AspNet cert configuration files
+aspnetcore*.js
+aspnetcore*.ts
+
+# Tests files
+src/**/*.test.ts

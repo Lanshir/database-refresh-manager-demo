@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.VisualStudio.JavaScript.Sdk/1.0.949573">
+  <PropertyGroup>
+    <StartupCommand>yarn start</StartupCommand>
+    <!-- Command to create an optimized build of the project that's ready for publishing -->
+    <ProductionBuildCommand>yarn run build</ProductionBuildCommand>
+    <!-- Folder where production build objects will be placed -->
+    <BuildOutputFolder>$(MSBuildProjectDirectory)\build</BuildOutputFolder>
+    <!-- Disable default npm install & build on debug -->
+    <ShouldRunNpmInstall>false</ShouldRunNpmInstall>
+    <ShouldRunBuildScript>false</ShouldRunBuildScript>
+  </PropertyGroup>
+  <!-- Check Node & Yarn install. -->
+  <Target Name="EnsurePackageManagersInstall" BeforeTargets="Build">
+    <!-- Ensure Node.js is installed. -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <!-- Ensure Yarn is installed. -->
+    <Exec Command="yarn --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'"
+           Text="Node.js and Yarn is required to build and run this project."/>
+  </Target>
+  <!-- Debug auto yarn install. -->
+  <Target Name="RunYarnInstall"
+          BeforeTargets="Build"
+          DependsOnTargets="EnsurePackageManagersInstall"
+          Condition="'$(Configuration)' == 'Debug' And !Exists('$(MSBuildThisFileDirectory)node_modules')">
+    <Message Importance="high" Text="Restoring dependencies using 'yarn', it may take a few minutes..." />
+    <Exec WorkingDirectory="$(MSBuildThisFileDirectory)" Command="yarn">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'"
+           Text="Error occured on yarn packages restore."/>
+  </Target>
+</Project>

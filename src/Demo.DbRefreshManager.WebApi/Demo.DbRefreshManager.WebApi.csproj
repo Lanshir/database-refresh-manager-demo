@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Description>$(AssemblyName)</Description>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>0b05aaea-1a7d-4123-b282-844c34ff69c9</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>$(AssemblyName).xml</DocumentationFile>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1573;1591;1998;VSTHRD200;CA1862;CA2254</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1573;1591;1998;VSTHRD200;CA1862;CA2254</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="HotChocolate.AspNetCore" Version="14.1.0" />
+    <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="14.1.0" />
+    <PackageReference Include="HotChocolate.Data" Version="14.1.0" />
+    <PackageReference Include="HotChocolate.Subscriptions.InMemory" Version="14.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Quartz.AspNetCore" Version="3.13.1" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.1" />
+    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.13.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="$(AssemblyName).xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Demo.DbRefreshManager.Common\Demo.DbRefreshManager.Common.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.Dal\Demo.DbRefreshManager.Dal.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.Services\Demo.DbRefreshManager.Services.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.WebUI\Demo.DbRefreshManager.WebUI.esproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
