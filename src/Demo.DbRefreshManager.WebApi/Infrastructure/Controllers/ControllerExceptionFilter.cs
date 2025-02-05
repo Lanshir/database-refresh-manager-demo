@@ -16,7 +16,7 @@ public class ControllerExceptionFilter : IActionFilter
     {
         if (ctx.Exception == null) return;
 
-        // Ошибка бизнес логики возвращает ApiesponseDto со статусом 400 и данными ошибки.
+        // Ошибка бизнес логики возвращает ApiResponseDto со статусом 400 и данными ошибки.
         if (ctx.Exception is BusinessLogicException exc)
         {
             ctx.Result = new BadRequestObjectResult(

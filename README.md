@@ -28,7 +28,7 @@
 
 Полный список frontend библиотек в файле [package.json](/src/Demo.DbRefreshManager.WebUI/package.json) проекта [WebUI](/src/Demo.DbRefreshManager.WebUI).
 
-## Запуск преокта
+## Запуск проекта
 
 Проект состоит из 2 основных частей - WebApi (backend api) и WebUI (приложение frontend), возможен запуск бэкенда для дебага без frontend.
 
