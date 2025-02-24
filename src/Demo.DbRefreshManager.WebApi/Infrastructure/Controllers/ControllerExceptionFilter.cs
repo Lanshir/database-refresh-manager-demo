@@ -21,6 +21,8 @@ public class ControllerExceptionFilter : IActionFilter
         {
             ctx.Result = new BadRequestObjectResult(
                 ApiResponse.Default(exc.Code, exc.Data, exc.Message));
+
+            ctx.ExceptionHandled = true;
         }
         // Другие ошибки возвращают статус 500 и dto ошибки.
         else
@@ -30,7 +32,5 @@ public class ControllerExceptionFilter : IActionFilter
                 StatusCode = StatusCodes.Status500InternalServerError
             };
         }
-
-        ctx.ExceptionHandled = true;
     }
 }
