@@ -10,8 +10,8 @@ public partial class KebabCaseTransformer : IOutboundParameterTransformer
     public string? TransformOutbound(object? value) =>
         value is null || value is not string
             ? null
-            : SmallToBigCharRegex().Replace(value.ToString()!, "$1-$2").ToLower();
+            : SmallThenBigCharRegex().Replace(value.ToString()!, "$1-$2").ToLower();
 
     [GeneratedRegex("([a-z])([A-Z])")]
-    private static partial Regex SmallToBigCharRegex();
+    private static partial Regex SmallThenBigCharRegex();
 }
