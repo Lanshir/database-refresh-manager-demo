@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Serilog;
 using Serilog.Debugging;
 using System.Diagnostics;

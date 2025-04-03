@@ -36,7 +36,7 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
 
                     break;
                 }
-        };
+        }
 
         return errBuilder.Build();
     }

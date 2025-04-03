@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Demo.DbRefreshManager.Common.Exceptions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using Demo.DbRefreshManager.WebApi.Models.Api;
 using Microsoft.AspNetCore.Authorization;

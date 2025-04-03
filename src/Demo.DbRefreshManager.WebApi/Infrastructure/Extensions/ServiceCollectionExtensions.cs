@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Demo.DbRefreshManager.Common.Config.Abstract;
 using Demo.DbRefreshManager.Common.Converters.Abstract;

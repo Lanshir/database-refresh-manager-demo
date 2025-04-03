@@ -3,6 +3,7 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.Constants;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Controllers;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
+using Demo.DbRefreshManager.WebApi.Infrastructure.MinimalApi;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -27,8 +28,6 @@ internal class Program
         {
             // Kebab case controller names transform.
             o.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseTransformer()));
-            // Controller Exception handling.
-            o.Filters.Add<ControllerExceptionFilter>();
         });
 
         if (!environment.IsProduction())
@@ -54,6 +53,7 @@ internal class Program
         services.AddQuartzJobsServices(environment);
 
         var app = builder.Build();
+        var endpointExceptionsFilter = new EndpointExceptionsFilter();
 
         // Configure the HTTP request pipeline.
         if (!environment.IsProduction())
@@ -69,7 +69,7 @@ internal class Program
         app.UseDefaultFiles();
         app.MapStaticAssets();
 
-        app.MapControllers();
+        app.MapControllers().AddEndpointFilter(endpointExceptionsFilter);
 
         app.MapGraphQL().WithOptions(new()
         {
