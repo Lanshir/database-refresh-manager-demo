@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Context;
+using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Dal.Repositories.Concrete.Base;
@@ -12,13 +12,13 @@ internal class DbPersonalAccessesRepository(
     ) : BaseRepository<DbPersonalAccess>(contextFactory), IDbPersonalAccessesRepository
 {
     public async Task<int[]> GetPersonalAccessJobIds(string login)
-        => await Get()
+        => await GetQueriable()
             .Where(a => a.Login.ToUpper() == login.ToUpper())
             .Select(a => a.JobId)
             .ToArrayAsync();
 
     public async Task<bool> UserHasAccess(string login, int jobId)
-        => await Get()
+        => await GetQueriable()
             .Where(a => a.Login.ToUpper() == login.ToUpper()
                 && a.JobId == jobId)
             .Select(a => true)

@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Common.Extensions;
+using Demo.DbRefreshManager.Common.Extensions;
 using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
@@ -13,7 +13,7 @@ internal class DbRefreshLogsRepository(
     ) : BaseRepository<DbRefreshLog>(contextFactory), IDbRefreshLogsRepository
 {
     public IQueryable<DbRefreshLog> GetUserDisplayLogsQuery(int? jobId = null, DateTime? startDate = null)
-        => Get()
+        => GetQueriable()
             .Where(l => !l.DbRefreshJob!.IsDeleted
                 && (jobId == null || l.DbRefreshJobId == jobId)
                 && (startDate == null

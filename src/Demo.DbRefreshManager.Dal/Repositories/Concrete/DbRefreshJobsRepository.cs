@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Common.Extensions;
+using Demo.DbRefreshManager.Common.Extensions;
 using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
@@ -10,18 +10,10 @@ namespace Demo.DbRefreshManager.Dal.Repositories.Concrete;
 /// <inheritdoc cref="IDbRefreshJobsRepository" />
 internal class DbRefreshJobsRepository(
     IDbContextFactory<AppDbContext> contextFactory
-    ) : BaseRepository<DbRefreshJob>(contextFactory), IDbRefreshJobsRepository
+    ) : BaseRepository<DbRefreshJob>(contextFactory), IDbRefreshJobsRepository, IDisposable
 {
-    public IQueryable<DbPersonalAccess> GetPersonalAccesses(string login)
-    {
-        var ctx = ContextFactory.CreateDbContext();
-
-        return ctx.Set<DbPersonalAccess>()
-            .Where(a => a.Login.ToUpper() == login.ToUpper());
-    }
-
     public IQueryable<DbRefreshJob> GetUserDisplayJobsListQuery(int? id = null, string? dbName = null)
-        => Get()
+        => GetQueriable()
             .Where(j => !j.IsDeleted && j.Group!.IsVisible
                 && (id == null || j.Id == id)
                 && (dbName == null || j.DbName.ToUpper() == dbName.ToUpper()))
@@ -29,14 +21,14 @@ internal class DbRefreshJobsRepository(
             .ThenBy(j => j.Id);
 
     public async Task<DbRefreshJob?> FindJob(int jobId)
-        => await Get()
+        => await GetQueriable()
             .Include(j => j.Group)
             .Include(j => j.Group!.AccessRoles)
             .Include(j => j.ScheduleChangeUser)
             .SingleOrDefaultAsync(j => j.Id == jobId);
 
     public async Task<DbRefreshJob?> FindJob(string dbName)
-        => await Get()
+        => await GetQueriable()
             .Include(j => j.Group)
             .Include(j => j.Group!.AccessRoles)
             .Include(j => j.ScheduleChangeUser)
@@ -47,14 +39,14 @@ internal class DbRefreshJobsRepository(
         var nowDateTime = DateTime.UtcNow.CeilToMinutes();
 
         // Получение всех возможных задач для запуска.
-        var jobsToRun = await Get()
+        var jobsToRun = await GetQueriable()
             .Include(j => j.Group)
             .Include(j => j.Group!.AccessRoles)
             .Include(j => j.ScheduleChangeUser)
             .Where(j => !j.IsDeleted && !j.InProgress)
             .ToListAsync();
 
-        jobsToRun = jobsToRun
+        jobsToRun = [..jobsToRun
             // Фильтр по условию ручного запуска.
             .Where(j =>
                 // Фильтр по условию ручного запуска.
@@ -62,7 +54,7 @@ internal class DbRefreshJobsRepository(
                 ||
                 // Фильтр по условию запуска по расписанию.
                 (j.ScheduleIsActive && j.ScheduleRefreshTime.UtcDateTime.TimeOfDay == nowDateTime.TimeOfDay))
-            .ToList();
+            ];
 
         return jobsToRun;
     }

@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Context;
+using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
@@ -9,26 +9,28 @@ namespace Demo.DbRefreshManager.Dal.Repositories.Concrete.Base;
 /// <summary>
 /// Базовый репозиторий.
 /// </summary>
-/// <inheritdoc cref="RepositoryBase" />
 public class BaseRepository<TEntity>(
     IDbContextFactory<AppDbContext> contextFactory
-    ) : IRepository<TEntity> where TEntity : class
+    ) : IDisposable, IRepository<TEntity> where TEntity : class
 {
+    private readonly List<AppDbContext> _contextsToDispose = [];
+
     /// <summary>
     /// Фабрика контекстов EF.
     /// </summary>
     protected IDbContextFactory<AppDbContext> ContextFactory { get; } = contextFactory;
 
-    protected virtual IQueryable<TEntity> Get()
+    protected virtual IQueryable<TEntity> GetQueriable()
     {
         var ctx = ContextFactory.CreateDbContext();
+        _contextsToDispose.Add(ctx);
 
         return ctx.Set<TEntity>();
     }
 
     protected virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
-        var ctx = ContextFactory.CreateDbContext();
+        using var ctx = await ContextFactory.CreateDbContextAsync();
         var entry = await ctx.AddAsync(entity);
 
         await ctx.SaveChangesAsync();
@@ -38,7 +40,7 @@ public class BaseRepository<TEntity>(
 
     protected virtual async Task CreateManyAsync(List<TEntity> entities)
     {
-        var ctx = await ContextFactory.CreateDbContextAsync();
+        using var ctx = await ContextFactory.CreateDbContextAsync();
 
         await ctx.AddRangeAsync(entities);
         await ctx.SaveChangesAsync();
@@ -48,7 +50,7 @@ public class BaseRepository<TEntity>(
         Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls,
         Expression<Func<TEntity, bool>> where)
     {
-        var ctx = await ContextFactory.CreateDbContextAsync();
+        using var ctx = await ContextFactory.CreateDbContextAsync();
 
         await ctx.Set<TEntity>()
             .Where(where)
@@ -60,6 +62,7 @@ public class BaseRepository<TEntity>(
         Expression<Func<TEntity, bool>> where)
     {
         var ctx = await ContextFactory.CreateDbContextAsync();
+        _contextsToDispose.Add(ctx);
 
         await ctx.Set<TEntity>()
             .Where(where)
@@ -72,8 +75,14 @@ public class BaseRepository<TEntity>(
 
     protected virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> where)
     {
-        var ctx = await ContextFactory.CreateDbContextAsync();
+        using var ctx = await ContextFactory.CreateDbContextAsync();
 
         await ctx.Set<TEntity>().Where(where).ExecuteDeleteAsync();
+    }
+
+    public void Dispose()
+    {
+        _contextsToDispose.ForEach(ctx => ctx.Dispose());
+        GC.SuppressFinalize(this);
     }
 }

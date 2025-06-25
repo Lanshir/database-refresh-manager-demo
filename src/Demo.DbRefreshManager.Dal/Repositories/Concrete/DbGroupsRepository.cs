@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Context;
+using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Dal.Repositories.Concrete.Base;
@@ -11,7 +11,7 @@ internal class DbGroupsRepository(
     IDbContextFactory<AppDbContext> contextFactory
     ) : BaseRepository<DbGroup>(contextFactory), IDbGroupsRepository
 {
-    public IQueryable<DbGroup> GetUserDisplayGroupsQuery() => Get()
+    public IQueryable<DbGroup> GetUserDisplayGroupsQuery() => GetQueriable()
         .Where(g => g.IsVisible)
         .OrderBy(g => g.SortOrder);
 }
