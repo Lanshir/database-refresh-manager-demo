@@ -1,4 +1,4 @@
-﻿namespace Demo.DbRefreshManager.Dal.Entities.Users;
+namespace Demo.DbRefreshManager.Dal.Entities.Users;
 
 /// <summary>
 /// Модель пользователя.
@@ -59,9 +59,4 @@ public class User
     /// Роли пользователя.
     /// </summary>
     public List<UserRole> Roles { get; set; } = new();
-
-    /// <summary>
-    /// Привязки ролей к пользователю.
-    /// </summary>
-    public List<UserRoleBind> RolesBinds { get; set; } = new();
 }

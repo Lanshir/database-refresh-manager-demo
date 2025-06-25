@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Entities.Users;
+using Demo.DbRefreshManager.Dal.Entities.Users;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract.Base;
 
 namespace Demo.DbRefreshManager.Dal.Repositories.Abstract;
@@ -11,7 +11,7 @@ public interface IUsersRepository : IRepository<User>
     /// <summary>
     /// Мердж пользователя из LDAP.
     /// </summary>
-    /// <param name="ldapUserData">Данные пользователя ldap.</param>
+    /// <param name="ldapUser">Данные пользователя ldap.</param>
     /// <returns>Пользователь из БД.</returns>
-    Task<User> MergeLdapUser(User ldapUserData);
+    Task<User> MergeLdapUser(User ldapUser);
 }

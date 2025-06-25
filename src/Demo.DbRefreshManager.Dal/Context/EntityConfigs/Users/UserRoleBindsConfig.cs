@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Entities.Users;
+using Demo.DbRefreshManager.Dal.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,7 +17,7 @@ internal class UserRoleBindsConfig : IEntityTypeConfiguration<UserRoleBind>
         builder.Property(b => b.UserId).HasColumnName("user_id");
         builder.Property(b => b.RoleId).HasColumnName("role_id");
 
-        builder.HasOne(b => b.User).WithMany(u => u.RolesBinds);
+        builder.HasOne(b => b.User).WithMany();
         builder.HasOne(b => b.Role).WithMany();
     }
 }

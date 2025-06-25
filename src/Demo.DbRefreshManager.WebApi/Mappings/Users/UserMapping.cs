@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Demo.DbRefreshManager.Dal.Entities.Users;
 
 namespace Demo.DbRefreshManager.WebApi.Mappings.Users;
@@ -13,7 +13,6 @@ public class UserMapping : Profile
     {
         CreateMap<User, User>()
             .ForMember(u => u.Id, act => act.Ignore())
-            .ForMember(u => u.Roles, act => act.Ignore())
-            .ForMember(u => u.RolesBinds, act => act.Ignore());
+            .ForMember(u => u.Roles, act => act.Ignore());
     }
 }

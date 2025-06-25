@@ -13,27 +13,26 @@ internal class UsersRepository(
     ITypeMapper mapper
     ) : BaseRepository<User>(contextFactory), IUsersRepository
 {
-    public async Task<User> MergeLdapUser(User ldapUserData)
+    public async Task<User> MergeLdapUser(User ldapUser)
     {
         using var ctx = await ContextFactory.CreateDbContextAsync();
         ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
         var user = await ctx.Set<User>()
             .Include(u => u.Roles)
-            .FirstOrDefaultAsync(u =>
-                u.LdapLogin.ToUpper() == ldapUserData.LdapLogin.ToUpper());
+            .FirstOrDefaultAsync(u => u.LdapLogin.ToUpper() == ldapUser.LdapLogin.ToUpper());
 
-        var dbLdapRoles = await ctx.Set<UserRole>()
+        var ldapUserRoles = await ctx.Set<UserRole>()
             .Where(r => r.IsActive
-                && ldapUserData.Roles
+                && ldapUser.Roles
                     .Select(r1 => r1.LdapGroup)
                     .Contains(r.LdapGroup))
             .ToListAsync();
 
         if (user == null)
         {
-            user = mapper.Map(ldapUserData, new User());
-            user.Roles = dbLdapRoles;
+            user = mapper.Map(ldapUser, new User());
+            user.Roles = ldapUserRoles;
 
             ctx.Add(user);
 
@@ -43,14 +42,14 @@ internal class UsersRepository(
         }
 
         // Обновление пользователя если данные ldap изменились.
-        if (user.LdapChangeDate != ldapUserData.LdapChangeDate)
+        if (user.LdapChangeDate != ldapUser.LdapChangeDate)
         {
-            user = mapper.Map(ldapUserData, user);
+            user = mapper.Map(ldapUser, user);
             user.ModifyDate = DateTime.UtcNow;
 
             // Синхронизация привязок ролей пользователя с ldap.
-            user.Roles.RemoveAll(ur => !dbLdapRoles.Any(r => r.Id == ur.Id));
-            user.Roles.AddRange(dbLdapRoles.Where(r => !user.Roles.Any(ur => ur.Id == r.Id)));
+            user.Roles.RemoveAll(ur => !ldapUserRoles.Any(r => r.Id == ur.Id));
+            user.Roles.AddRange(ldapUserRoles.Where(r => !user.Roles.Any(ur => ur.Id == r.Id)));
 
             await ctx.SaveChangesAsync();
         }
