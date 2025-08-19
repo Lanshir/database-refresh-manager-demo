@@ -28,14 +28,9 @@ lightTheme = createTheme(lightTheme, <ThemeOptions>{
         },
         MuiDataGrid: {
             styleOverrides: {
-                'columnHeaderRow': {
-                    background: lightTheme.palette.primary.dark + '!important'
-                },
-                columnHeaders: {
-                    backgroundColor: lightTheme.palette.primary.dark
-                },
                 columnHeader: {
-                    color: lightTheme.palette.common.white
+                    color: lightTheme.palette.common.white,
+                    backgroundColor: lightTheme.palette.primary.dark
                 },
                 main: {
                     backgroundColor: lightTheme.palette.common.white

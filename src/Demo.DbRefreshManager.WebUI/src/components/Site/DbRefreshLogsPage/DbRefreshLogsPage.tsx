@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useUnmount } from 'react-use';
 import { useSetAtom } from 'jotai';
 import { FlexCol, FlexRow, Flexbox } from '@shared/components';
-import { Grid2 as Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { resetPageStateAction } from '@store/dbRefreshLogs/dbRefreshLogsActions';
 import DbLegendPopupButton from '@components/Site/DbLegend/DbLegendPopupButton';
 import LogFilters from './Chunks/LogFiltersChunk';

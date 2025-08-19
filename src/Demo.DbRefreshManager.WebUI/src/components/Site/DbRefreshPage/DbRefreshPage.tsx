@@ -2,7 +2,7 @@ import './db-refresh-page-styles.scss';
 import { FC } from 'react';
 import { useUnmount } from 'react-use';
 import { useSetAtom } from 'jotai';
-import { Alert, Grid2 as Grid, Typography } from '@mui/material';
+import { Alert, Grid, Typography } from '@mui/material';
 import { FlexCol, FlexRow, Flexbox } from '@shared/components';
 import { resetPageStateAction } from '@store/dbRefresh/dbRefreshActions';
 import DbLegendPopupButton from '@components/Site/DbLegend/DbLegendPopupButton';

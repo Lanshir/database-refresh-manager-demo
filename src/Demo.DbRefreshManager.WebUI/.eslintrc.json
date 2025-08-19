@@ -30,7 +30,7 @@
     ],
     "no-restricted-globals": "off",
     "@typescript-eslint/quotes": [ "error", "single" ],
-    "@typescript-eslint/indent": [ "warn", 4 ],
+    // "@typescript-eslint/indent": [ "warn", 4 ],
     "@typescript-eslint/no-duplicate-imports": "error",
     "@typescript-eslint/semi": [ "error", "always" ],
     "@typescript-eslint/consistent-type-assertions": "off",
