@@ -175,11 +175,10 @@ const defaultHeaders = {
  * @param timeoutMs Таймаут в МС.
  * @param url Url запроса.
  */
-const getTimeoutController = (timeoutMs?: number, url?: string)
-    : [AbortController | undefined, () => void] => {
+const getTimeoutController = (timeoutMs?: number, url?: string): [AbortController | null, () => void] => {
 
     if (!timeoutMs) {
-        return [undefined, () => { }];
+        return [null, () => { }];
     }
 
     const controller = new AbortController();

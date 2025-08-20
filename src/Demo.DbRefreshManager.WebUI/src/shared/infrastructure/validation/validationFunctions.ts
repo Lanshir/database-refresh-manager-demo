@@ -87,7 +87,7 @@ export function ExactLength(
 export function IsEmail(text?: string, error = 'Введите корректный email') {
     text = text?.trim() ?? '';
 
-    let regex = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[а-яА-ЯёЁa-zA-Z0-9]+[.]{1}[а-яА-ЯёЁa-zA-Z]+$');
+    const regex = new RegExp('^[а-яА-ЯёЁa-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[а-яА-ЯёЁa-zA-Z0-9]+[.]{1}[а-яА-ЯёЁa-zA-Z]+$');
 
     return regex.test(text) ? '' : error;
 }
@@ -97,7 +97,7 @@ export function IsEmail(text?: string, error = 'Введите корректн�
  * @returns Текст ошибки.
  */
 export function IsPhone(text?: string, error = 'Введите телефон') {
-    let regex = new RegExp('[^0-9]', 'g');
+    const regex = new RegExp('[^0-9]', 'g');
 
     text = text?.replace(regex, '')?.slice(-11);
 

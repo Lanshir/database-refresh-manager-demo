@@ -35,7 +35,7 @@ export async function StartManualDbRefresh(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data?.v1.dbRefreshJob.manualStart!;
+    return result.data!.v1.dbRefreshJob.manualStart;
 }
 
 /**
@@ -65,7 +65,7 @@ export async function StopManualDbRefresh(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data?.v1.dbRefreshJob.manualStop!;
+    return result.data!.v1.dbRefreshJob.manualStop;
 }
 
 /**
@@ -99,7 +99,7 @@ export async function SetScheduledDbRefreshActive(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data?.v1.dbRefreshJob.scheduleChange!;
+    return result.data!.v1.dbRefreshJob.scheduleChange;
 }
 
 /**
@@ -130,5 +130,5 @@ export async function SetUserComment(
     const variables = { jobId, comment };
     const result = await ApolloClient.query<Schema>({ query, variables });
 
-    return result.data?.v1.dbRefreshJob.setUserComment!;
+    return result.data!.v1.dbRefreshJob.setUserComment;
 }

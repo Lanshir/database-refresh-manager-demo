@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, SyntheticEvent } from 'react';
 
 /**
  * Использовать локальный state для MUI autocomplete.
@@ -12,12 +12,11 @@ export function useMuiAutocompleteState<TValue>(
     defaultState: TValue | null,
     inputFilter = (text: string) => text,
     onChangeCallback = (value: TValue | null) => { }
-):
-    [
-        typeof state, typeof setState,
-        typeof input, typeof setInput,
-        typeof onChange, typeof onChangeInput
-    ] {
+): [
+    typeof state, typeof setState,
+    typeof input, typeof setInput,
+    typeof onChange, typeof onChangeInput
+] {
     // Состояние выбранного значения.
     const [state, setState] = useState(defaultState);
 
@@ -25,13 +24,13 @@ export function useMuiAutocompleteState<TValue>(
     const [input, setInput] = useState('');
 
     // Событие при выборе пункта.
-    const onChange = (event: any, option: TValue | null) => {
+    const onChange = (event: SyntheticEvent, option: TValue | null) => {
         setState(option);
         onChangeCallback(option);
     };
 
     // Событие изменения текста
-    const onChangeInput = (event: any, value: string) => {
+    const onChangeInput = (event: SyntheticEvent, value: string) => {
         setInput(inputFilter(value));
     };
 

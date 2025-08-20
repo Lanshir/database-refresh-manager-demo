@@ -1,3 +1,5 @@
+import { SyntheticEvent } from 'react';
+
 /**
  * Использовать обработчик OnChange для MUI autocomplete.
  * @param handler Ф-я обработчик значения.
@@ -10,12 +12,12 @@ export function useMuiAutocompleteHandler<TValue>(
     inputFilter = (text: string) => text
 ): [typeof onChange, typeof onChangeInput] {
     // Событие при выборе пункта.
-    const onChange = (event: any, option: TValue | null) => {
+    const onChange = (event: SyntheticEvent, option: TValue | null) => {
         handler(option);
     };
 
     // Событие изменения текста
-    const onChangeInput = (event: any, value: string) => {
+    const onChangeInput = (event: SyntheticEvent, value: string) => {
         inputHandler(inputFilter(value));
     };
 

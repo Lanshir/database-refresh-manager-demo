@@ -76,7 +76,7 @@ export const checkAuthQuery = atom(null,
                 navigate({ pathname: Routes.home }, { replace: true });
             }
         }
-        catch (e) {
+        catch {
             set(authorizationState, RESET);
             navigate({ pathname: Routes.login }, { replace: true });
         }
