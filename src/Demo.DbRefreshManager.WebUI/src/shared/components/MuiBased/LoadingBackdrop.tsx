@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Backdrop, BackdropProps, CircularProgress } from '@mui/material';
 
-interface LoadingBackdropProps extends BackdropProps {
+export type LoadingBackdropProps = BackdropProps & {
     backdropOpacity?: string
 }
 

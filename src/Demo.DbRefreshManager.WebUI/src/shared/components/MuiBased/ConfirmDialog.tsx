@@ -3,7 +3,7 @@ import {
     Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, SxProps
 } from '@mui/material';
 
-interface ConfirmDialogProps {
+export type ConfirmDialogProps = {
     open: boolean;
     title: string;
     text: string;

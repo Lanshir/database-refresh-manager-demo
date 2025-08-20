@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Alert, AlertColor, Collapse, CollapseProps } from '@mui/material';
 
-interface AlertMessageProps extends CollapseProps {
+export type AlertMessageProps = CollapseProps & {
     open?: boolean,
     severity?: AlertColor,
     variant?: 'filled' | 'outlined' | 'standard',

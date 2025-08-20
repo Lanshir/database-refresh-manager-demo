@@ -20,16 +20,11 @@ export const jobsListFilterState = atomWithReset<IJobsListFiltersState>({});
 /** Состояние списка персональных доступов к задачам перезаливки. */
 export const personalAccessIdsState = atomWithReset<number[]>([]);
 
-/** Поля ввода подтверждения перезаливки. */
-export const confirmRefreshInputState = atomWithReset<IConfirmRefreshInputState>({
-    delayMinutes: 10,
-    comment: ''
-});
+/** Задержка до перезаливки в минутах. */
+export const confirmRefreshDelayMinutesState = atomWithReset(10);
 
-/** Состояние отдельного поля ввода подтверждения перезаливки. */
-export const confirmRefreshInputPropState = atomFamily(
-    (prop: keyof IConfirmRefreshInputState) => focusAtom(confirmRefreshInputState, o => o.prop(prop))
-);
+/** Комментарий подтверждения перезаливки. */
+export const confirmRefreshCommentState = atomWithReset('');
 
 /** Состояние диалогового окна подтверждения перезаливки. */
 export const confirmRefreshDialogState = atomWithReset<IRefreshDialogState>({});
@@ -69,9 +64,4 @@ export interface IJobsListFiltersState {
 
 export interface IRefreshDialogState {
     jobId?: number | null
-};
-
-export interface IConfirmRefreshInputState {
-    delayMinutes: number
-    comment: string
 };

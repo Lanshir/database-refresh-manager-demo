@@ -1,6 +1,4 @@
 export * from './useCheckboxState';
-export * from './useJotaiNumberInputState';
-export * from './useJotaiTextInputState';
 export * from './useKeyboardEventHandler';
 export * from './useMuiAutocompleteHandler';
 export * from './useMuiAutocompleteState';

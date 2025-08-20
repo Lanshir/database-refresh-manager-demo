@@ -3,7 +3,8 @@ import { RESET } from 'jotai/utils';
 import {
     pageLoadingState, jobsListState, jobLoadingState,
     jobsListFilterState, personalAccessIdsState,
-    confirmRefreshInputState, confirmRefreshDialogState, cancelRefreshDialogState
+    confirmRefreshCommentState, confirmRefreshDelayMinutesState,
+    confirmRefreshDialogState, cancelRefreshDialogState
 } from './dbRefreshState';
 import { dbRefreshJobsListItemsState, DbRefreshJobListItem } from '@store/listItems/listItemsState';
 import { pushErrorAction } from '@store/alerts/alertsActions';
@@ -21,7 +22,8 @@ export const resetPageStateAction = atom(null,
         set(jobsListState, RESET);
         set(jobsListFilterState, RESET);
         set(personalAccessIdsState, RESET);
-        set(confirmRefreshInputState, RESET);
+        set(confirmRefreshCommentState, RESET);
+        set(confirmRefreshDelayMinutesState, RESET);
         set(confirmRefreshDialogState, RESET);
         set(cancelRefreshDialogState, RESET);
     });
@@ -98,7 +100,8 @@ export const setJobScheduledRefreshActiveQuery = atom(null,
 /** Запрос запуска ручной перезаливки БД. */
 export const startJobManualRefreshQuery = atom(null,
     async (get, set, jobId: number) => {
-        const { delayMinutes, comment } = get(confirmRefreshInputState);
+        const delayMinutes = get(confirmRefreshDelayMinutesState);
+        const comment = get(confirmRefreshCommentState);
 
         set(jobLoadingState(jobId), true);
 
