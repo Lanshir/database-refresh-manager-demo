@@ -1,11 +1,11 @@
-# (!!!) Файл используется для локальной разработки Visual Studio.
-# Изменять только ознакомившись с документацией по ссылке ниже.
-# Стадия base должна обязательно присутствовать, с неё запускается локальная отладка в Docker.
+# (!!!) Р¤Р°Р№Р» РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ Р»РѕРєР°Р»СЊРЅРѕР№ СЂР°Р·СЂР°Р±РѕС‚РєРё Visual Studio.
+# РР·РјРµРЅСЏС‚СЊ С‚РѕР»СЊРєРѕ РѕР·РЅР°РєРѕРјРёРІС€РёСЃСЊ СЃ РґРѕРєСѓРјРµРЅС‚Р°С†РёРµР№ РїРѕ СЃСЃС‹Р»РєРµ РЅРёР¶Рµ.
+# РЎС‚Р°РґРёСЏ base РґРѕР»Р¶РЅР° РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ, СЃ РЅРµС‘ Р·Р°РїСѓСЃРєР°РµС‚СЃСЏ Р»РѕРєР°Р»СЊРЅР°СЏ РѕС‚Р»Р°РґРєР° РІ Docker.
 
 # See https://aka.ms/customizecontainer to learn how to customize your debug container
 # and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-# Docker build запукается по ум. из папки с файлом sln.
+# Docker build Р·Р°РїСѓРєР°РµС‚СЃСЏ РїРѕ СѓРј. РёР· РїР°РїРєРё СЃ С„Р°Р№Р»РѕРј sln.
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
@@ -13,7 +13,6 @@ USER app
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
-
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -34,12 +33,8 @@ RUN node --version && yarn --version
 
 # Copy project files & restore NuGet.
 WORKDIR /src
-COPY ["Demo.DbRefreshManager.Common/Demo.DbRefreshManager.Common.csproj", "Demo.DbRefreshManager.Common/"]
-COPY ["Demo.DbRefreshManager.Dal/Demo.DbRefreshManager.Dal.csproj", "Demo.DbRefreshManager.Dal/"]
-COPY ["Demo.DbRefreshManager.Services/Demo.DbRefreshManager.Services.csproj", "Demo.DbRefreshManager.Services/"]
-COPY ["Demo.DbRefreshManager.WebApi/Demo.DbRefreshManager.WebApi.csproj", "Demo.DbRefreshManager.WebApi/"]
-RUN dotnet restore "Demo.DbRefreshManager.WebApi/Demo.DbRefreshManager.WebApi.csproj"
 COPY . .
+RUN dotnet restore "Demo.DbRefreshManager.WebApi/Demo.DbRefreshManager.WebApi.csproj"
 
 # Restore Yarn packages.
 WORKDIR "/src/Demo.DbRefreshManager.WebUI"
