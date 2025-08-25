@@ -21,8 +21,7 @@
     /* Linting */
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowObjectTypes": true
+    "noFallthroughCasesInSwitch": true
   },
   "include": [ "src", "*.config.ts" ],
   "extends": "./tsconfig.paths.json"

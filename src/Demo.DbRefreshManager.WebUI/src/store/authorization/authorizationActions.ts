@@ -84,9 +84,10 @@ export const checkAuthQuery = atom(null,
 
 /** Запрос деавторизации. */
 export const deauthorizeQuery = atom(null,
-    async (get, set) => {
+    async (get, set, onSuccess: () => void) => {
         try {
             await Deauthorize().then(EnsureApiResponseSuccess);
+            onSuccess();
         }
         catch (e) {
             set(pushErrorAction, e as Error);

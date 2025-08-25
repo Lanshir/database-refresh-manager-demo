@@ -15,7 +15,7 @@ const RequestSender = {
      */
     async get(
         url: string,
-        headers?: {},
+        headers?: object,
         timeoutMs?: number,
         skipErrorsHandler: boolean = false
     ): Promise<Response> {
@@ -29,7 +29,6 @@ const RequestSender = {
 
         return fetch(url, options)
             .then(res => { stopTimeout(); return res; })
-            .then(handleRedirect)
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -44,8 +43,8 @@ const RequestSender = {
      */
     async post(
         url: string,
-        body?: {},
-        headers?: {},
+        body?: object,
+        headers?: object,
         timeoutMs?: number,
         skipErrorsHandler: boolean = false
     ): Promise<Response> {
@@ -60,7 +59,6 @@ const RequestSender = {
 
         return fetch(url, options)
             .then(res => { stopTimeout(); return res; })
-            .then(handleRedirect)
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -75,8 +73,8 @@ const RequestSender = {
      */
     async put(
         url: string,
-        body?: {},
-        headers?: {},
+        body?: object,
+        headers?: object,
         timeoutMs?: number,
         skipErrorsHandler: boolean = false
     ): Promise<Response> {
@@ -91,7 +89,6 @@ const RequestSender = {
 
         return fetch(url, options)
             .then(res => { stopTimeout(); return res; })
-            .then(handleRedirect)
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -106,8 +103,8 @@ const RequestSender = {
      */
     async delete(
         url: string,
-        body?: {},
-        headers?: {},
+        body?: object,
+        headers?: object,
         timeoutMs?: number,
         skipErrorsHandler: boolean = false
     ): Promise<Response> {
@@ -122,7 +119,6 @@ const RequestSender = {
 
         return fetch(url, options)
             .then(res => { stopTimeout(); return res; })
-            .then(handleRedirect)
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -140,7 +136,7 @@ const RequestSender = {
         url: string,
         method: Method,
         body: FormData,
-        headers?: {},
+        headers?: object,
         timeoutMs?: number,
         skipErrorsHandler: boolean = false
     ): Promise<Response> {
@@ -158,7 +154,6 @@ const RequestSender = {
 
         return await fetch(url, options)
             .then(res => { stopTimeout(); return res; })
-            .then(handleRedirect)
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 };
@@ -195,21 +190,8 @@ const getTimeoutController = (timeoutMs?: number, url?: string): [AbortControlle
     return [controller, stopTimeout];
 };
 
-const handleRedirect = (response: Response) => {
-    if (response.redirected) {
-        window.location.replace(response.url);
-
-        const error = new RequestError('Переадресация...');
-        error.redirected = true;
-
-        throw error;
-    }
-
-    return response;
-};
-
 const handleServerError = async (response: Response, skipErrorsHandler: boolean) => {
-    if (!skipErrorsHandler && !response.ok) {
+    if (!skipErrorsHandler && !response.ok && !response.redirected) {
         if (response.status === 401) {
             Navigation.toLoginPage();
         }
@@ -217,10 +199,14 @@ const handleServerError = async (response: Response, skipErrorsHandler: boolean)
         const error = new RequestError(`Ошибка сервера (Код: ${response.status})`);
 
         // Добавляем данные из тела ошибки к error, если есть.
-        try {
-            error.fetchData = await response.json();
-        } catch {
-            console.log('unable to parse server error data');
+        const hasJson = !!response.headers.get('Content-Type')?.includes('json');
+
+        if (hasJson) {
+            try {
+                error.responseData = await response.json();
+            } catch {
+                console.log('unable to parse request error data');
+            }
         }
 
         throw error;
@@ -235,8 +221,7 @@ class RequestError extends Error implements IRequestError {
         Object.setPrototypeOf(this, RequestError.prototype);
     }
 
-    redirected: boolean = false;
-    fetchData?: unknown;
+    responseData?: object;
 }
 
 export default RequestSender as Readonly<typeof RequestSender>;

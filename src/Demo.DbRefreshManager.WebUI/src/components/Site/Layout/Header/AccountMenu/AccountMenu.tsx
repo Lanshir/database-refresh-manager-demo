@@ -17,7 +17,7 @@ const AccountMenu: FC = () => {
     const navigate = useNavigate();
 
     const onDeauthorize = () => {
-        deauthorize().then(() => navigate({ pathname: Routes.login }));
+        deauthorize(() => navigate({ pathname: Routes.login }));
     };
 
     return <FlexRow alignItems="center" marginLeft="auto">
