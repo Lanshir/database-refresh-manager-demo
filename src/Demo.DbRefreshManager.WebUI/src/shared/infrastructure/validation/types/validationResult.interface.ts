@@ -3,9 +3,9 @@
  */
 export interface IValidationResult<TErrors> {
     /** Есть ошибки. */
-    hasErrors: boolean;
+    hasErrors: boolean
     /** Объект ошибок. */
-    errors: TErrors;
+    errors: TErrors
 }
 
 export default IValidationResult;

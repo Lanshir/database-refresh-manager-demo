@@ -5,7 +5,6 @@ import { useState, SyntheticEvent } from 'react';
  * @param defaultState Значение state по ум.
  * @param inputFilter Ф-я фильтрации ввода.
  * @param onChangeCallback Callback при вызове onChange.
- * 
  * @returns Состояния, сеттеры значения/текстового ввода, обработчики onChange.
  */
 export function useMuiAutocompleteState<TValue>(

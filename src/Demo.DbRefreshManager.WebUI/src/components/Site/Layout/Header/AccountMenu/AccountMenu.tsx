@@ -9,7 +9,7 @@ import { ShortenFullName } from '@helpers';
 import Routes from '@constants/routes';
 
 /**
- * Блок меню авторизованного пользователя. 
+ * Блок меню авторизованного пользователя.
  */
 const AccountMenu: FC = () => {
     const { user } = useAtomValue(authorizationState);
@@ -20,16 +20,18 @@ const AccountMenu: FC = () => {
         deauthorize(() => navigate({ pathname: Routes.login }));
     };
 
-    return <FlexRow alignItems="center" marginLeft="auto">
-        <Typography marginRight={2}>
-            {ShortenFullName(user.fullName)}
-        </Typography>
-        <Button variant="contained" color="secondary"
-            onClick={onDeauthorize}
-        >
-            Выйти
-        </Button>
-    </FlexRow >;
+    return (
+        <FlexRow alignItems="center" marginLeft="auto">
+            <Typography marginRight={2}>
+                {ShortenFullName(user.fullName)}
+            </Typography>
+            <Button variant="contained" color="secondary"
+                onClick={onDeauthorize}
+            >
+                Выйти
+            </Button>
+        </FlexRow>
+    );
 };
 
 export default AccountMenu;

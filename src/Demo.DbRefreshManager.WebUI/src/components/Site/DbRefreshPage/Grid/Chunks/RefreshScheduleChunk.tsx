@@ -3,9 +3,9 @@ import { FlexCol } from '@shared/components';
 import dayjs from 'dayjs';
 
 interface ChunkProps {
-    manualRefreshDate?: string | null,
-    scheduleRefreshDate: string,
-    lastRefreshDate: string,
+    manualRefreshDate?: string | null
+    scheduleRefreshDate: string
+    lastRefreshDate: string
     scheduleIsActive: boolean
 }
 

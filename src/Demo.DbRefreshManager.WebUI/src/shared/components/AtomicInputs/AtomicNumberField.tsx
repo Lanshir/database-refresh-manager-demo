@@ -2,10 +2,10 @@ import { forwardRef, ChangeEvent } from 'react';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { PrimitiveAtom, useAtom } from 'jotai';
 
-export type AtomicNumberFieldProps = Omit<TextFieldProps, 'value' |'onChange'> & {
-    stateAtom: PrimitiveAtom<number>,
+export type AtomicNumberFieldProps = Omit<TextFieldProps, 'value' | 'onChange'> & {
+    stateAtom: PrimitiveAtom<number>
     setStateCallback?: (num: number) => void
-}
+};
 
 const numberRegexp = /[^0-9]/ig;
 
@@ -24,7 +24,7 @@ export const AtomicNumberField = forwardRef<HTMLDivElement | null, AtomicNumberF
             }
         };
 
-        return <TextField ref={ref} {...props} value={state} onChange={onChange} />
+        return <TextField ref={ref} {...props} value={state} onChange={onChange} />;
     }
 );
 

@@ -4,15 +4,15 @@ import {
 } from '@mui/material';
 
 export type ConfirmDialogProps = {
-    open: boolean;
-    title: string;
-    text: string;
-    buttons: Array<'Yes' | 'No' | 'Cancel'>;
-    onYes?: () => void;
-    onNo?: () => void;
-    onCancel?: () => void;
-    onClose(): void;
-}
+    open: boolean
+    title: string
+    text: string
+    buttons: Array<'Yes' | 'No' | 'Cancel'>
+    onYes?: () => void
+    onNo?: () => void
+    onCancel?: () => void
+    onClose(): void
+};
 
 const buttonSx = { width: 80 } as SxProps;
 
@@ -31,21 +31,21 @@ export const ConfirmDialog: FC<ConfirmDialogProps> = (props) => {
             </DialogContent>
 
             <DialogActions>
-                {!buttons.some(b => b === 'Cancel') ? null :
-                    <Button sx={buttonSx} variant="text" onClick={onCancel} >
+                {!buttons.some(b => b === 'Cancel') ? null : (
+                    <Button sx={buttonSx} variant="text" onClick={onCancel}>
                         Отмена
                     </Button>
-                }
-                {!buttons.some(b => b === 'No') ? null :
-                    <Button sx={buttonSx} variant="outlined" onClick={onNo} >
+                )}
+                {!buttons.some(b => b === 'No') ? null : (
+                    <Button sx={buttonSx} variant="outlined" onClick={onNo}>
                         Нет
                     </Button>
-                }
-                {!buttons.some(b => b === 'Yes') ? null :
-                    <Button sx={buttonSx} variant="contained" onClick={onYes} >
+                )}
+                {!buttons.some(b => b === 'Yes') ? null : (
+                    <Button sx={buttonSx} variant="contained" onClick={onYes}>
                         Да
                     </Button>
-                }
+                )}
             </DialogActions>
         </Dialog>
     );

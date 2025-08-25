@@ -19,7 +19,7 @@ import { AlertMessage, FlexCol } from '@shared/components';
 import Routes from '@constants/routes';
 
 /**
- * Форма авторизации. 
+ * Форма авторизации.
  */
 const Login: FC = () => {
     const isLoading = useAtomValue(loginLoadingState);
@@ -64,11 +64,13 @@ const Login: FC = () => {
                     />
 
                     <Alert sx={{ mb: 1 }} severity="info">
-                        Demo users logins:<br />
-                        demoMaster, demoAnalyst, demoSupport<br />
+                        Demo users logins:
+                        <br />
+                        demoMaster, demoAnalyst, demoSupport
+                        <br />
                         <br />
                         Password: pwd
-                    </ Alert>
+                    </Alert>
 
                     <TextField label="Логин" fullWidth
                         size="small" margin="dense"
@@ -102,13 +104,13 @@ const Login: FC = () => {
                     <FormControlLabel label="Запомнить меня"
                         labelPlacement="start"
                         sx={{ userSelect: 'none' }}
-                        control={
+                        control={(
                             <Checkbox sx={{ paddingY: 0 }}
                                 checked={rememberMe}
                                 onChange={onRememberMeChange}
                                 disabled={isLoading}
                             />
-                        }
+                        )}
                     />
                 </CardContent>
                 <CardActions className="card-actions">

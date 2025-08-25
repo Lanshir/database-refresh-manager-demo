@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 /**
  * Использовать локальный state для MUI Select.
- * 
  * @param defaultValue Состояние по ум.
  * @param valueMapping Функция конвертации значения MenuItem в значение State.
  */

@@ -8,7 +8,6 @@ export function ValidateLoginInput(
     login?: string,
     password?: string
 ): IValidationResult<ILoginErrors> {
-
     const errors: ILoginErrors = {
         login: TextRequired(login, 'Введите логин'),
         password: TextRequired(password, 'Введите пароль')

@@ -11,7 +11,7 @@ import { NameWithNumberComparer } from '@infrastructure/muiDataGrid/cellSortComp
 import dayjs from 'dayjs';
 
 /**
- * Грид с логами перезаливок БД. 
+ * Грид с логами перезаливок БД.
  */
 const DbRefreshLogsGrid: FC = () => {
     const loadLogs = useSetAtom(loadDbRefreshLogsQuery);
@@ -40,8 +40,8 @@ const DbRefreshLogsGrid: FC = () => {
     );
 };
 
-const columns: GridColDef<DbRefreshLog>[] =
-    [
+const columns: GridColDef<DbRefreshLog>[]
+    = [
         {
             field: 'legendCell',
             headerClassName: 'legend-header',
@@ -50,15 +50,16 @@ const columns: GridColDef<DbRefreshLog>[] =
             minWidth: 1,
             maxWidth: 1,
             valueGetter: (val, row, col, api) => row.groupCssColor,
-            renderCell: ({ value }: GridRenderCellParams<DbRefreshLog, string>) =>
+            renderCell: ({ value }: GridRenderCellParams<DbRefreshLog, string>) => (
                 <Box sx={{
                     backgroundColor: value ?? 'transparent',
                     position: 'absolute',
                     height: '100%',
                     width: '100%',
                     zIndex: '-1'
-                }} />
-        },
+                }}
+                />
+            ) },
         {
             field: nameof<DbRefreshLog>('dbName'),
             headerName: '№ Базы',

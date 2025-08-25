@@ -19,14 +19,14 @@ export default tseslint.config([
     {
         files: ['**/*.{ts,tsx}'],
         plugins: {
-            'no-relative-import-paths': noRelativeImports,
-            '@stylistic': stylistic
+            'no-relative-import-paths': noRelativeImports
         },
         extends: [
             js.configs.recommended,
             tseslint.configs.recommended,
             reactHooks.configs['recommended-latest'],
             reactRefresh.configs.vite,
+            stylistic.configs.recommended
         ],
         languageOptions: {
             ecmaVersion: 2020,
@@ -52,8 +52,17 @@ export default tseslint.config([
             ],
 
             // @stylistic
-            '@stylistic/quotes': ['error', 'single'],
             '@stylistic/indent': ['warn', 4],
+            '@stylistic/indent-binary-ops': ['warn', 4],
+            '@stylistic/jsx-indent-props': ['warn', 4],
+            '@stylistic/quotes': ['error', 'single'],
+            '@stylistic/semi': ['error', 'always'],
+            '@stylistic/no-extra-semi': ['error'],
+            '@stylistic/quote-props': ["off"],
+            '@stylistic/comma-dangle': ['off'],
+            '@stylistic/multiline-ternary': ['off'],
+            '@stylistic/jsx-first-prop-new-line': ['off'],
+            '@stylistic/jsx-max-props-per-line': ['off'],
 
             // @typescript
             '@typescript-eslint/no-unused-vars': 'off',

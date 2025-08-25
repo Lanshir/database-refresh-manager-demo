@@ -1,6 +1,5 @@
 import { atom } from 'jotai';
 import { atomWithReset, atomFamily } from 'jotai/utils';
-import { focusAtom } from 'jotai-optics';
 import { authorizationState } from '@store/authorization/authorizationState';
 import { DbRefreshJob } from '@shared/types/api/dbRefreshJobs';
 import { chain } from 'underscore';
@@ -64,4 +63,4 @@ export interface IJobsListFiltersState {
 
 export interface IRefreshDialogState {
     jobId?: number | null
-};
+}

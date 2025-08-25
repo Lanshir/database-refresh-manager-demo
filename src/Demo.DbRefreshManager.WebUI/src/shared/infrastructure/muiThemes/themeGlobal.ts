@@ -39,7 +39,6 @@ const themeGlobal = createTheme({
                     '&:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell.rich-text-cell': <CSSInterpolation>{
                         overflowY: 'auto',
                         alignItems: 'flex-start',
-
                         '& .MuiDataGrid-cellContent': <CSSInterpolation>{
                             display: 'flex',
                             minHeight: '100%',

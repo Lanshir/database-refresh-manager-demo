@@ -7,12 +7,12 @@ import dayjs from 'dayjs';
  * @param format DateTime format.
  */
 export function DayjsDateFormatter(format: string = 'DD.MM.yyyy') {
-    const formatter: GridValueFormatter =
-        (value: string) => dayjs(value).format(format);
+    const formatter: GridValueFormatter
+        = (value: string) => dayjs(value).format(format);
 
     return formatter;
 }
 
 /** Короткое ФИО (Фамилия И.О). */
-export const ShortFullName: GridValueFormatter =
-    (value: string) => ShortenFullName(value);
+export const ShortFullName: GridValueFormatter
+    = (value: string) => ShortenFullName(value);

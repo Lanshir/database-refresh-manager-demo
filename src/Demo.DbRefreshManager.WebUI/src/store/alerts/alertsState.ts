@@ -5,6 +5,6 @@ import { VariantType } from 'notistack';
 export const alertsState = atom<INotistackAlert[]>([]);
 
 export interface INotistackAlert {
-    variant: VariantType,
+    variant: VariantType
     message: string
 }

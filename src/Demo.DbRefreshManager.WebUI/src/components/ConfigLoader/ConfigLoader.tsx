@@ -3,10 +3,9 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { configState, configAsyncState } from '@store/config/configState';
 
 /**
- * Загрузчик конфигурации frontend. 
+ * Загрузчик конфигурации frontend.
  */
-const ConfigLoader: FC = () =>
-{
+const ConfigLoader: FC = () => {
     const configLoadable = useAtomValue(configAsyncState);
     const setConfig = useSetAtom(configState);
 

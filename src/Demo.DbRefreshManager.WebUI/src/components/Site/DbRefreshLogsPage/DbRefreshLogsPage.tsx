@@ -10,8 +10,7 @@ import LogFilters from './Chunks/LogFiltersChunk';
 import DbRefreshLogsGrid from './Grid/DbRefreshLogsGrid';
 
 /** Страница логов БД. */
-const DbRefreshLogsPage: FC = () =>
-{
+const DbRefreshLogsPage: FC = () => {
     const resetPage = useSetAtom(resetPageStateAction);
 
     useUnmount(resetPage);

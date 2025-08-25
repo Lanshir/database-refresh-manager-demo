@@ -9,9 +9,9 @@ import SnackbarToStoreBind from './SnackbarToStoreBind';
 import './snackbar-styles.scss';
 
 /**
- * Провайдер оповещений в Snackbar. 
+ * Провайдер оповещений в Snackbar.
  */
-const SnackbarAlertRoot: FC<PropsWithChildren> = ({ children }) =>
+const SnackbarAlertRoot: FC<PropsWithChildren> = ({ children }) => (
     <SnackbarProvider maxSnack={5}
         autoHideDuration={10000}
         anchorOrigin={anchorOrigin}
@@ -20,7 +20,8 @@ const SnackbarAlertRoot: FC<PropsWithChildren> = ({ children }) =>
     >
         <SnackbarToStoreBind />
         {children}
-    </SnackbarProvider>;
+    </SnackbarProvider>
+);
 
 const anchorOrigin: SnackbarOrigin = {
     horizontal: 'right',
@@ -34,9 +35,10 @@ const icons: Partial<Record<VariantType, React.ReactNode>> = {
     info: <Info className="snack-icon" />
 };
 
-const dismissAction: SnackbarAction = (snackId) =>
+const dismissAction: SnackbarAction = snackId => (
     <IconButton onClick={() => closeSnackbar(snackId)}>
         <Close sx={{ color: theme => theme.palette.common.white }} />
-    </IconButton>;
+    </IconButton>
+);
 
 export default SnackbarAlertRoot;

@@ -20,8 +20,8 @@ const splitLink = split(
         const definition = getMainDefinition(query);
 
         return (
-            definition.kind === Kind.OPERATION_DEFINITION &&
-            definition.operation === OperationTypeNode.SUBSCRIPTION
+            definition.kind === Kind.OPERATION_DEFINITION
+            && definition.operation === OperationTypeNode.SUBSCRIPTION
         );
     },
     wsLink,

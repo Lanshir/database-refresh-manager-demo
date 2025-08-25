@@ -29,7 +29,7 @@ export default function FormatRequestErrorMessage(error: IRequestError | Error):
     }
     // Ошибки REST с телом ApiResponse.
     else if (!!restApiResponseMessage) {
-        message = restApiResponseMessage
+        message = restApiResponseMessage;
     }
     else {
         message = reqError.message;

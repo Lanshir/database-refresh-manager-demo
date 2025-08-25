@@ -3,9 +3,9 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { PrimitiveAtom, useAtom } from 'jotai';
 
 export type AtomicTextFieldProps = Omit<TextFieldProps, 'value' | 'onChange'> & {
-    stateAtom: PrimitiveAtom<string>,
+    stateAtom: PrimitiveAtom<string>
     setStateCallback?: (text: string) => void
-}
+};
 
 /** TextField with atom input */
 export const AtomicTextField = forwardRef<HTMLDivElement | null, AtomicTextFieldProps>(
@@ -22,7 +22,7 @@ export const AtomicTextField = forwardRef<HTMLDivElement | null, AtomicTextField
             }
         };
 
-        return <TextField ref={ref} {...props} value={state} onChange={onChange} />
+        return <TextField ref={ref} {...props} value={state} onChange={onChange} />;
     }
 );
 

@@ -24,7 +24,7 @@ const Header: FC = () => {
                     Database Refresh Manager
                 </Typography>
 
-                {!isAuthorized ? null :
+                {!isAuthorized ? null : (
                     <>
                         <Stack direction="row" ml={4}>
                             <Button variant="text" size="medium" color="inherit"
@@ -48,7 +48,7 @@ const Header: FC = () => {
 
                         <AccountMenu />
                     </>
-                }
+                )}
             </Toolbar>
         </AppBar>
     );

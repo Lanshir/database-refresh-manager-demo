@@ -1,5 +1,5 @@
 /**
- * Запись лога перезаливки БД. 
+ * Запись лога перезаливки БД.
  */
 export type DbRefreshLog = {
     dbRefreshJobId: number

@@ -6,7 +6,7 @@ import { chain } from 'underscore';
 export const dbRefreshJobsListItemsState = atom<DbRefreshJobListItem[]>([]);
 
 /** Сортированные пункты списка задач на перезаливку. */
-export const dbRefreshJobsSortedItemsState = atom((get) =>
+export const dbRefreshJobsSortedItemsState = atom(get =>
     chain(get(dbRefreshJobsListItemsState))
         .sortBy(i => Number(i.dbName.replaceAll(/[^0-9]/g, '')))
         .sortBy(i => i.dbName.replaceAll(/[0-9]/g, ''))

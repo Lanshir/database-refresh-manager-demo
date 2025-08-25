@@ -9,10 +9,9 @@ interface ChunkProps {
 }
 
 /**
- * Ссылка на список объектов. 
+ * Ссылка на список объектов.
  */
-const ObjectsListLinkChunk: FC<ChunkProps> = ({ dbName }) =>
-{
+const ObjectsListLinkChunk: FC<ChunkProps> = ({ dbName }) => {
     const config = useAtomValue(configState);
 
     return (

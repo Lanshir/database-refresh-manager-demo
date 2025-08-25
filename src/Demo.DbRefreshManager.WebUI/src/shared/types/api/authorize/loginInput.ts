@@ -1,7 +1,7 @@
 /** Ввод авторизации. */
 type LoginInput = {
-    login: string,
-    password: string,
+    login: string
+    password: string
     rememberMe: boolean
 };
 

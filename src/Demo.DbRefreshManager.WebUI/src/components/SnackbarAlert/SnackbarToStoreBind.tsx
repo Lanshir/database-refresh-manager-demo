@@ -4,10 +4,9 @@ import { popAlertAction } from '@store/alerts/alertsActions';
 import { useSnackbar } from 'notistack';
 
 /**
- * Логика привязки вывода ошибок из store в notistack. 
+ * Логика привязки вывода ошибок из store в notistack.
  */
-const SnackbarToStoreBind: FC = () =>
-{
+const SnackbarToStoreBind: FC = () => {
     const { enqueueSnackbar } = useSnackbar();
     const [alerts, popAlert] = useAtom(popAlertAction);
 

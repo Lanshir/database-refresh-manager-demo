@@ -5,7 +5,7 @@ import { Box, Button, Popover } from '@mui/material';
 import DbLegend from './DbLegend';
 
 /**
- * Кнопка меню легенды БД. 
+ * Кнопка меню легенды БД.
  */
 const DbLegendPopupButton: FC = () => {
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);

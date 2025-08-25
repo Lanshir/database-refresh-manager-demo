@@ -11,7 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers';
 import { debounce } from 'ts-debounce';
 
 /**
- * Фильтры таблицы логов перезаливки БД. 
+ * Фильтры таблицы логов перезаливки БД.
  */
 const LogFiltersChunk: FC<StackProps> = (props) => {
     const [isLoading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const LogFiltersChunk: FC<StackProps> = (props) => {
     const [dayJsDateFilter, , onChangeDateFilter] = useMuiDayjsInputState();
 
     const dateFilter = useMemo(
-        () => dayJsDateFilter?.isValid()? dayJsDateFilter.toDate() : null,
+        () => dayJsDateFilter?.isValid() ? dayJsDateFilter.toDate() : null,
         [dayJsDateFilter]);
 
     const [

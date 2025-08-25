@@ -6,7 +6,7 @@ import { pageLoadingState, jobsListFilterState } from '@store/dbRefresh/dbRefres
 import { dbRefreshJobsSortedItemsState, DbRefreshJobListItem } from '@store/listItems/listItemsState';
 
 /**
- * Фильтры списка БД. 
+ * Фильтры списка БД.
  */
 const DbListFiltersChunk: FC = () => {
     const jobListItems = useAtomValue(dbRefreshJobsSortedItemsState);

@@ -2,13 +2,13 @@ import { FC } from 'react';
 import { Alert, AlertColor, Collapse, CollapseProps } from '@mui/material';
 
 export type AlertMessageProps = CollapseProps & {
-    open?: boolean,
-    severity?: AlertColor,
-    variant?: 'filled' | 'outlined' | 'standard',
-    title?: string,
-    text?: string,
+    open?: boolean
+    severity?: AlertColor
+    variant?: 'filled' | 'outlined' | 'standard'
+    title?: string
+    text?: string
     onClose?: () => void
-}
+};
 
 /** Сворачиваемый Alert с сообщением. */
 export const AlertMessage: FC<AlertMessageProps> = (props) => {

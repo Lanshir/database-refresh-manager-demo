@@ -10,11 +10,11 @@ type DialogProps = {
     title: string
     onYes: () => void
     onNo: () => void
-}
+};
 
 /** Диалоговое окно подтверждения перезаливки БД. */
-const ConfirmDbRefreshDialog: FC<DialogProps> =
-    ({ open, title, onYes, onNo }) =>
+const ConfirmDbRefreshDialog: FC<DialogProps>
+    = ({ open, title, onYes, onNo }) => (
         <Dialog fullWidth maxWidth="xs" open={open} onClose={onNo}>
             <DialogTitle>{title}</DialogTitle>
 
@@ -31,13 +31,14 @@ const ConfirmDbRefreshDialog: FC<DialogProps> =
             </DialogContent>
 
             <DialogActions>
-                <Button sx={{ width: 100 }} variant="outlined" onClick={onNo} >
+                <Button sx={{ width: 100 }} variant="outlined" onClick={onNo}>
                     Нет
                 </Button>
-                <Button sx={{ width: 100 }} variant="contained" onClick={onYes} >
+                <Button sx={{ width: 100 }} variant="contained" onClick={onYes}>
                     Да
                 </Button>
             </DialogActions>
         </Dialog>
+    );
 
 export default ConfirmDbRefreshDialog;

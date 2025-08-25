@@ -5,10 +5,9 @@ import { checkAuthQuery } from '@store/authorization/authorizationActions';
 import { LoadingBackdrop } from '@shared/components';
 
 /**
- * Компонент проверки активной авторизации. 
+ * Компонент проверки активной авторизации.
  */
-const AuthChecker: FC<PropsWithChildren> = ({ children }) =>
-{
+const AuthChecker: FC<PropsWithChildren> = ({ children }) => {
     const checkAuth = useSetAtom(checkAuthQuery);
     const [authChecked, setAuthChecked] = useState(false);
 

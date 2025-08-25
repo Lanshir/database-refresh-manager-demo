@@ -5,10 +5,9 @@ import { changeJobPropsAction } from '@store/dbRefresh/dbRefreshActions';
 import { GetOnDbRefreshJobChangeQuery, OnDbRefreshJobChangeSchema } from '@requests/graphql/subscriptions';
 
 /**
- * Логика подписок на события web-socket. 
+ * Логика подписок на события web-socket.
  */
-const SubscriptionsChunk: FC = () =>
-{
+const SubscriptionsChunk: FC = () => {
     const changeJobProps = useSetAtom(changeJobPropsAction);
 
     const jobChangeEvent = useSubscription<OnDbRefreshJobChangeSchema>(GetOnDbRefreshJobChangeQuery());

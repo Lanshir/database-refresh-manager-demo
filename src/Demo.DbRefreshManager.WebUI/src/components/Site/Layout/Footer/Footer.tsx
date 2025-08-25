@@ -25,7 +25,7 @@ const Footer: FC = () => {
             }
         }, 1000);
 
-        return () => { clearInterval(refreshIntervalRef.current!); };
+        return () => clearInterval(refreshIntervalRef.current!);
     }, [today]);
 
     return (

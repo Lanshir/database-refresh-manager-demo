@@ -32,36 +32,42 @@ const ManualRefreshButtonChunk: FC<ChunkProps> = (
         [setCancelDialog, jobId]);
 
     return jobInProgress
-        ? <Button className="update-db-btn"
-            startIcon={
-                <FontAwesomeIcon icon={faSpinner} spinPulse
-                    className="spinner-icon"
-                />
-            }
-            variant="outlined" size="large"
-            disabled={jobDisabled}
-        >
-            В процессе...
-        </Button >
+        ? (
+            <Button className="update-db-btn"
+                startIcon={(
+                    <FontAwesomeIcon icon={faSpinner} spinPulse
+                        className="spinner-icon"
+                    />
+                )}
+                variant="outlined" size="large"
+                disabled={jobDisabled}
+            >
+                В процессе...
+            </Button>
+        )
 
         : !updateIsQueued
-            ? <Button className="update-db-btn"
-                startIcon={<PlayArrow />}
-                variant="outlined" color="success"
-                onClick={onStartClick}
-                disabled={jobDisabled}
-            >
-                Старт
-            </Button >
+            ? (
+                <Button className="update-db-btn"
+                    startIcon={<PlayArrow />}
+                    variant="outlined" color="success"
+                    onClick={onStartClick}
+                    disabled={jobDisabled}
+                >
+                    Старт
+                </Button>
+            )
 
-            : <Button className="update-db-btn"
-                startIcon={<Stop />}
-                variant="outlined" color="warning"
-                onClick={onStopClick}
-                disabled={jobDisabled}
-            >
-                Стоп
-            </Button >;
+            : (
+                <Button className="update-db-btn"
+                    startIcon={<Stop />}
+                    variant="outlined" color="warning"
+                    onClick={onStopClick}
+                    disabled={jobDisabled}
+                >
+                    Стоп
+                </Button>
+            );
 };
 
 export default ManualRefreshButtonChunk;

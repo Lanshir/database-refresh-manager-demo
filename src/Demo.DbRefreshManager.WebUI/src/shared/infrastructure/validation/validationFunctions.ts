@@ -19,7 +19,7 @@ export function TextRequired(text?: string, error = 'Поле не должно 
  * @returns Текст ошибки.
  */
 export function NumberRequired(num?: number | null, error = 'Поле не должно быть пустым') {
-    return typeof num === 'number' ? '' : error;   
+    return typeof num === 'number' ? '' : error;
 }
 
 /**

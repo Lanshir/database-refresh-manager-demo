@@ -22,7 +22,7 @@ const alertAtom = atomWithReset<IAlert>({});
 
 /** Состояние alert авторизации. */
 export const alertState = atom(
-    (get) => get(alertAtom),
+    get => get(alertAtom),
     (get, set, newAlert: IAlert | typeof RESET) => {
         newAlert === RESET
             ? set(alertAtom, RESET)

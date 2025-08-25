@@ -1,10 +1,10 @@
 /**
- * Пункт группы БД. 
+ * Пункт группы БД.
  */
 export type DbGroup = {
-    id: number,
-    sortOrder: number,
-    description: string,
+    id: number
+    sortOrder: number
+    description: string
     cssColor: string
 };
 

@@ -31,7 +31,7 @@ export const pushErrorAction = atom(null,
 
 /** Достать alert из списка. */
 export const popAlertAction = atom(
-    (get) => get(alertsState),
+    get => get(alertsState),
     (get, set) => {
         const alerts = get(alertsState);
         const last = alerts.length > 0

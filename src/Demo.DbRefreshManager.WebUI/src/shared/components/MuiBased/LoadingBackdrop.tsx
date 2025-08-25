@@ -3,7 +3,7 @@ import { Backdrop, BackdropProps, CircularProgress } from '@mui/material';
 
 export type LoadingBackdropProps = BackdropProps & {
     backdropOpacity?: string
-}
+};
 
 /** Фоновая анимация загрузки. */
 export const LoadingBackdrop: FC<LoadingBackdropProps> = (props) => {

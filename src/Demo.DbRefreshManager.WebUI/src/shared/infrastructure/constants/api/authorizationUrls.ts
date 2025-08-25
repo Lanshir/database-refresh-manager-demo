@@ -1,5 +1,5 @@
 /**
- * Url методов авторизации.. 
+ * Url методов авторизации..
  */
 const AuthorizationUrls = {
     /** GET */

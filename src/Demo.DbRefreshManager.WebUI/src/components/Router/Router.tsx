@@ -8,7 +8,7 @@ const LoginPage = lazy(() => import('@components/Site/LoginPage/LoginPage'));
 const DbRefreshPage = lazy(() => import('@components/Site/DbRefreshPage/DbRefreshPage'));
 const DbRefreshLogsPage = lazy(() => import('@components/Site/DbRefreshLogsPage/DbRefreshLogsPage'));
 
-const Router: FC = () =>
+const Router: FC = () => (
     <Routes>
         <Route path={SiteRoutes.home} element={<Layout />}>
             {/* Home */}
@@ -24,6 +24,7 @@ const Router: FC = () =>
             {/* NotFound page */}
             <Route path="*" element={<Suspense><NotFound /></Suspense>} />
         </Route>
-    </Routes>;
+    </Routes>
+);
 
 export default Router;

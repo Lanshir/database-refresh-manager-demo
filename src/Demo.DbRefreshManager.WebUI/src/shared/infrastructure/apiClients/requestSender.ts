@@ -28,7 +28,10 @@ const RequestSender = {
         };
 
         return fetch(url, options)
-            .then(res => { stopTimeout(); return res; })
+            .then((res) => {
+                stopTimeout();
+                return res;
+            })
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -58,7 +61,10 @@ const RequestSender = {
         };
 
         return fetch(url, options)
-            .then(res => { stopTimeout(); return res; })
+            .then((res) => {
+                stopTimeout();
+                return res;
+            })
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -88,7 +94,10 @@ const RequestSender = {
         };
 
         return fetch(url, options)
-            .then(res => { stopTimeout(); return res; })
+            .then((res) => {
+                stopTimeout();
+                return res;
+            })
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -118,7 +127,10 @@ const RequestSender = {
         };
 
         return fetch(url, options)
-            .then(res => { stopTimeout(); return res; })
+            .then((res) => {
+                stopTimeout();
+                return res;
+            })
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 
@@ -153,7 +165,10 @@ const RequestSender = {
         };
 
         return await fetch(url, options)
-            .then(res => { stopTimeout(); return res; })
+            .then((res) => {
+                stopTimeout();
+                return res;
+            })
             .then(res => handleServerError(res, skipErrorsHandler));
     },
 };
@@ -171,7 +186,6 @@ const defaultHeaders = {
  * @param url Url запроса.
  */
 const getTimeoutController = (timeoutMs?: number, url?: string): [AbortController | null, () => void] => {
-
     if (!timeoutMs) {
         return [null, () => { }];
     }
@@ -204,7 +218,8 @@ const handleServerError = async (response: Response, skipErrorsHandler: boolean)
         if (hasJson) {
             try {
                 error.responseData = await response.json();
-            } catch {
+            }
+            catch {
                 console.log('unable to parse request error data');
             }
         }
