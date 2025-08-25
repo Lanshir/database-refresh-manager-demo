@@ -67,7 +67,6 @@ export default tseslint.config([
             // @typescript
             '@typescript-eslint/no-unused-vars': 'off',
             '@typescript-eslint/no-unused-expressions': 'off',
-            '@typescript-eslint/no-empty-object-type': 'off',
 
             // import restrictions
             '@typescript-eslint/no-restricted-imports': [
