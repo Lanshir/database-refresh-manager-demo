@@ -14,8 +14,7 @@ const devHttpsProxy: ProxyOptions = {
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
     const baseConfig: UserConfig = {
-        plugins: [react(), tsConfigPaths(), eslint(), svgrPlugin()],
-        build: { outDir: 'build' }
+        plugins: [react(), tsConfigPaths(), eslint(), svgrPlugin()]
     };
 
     switch (command) {

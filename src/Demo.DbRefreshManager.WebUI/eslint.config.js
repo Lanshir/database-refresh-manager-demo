@@ -5,8 +5,10 @@ import stylistic from '@stylistic/eslint-plugin'
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import noRelativeImports from 'eslint-plugin-no-relative-import-paths';
+import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
+    globalIgnores(['dist']),
     {
         // Note: there should be no other properties in this object
         ignores: [
