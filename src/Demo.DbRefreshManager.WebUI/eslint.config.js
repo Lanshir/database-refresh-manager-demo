@@ -39,18 +39,6 @@ export default tseslint.config([
             'no-empty': 'warn',
             'no-extra-boolean-cast': 'off',
 
-            // max characters per line
-            'max-len': [
-                'warn',
-                { 'code': 120 }
-            ],
-
-            // no ../../folder imports
-            'no-relative-import-paths/no-relative-import-paths': [
-                'error',
-                { 'allowSameFolder': true }
-            ],
-
             // @stylistic
             '@stylistic/indent': ['warn', 4],
             '@stylistic/indent-binary-ops': ['warn', 4],
@@ -67,6 +55,14 @@ export default tseslint.config([
             // @typescript
             '@typescript-eslint/no-unused-vars': 'off',
             '@typescript-eslint/no-unused-expressions': 'off',
+
+            // max characters per line
+            'max-len': [ 'warn', { 'code': 120 } ],
+
+            // no ../../folder imports
+            'no-relative-import-paths/no-relative-import-paths': [
+                'error', { 'allowSameFolder': true }
+            ],
 
             // import restrictions
             '@typescript-eslint/no-restricted-imports': [

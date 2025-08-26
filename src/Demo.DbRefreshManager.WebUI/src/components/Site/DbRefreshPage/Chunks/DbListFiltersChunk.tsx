@@ -1,6 +1,5 @@
-import { FC, useState } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
-import { useMuiAutocompleteHandler } from '@hooks';
+import { FC, useEffect, useState } from 'react';
+import { useSetAtom, useAtomValue } from 'jotai';
 import { Autocomplete, Stack, TextField } from '@mui/material';
 import { pageLoadingState, jobsListFilterState } from '@store/dbRefresh/dbRefreshState';
 import { dbRefreshJobsSortedItemsState, DbRefreshJobListItem } from '@store/listItems/listItemsState';
@@ -11,25 +10,24 @@ import { dbRefreshJobsSortedItemsState, DbRefreshJobListItem } from '@store/list
 const DbListFiltersChunk: FC = () => {
     const jobListItems = useAtomValue(dbRefreshJobsSortedItemsState);
     const isLoading = useAtomValue(pageLoadingState);
-    const [filters, setFilters] = useAtom(jobsListFilterState);
+    const setFilters = useSetAtom(jobsListFilterState);
 
-    const [jobInput, setJobInput] = useState('');
-    const [onChangeJob, onChangeJobInput] = useMuiAutocompleteHandler<DbRefreshJobListItem>(
-        job => setFilters(prev => ({ ...prev, jobId: job?.id })),
-        input => setJobInput(input));
+    const [filterJobItem, setFilterJobItem] = useState<DbRefreshJobListItem | null>(null);
+
+    useEffect(() => {
+        setFilters(prev => ({ ...prev, jobId: filterJobItem?.id }));
+    }, [filterJobItem, setFilters]);
 
     return (
         <Stack direction="row" marginX={2} spacing={1} alignItems="center">
             <Autocomplete className="filter-input"
-                options={jobListItems}
+                size="small" autoComplete autoHighlight
                 loading={isLoading}
                 disabled={isLoading}
+                options={jobListItems}
                 getOptionLabel={j => j.dbName}
-                onChange={onChangeJob}
-                value={jobListItems.find(j => j.id === filters.jobId) ?? null}
-                onInputChange={onChangeJobInput}
-                inputValue={jobInput}
-                size="small" autoComplete autoHighlight
+                value={filterJobItem}
+                onChange={(e, job) => setFilterJobItem(job)}
                 renderInput={params => <TextField {...params} label="Поиск БД" />}
             />
         </Stack>
