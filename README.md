@@ -20,7 +20,7 @@
 - **Typescript** - язык программирования;
 - **NodeJS (v20+)** - среда выполнения js/ts ([установка](https://nodejs.org/ru));
 - **Yarn** - менеджер библиотек js ([документация](https://yarnpkg.com/getting-started/install));
-- **Craco** - Надстройка над create-react-app для упрощения конфигурации сборки, доп. плагинов ([документация](https://craco.js.org/), [плагины](https://craco.js.org/plugins/));
+- **Vite** - Инструмент сборки js для frontend приложений ([сайт](https://vite.dev/));
 - **React** - библиотека разработки SPA приложения ([материал по теме](https://metanit.com/web/react/));
 - **Jotai** - библиотека для работы с хранилищем глобального состояния ([документация](https://jotai.org/docs/introduction));
 - **Mui** - библиотека компонентов интерфейса ([документация](https://mui.com/material-ui/react-button/));
@@ -39,9 +39,7 @@
 ### Требования для запуска frontend
 
 - Установить [NodeJS 20+ версии](https://nodejs.org/ru), проверка установки - команда node --version в консоли;
-- Установить yarn стабильной версии - в командной строке выполнить команды:
-	- corepack enable
-	- yarn set version stable
+- Установить yarn стабильной версии (в командной строке выполнить команды: corepack enable, yarn set version stable);
 - В командной строке выполнить команду yarn в папке проекта [WebUI](/src/Demo.DbRefreshManager.WebUI) для загрузки библиотек.
 
 ### Запуск backend без frontend
