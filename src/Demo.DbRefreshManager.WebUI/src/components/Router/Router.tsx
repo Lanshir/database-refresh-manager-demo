@@ -3,7 +3,7 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 import SiteRoutes from '@constants/routes';
 import Layout from '@components/Site/Layout/Layout';
 
-const NotFound = lazy(() => import('@components/Router/NotFound/NotFound'));
+const NotFound = lazy(() => import('@components/Router/NotFound'));
 const LoginPage = lazy(() => import('@components/Site/LoginPage/LoginPage'));
 const DbRefreshPage = lazy(() => import('@components/Site/DbRefreshPage/DbRefreshPage'));
 const DbRefreshLogsPage = lazy(() => import('@components/Site/DbRefreshLogsPage/DbRefreshLogsPage'));

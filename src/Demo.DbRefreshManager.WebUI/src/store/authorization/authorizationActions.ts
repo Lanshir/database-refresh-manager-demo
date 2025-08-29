@@ -8,6 +8,7 @@ import { ValidateLoginInput } from '@validation/validators/authorizationValidati
 import { Authorize, CheckAuth, Deauthorize } from '@requests/rest/authorizationRequests';
 import { pushErrorAction } from '@store/alerts/alertsActions';
 import { IRequestError } from '@shared/types/errors';
+import { ApiResponse } from '@shared/types/api/rest';
 import { EnsureApiResponseSuccess } from '@helpers';
 import Routes from '@constants/routes';
 
@@ -47,8 +48,10 @@ export const authorizeQuery = atom(null,
             onSuccess();
         }
         catch (e) {
-            const err = e as IRequestError;
-            set(alertState, { severity: 'error', text: err.message });
+            const err = e as IRequestError<ApiResponse>;
+            const message = err.response?.data?.message ?? err.message;
+
+            set(alertState, { severity: 'error', text: message });
         }
         finally {
             set(loginLoadingState, false);

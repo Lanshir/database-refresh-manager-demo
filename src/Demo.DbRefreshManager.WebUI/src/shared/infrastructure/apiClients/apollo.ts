@@ -1,11 +1,8 @@
 import { ApolloClient, HttpLink, InMemoryCache, from, split } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { onError } from '@apollo/client/link/error';
 import { createClient } from 'graphql-ws';
 import { Kind, OperationTypeNode } from 'graphql';
-import GqlErrors from '@enums/graphQL/gqlErrorCodes';
-import Navigation from './utils/navigationProvider';
 
 const httpLink = new HttpLink({ uri: '/graphql' });
 
@@ -15,31 +12,23 @@ const wsLink = new GraphQLWsLink(createClient({
         : `ws://${location.host}/graphql`
 }));
 
-const splitLink = split(
+const protocolLink = split(
     ({ query }) => {
         const definition = getMainDefinition(query);
 
-        return (
-            definition.kind === Kind.OPERATION_DEFINITION
-            && definition.operation === OperationTypeNode.SUBSCRIPTION
-        );
+        return definition.kind === Kind.OPERATION_DEFINITION
+            && definition.operation === OperationTypeNode.SUBSCRIPTION;
     },
     wsLink,
     httpLink,
 );
 
-/** Обработка ошибок. */
-const errorLink = onError(({ graphQLErrors }) => {
-    if (graphQLErrors?.some(e =>
-        e.extensions!['code'] === GqlErrors.Unauthorized)
-    ) {
-        Navigation.toLoginPage();
-    }
-});
+/** Default api client composed apollo link. */
+export const composedLink = from([protocolLink]);
 
 /** Site default GraphQL client. */
-const client = new ApolloClient({
-    link: from([errorLink, splitLink]),
+export const apiClient = new ApolloClient({
+    link: composedLink,
     cache: new InMemoryCache(),
     defaultOptions: {
         query: {
@@ -54,4 +43,4 @@ const client = new ApolloClient({
     }
 });
 
-export default client;
+export default apiClient;

@@ -1,4 +1,4 @@
-import { RequestSender } from '@apiClients';
+import { AxiosClient } from '@apiClients';
 import AuthUrls from '@constants/api/authorizationUrls';
 import { ApiResponse } from '@shared/types/api/rest';
 import { LoginInput, LoginResult } from '@shared/types/api/authorize';
@@ -11,10 +11,10 @@ import { LoginInput, LoginResult } from '@shared/types/api/authorize';
 export async function Authorize(input: LoginInput) {
     const url = AuthUrls.authorize;
 
-    const response = await RequestSender.post(url, input, undefined, undefined, true);
-    const result = await response.json();
+    const response = await AxiosClient
+        .post<ApiResponse<LoginResult>>(url, input);
 
-    return result as ApiResponse<LoginResult>;
+    return response.data;
 }
 
 /**
@@ -24,18 +24,16 @@ export async function Authorize(input: LoginInput) {
 export async function CheckAuth() {
     const url = AuthUrls.checkAuth;
 
-    const response = await RequestSender.get(url, undefined, 5000);
-    const result = await response.json();
+    const response = await AxiosClient
+        .get<ApiResponse<LoginResult>>(url, { timeout: 5000 });
 
-    return result as ApiResponse<LoginResult>;
+    return response.data;
 }
 
 /** Деавторизация. */
 export async function Deauthorize() {
     const url = AuthUrls.deauthorize;
+    const response = await AxiosClient.delete<ApiResponse>(url);
 
-    const response = await RequestSender.delete(url);
-    const result = await response.json();
-
-    return result as ApiResponse;
+    return response.data;
 }

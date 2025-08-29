@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { alertsState, INotistackAlert } from './alertsState';
 import { IRequestError } from '@shared/types/errors';
-import GqlErrors from '@enums/graphQL/gqlErrorCodes';
+import GqlErrors from '@constants/gqlErrorCodes';
 import { FormatRequestErrorMessage, GetGqlErrorsFromNetworkError } from '@helpers';
 
 /** Добавить alert в список. */
@@ -16,9 +16,9 @@ export const pushErrorAction = atom(null,
         const reqError = error as IRequestError;
         const networkGqlErrors = GetGqlErrorsFromNetworkError(reqError.networkError);
 
-        // Игнор ошибок авторизации GraphQL.
-        if (reqError.graphQLErrors?.some(e => e.extensions!['code'] === GqlErrors.Unauthorized)
-            || networkGqlErrors?.some(e => e.extensions['code'] === GqlErrors.Unauthorized)
+        // Не отображать ошибки авторизации GraphQL.
+        if (reqError.graphQLErrors?.some(e => e.extensions!['code'] === GqlErrors.Unauthenticated)
+            || networkGqlErrors?.some(e => e.extensions['code'] === GqlErrors.Unauthenticated)
         ) {
             return;
         }

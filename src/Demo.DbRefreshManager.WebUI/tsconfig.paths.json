@@ -10,7 +10,6 @@
       "@helpers": [ "./shared/infrastructure/helpers" ],
       "@filters/*": [ "./shared/infrastructure/filters/*" ],
       "@filters": [ "./shared/infrastructure/filters" ],
-      "@enums/*": [ "./shared/infrastructure/enums/*" ],
       "@constants/*": [ "./shared/infrastructure/constants/*" ],
       "@apiClients/*": [ "./shared/infrastructure/apiClients/*" ],
       "@apiClients": [ "./shared/infrastructure/apiClients" ],

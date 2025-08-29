@@ -3,11 +3,14 @@ import { ApolloError } from '@apollo/client';
 /**
  * Интерфейс ошибки запросов приложения.
  */
-interface IRequestError<TResponseData = object>
-    extends Error, Pick<Partial<ApolloError>, 'graphQLErrors' | 'networkError'> {
+interface IRequestError<TAxiosData = object> extends
+    Error,
+    Pick<Partial<ApolloError>, 'graphQLErrors' | 'networkError'> {
 
-    /** Данные из json ответа. */
-    responseData?: TResponseData
+    /** Данные ответа Axios. */
+    response?: {
+        data?: TAxiosData
+    }
 }
 
 export default IRequestError;
