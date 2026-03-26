@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.WebApi.GraphQL.Mutations.V1;
+using Demo.DbRefreshManager.WebApi.GraphQL.Mutations.V1;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Mutations.Base;
 
@@ -8,5 +8,5 @@ namespace Demo.DbRefreshManager.WebApi.GraphQL.Mutations.Base;
 public class MutationV1
 {
     /// <inheritdoc cref="DbRefreshJobsMutationsV1" />
-    public DbRefreshJobsMutationsV1 DbRefreshJob => new();
+    public DbRefreshJobsMutationsV1 DbRefreshJobs => new();
 }

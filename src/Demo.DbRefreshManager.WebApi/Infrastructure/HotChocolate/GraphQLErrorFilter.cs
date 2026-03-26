@@ -11,7 +11,6 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
     public IError OnError(IError error)
     {
         var errBuilder = ErrorBuilder.FromError(error)
-                .RemoveException()
                 .ClearExtensions()
                 .ClearLocations();
 
@@ -38,6 +37,6 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
                 }
         }
 
-        return errBuilder.Build();
+        return errBuilder.Build().WithException(null);
     }
 }

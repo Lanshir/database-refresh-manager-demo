@@ -47,7 +47,7 @@ public class BaseRepository<TEntity>(
     }
 
     protected virtual async Task UpdatePropsAsync(
-        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls,
+        Action<UpdateSettersBuilder<TEntity>> setPropertyCalls,
         Expression<Func<TEntity, bool>> where)
     {
         using var ctx = await ContextFactory.CreateDbContextAsync();
@@ -58,7 +58,7 @@ public class BaseRepository<TEntity>(
     }
 
     protected virtual async Task<IQueryable<TEntity>> UpdatePropsReturningAsync(
-        Expression<Func<SetPropertyCalls<TEntity>, SetPropertyCalls<TEntity>>> setPropertyCalls,
+        Action<UpdateSettersBuilder<TEntity>> setPropertyCalls,
         Expression<Func<TEntity, bool>> where)
     {
         var ctx = await ContextFactory.CreateDbContextAsync();

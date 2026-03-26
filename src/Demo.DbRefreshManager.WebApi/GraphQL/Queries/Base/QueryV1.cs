@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;
+using Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 
@@ -8,5 +8,5 @@ namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 public class QueryV1
 {
     /// <inheritdoc cref="DbRefreshJobsQueriesV1" />
-    public DbRefreshJobsQueriesV1 DbRefreshJob => new();
+    public DbRefreshJobsQueriesV1 DbRefreshJobs => new();
 }

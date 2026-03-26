@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="Demo.DbRefreshManager.Common/Demo.DbRefreshManager.Common.csproj" />
+  <Project Path="Demo.DbRefreshManager.Dal/Demo.DbRefreshManager.Dal.csproj" />
+  <Project Path="Demo.DbRefreshManager.Services/Demo.DbRefreshManager.Services.csproj" />
+  <Project Path="Demo.DbRefreshManager.WebApi/Demo.DbRefreshManager.WebApi.csproj" />
+  <Project Path="Demo.DbRefreshManager.WebUI/Demo.DbRefreshManager.WebUI.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+</Solution>

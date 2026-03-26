@@ -13,7 +13,7 @@ export async function GetConfig(
 
     const query = gql`query GetConfig{
         v1{
-            config:frontendConfig{${propsToFetch.join('\n')}}
+            config:frontendConfigs{${propsToFetch.join('\n')}}
         }
     }`;
 

@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { loadable } from 'jotai/utils';
 import FrontendConfig from '@shared/types/api/frontendConfig/frontendConfig';
-import { GetConfig } from '@requests/graphql/queries/frontendConfigQueries';
+import { GetConfig } from '@requests/graphql/queries/frontendConfigsQueries';
 
 /** Конфигурация frontend. */
 export const configState = atom<FrontendConfig>({

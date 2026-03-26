@@ -15,7 +15,7 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.HotChocolate;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Serilog;
 using Demo.DbRefreshManager.WebApi.Jobs;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Quartz;
 using Serilog;
 using System.Reflection;

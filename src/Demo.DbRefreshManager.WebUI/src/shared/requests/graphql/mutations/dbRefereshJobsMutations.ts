@@ -15,7 +15,7 @@ export async function StartManualDbRefresh(
     comment?: string | null,
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { manualStart: Partial<DbRefreshJob> } } };
+    type Schema = { v1: { dbRefreshJobs: { manualStart: Partial<DbRefreshJob> } } };
 
     const variables = { jobId, delayMinutes, comment };
 
@@ -23,7 +23,7 @@ export async function StartManualDbRefresh(
         mutation StartManualDbRefresh
         ($jobId: Int!, $delayMinutes: Int!, $comment: String){
           v1 {
-            dbRefreshJob{
+            dbRefreshJobs{
               manualStart:startManualRefresh
               (jobId: $jobId, delayMinutes: $delayMinutes, comment: $comment) {
                 ${propsToFetch.join('\n')}
@@ -35,7 +35,7 @@ export async function StartManualDbRefresh(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data!.v1.dbRefreshJob.manualStart;
+    return result.data!.v1.dbRefreshJobs.manualStart;
 }
 
 /**
@@ -47,14 +47,14 @@ export async function StopManualDbRefresh(
     jobId: number,
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { manualStop: Partial<DbRefreshJob> } } };
+    type Schema = { v1: { dbRefreshJobs: { manualStop: Partial<DbRefreshJob> } } };
 
     const variables = { jobId };
 
     const mutation = gql`
         mutation StopManualDbRefresh($jobId: Int!){
           v1 {
-            dbRefreshJob{
+            dbRefreshJobs{
               manualStop:stopManualRefresh(jobId: $jobId) {
                 ${propsToFetch.join('\n')}
               }
@@ -65,7 +65,7 @@ export async function StopManualDbRefresh(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data!.v1.dbRefreshJob.manualStop;
+    return result.data!.v1.dbRefreshJobs.manualStop;
 }
 
 /**
@@ -79,7 +79,7 @@ export async function SetScheduledDbRefreshActive(
     isActive: boolean,
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { scheduleChange: Partial<DbRefreshJob> } } };
+    type Schema = { v1: { dbRefreshJobs: { scheduleChange: Partial<DbRefreshJob> } } };
 
     const variables = { jobId, isActive };
 
@@ -87,7 +87,7 @@ export async function SetScheduledDbRefreshActive(
         mutation SetScheduledDbRefreshActive
         ($jobId: Int!, $isActive: Boolean!){
           v1 {
-            dbRefreshJob{
+            dbRefreshJobs{
               scheduleChange:setScheduledRefreshActive
               (jobId: $jobId, isActive: $isActive) {
                 ${propsToFetch.join('\n')}
@@ -99,7 +99,7 @@ export async function SetScheduledDbRefreshActive(
 
     const result = await ApolloClient.mutate<Schema>({ mutation, variables });
 
-    return result.data!.v1.dbRefreshJob.scheduleChange;
+    return result.data!.v1.dbRefreshJobs.scheduleChange;
 }
 
 /**
@@ -113,12 +113,12 @@ export async function SetUserComment(
     comment: string,
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { setUserComment: Partial<DbRefreshJob> } } };
+    type Schema = { v1: { dbRefreshJobs: { setUserComment: Partial<DbRefreshJob> } } };
 
     const query = gql`
         mutation SetUserComment($jobId: Int!, $comment: String!){
           v1{
-            dbRefreshJob{
+            dbRefreshJobs{
               setUserComment(jobId: $jobId, comment: $comment){
                 ${propsToFetch.join('\n')}
               }
@@ -130,5 +130,5 @@ export async function SetUserComment(
     const variables = { jobId, comment };
     const result = await ApolloClient.query<Schema>({ query, variables });
 
-    return result.data!.v1.dbRefreshJob.setUserComment;
+    return result.data!.v1.dbRefreshJobs.setUserComment;
 }

@@ -3,7 +3,6 @@ import { gql } from '@apollo/client';
 import {
     DbGroup, DbGroupKeys, DbRefreshJob, DbRefreshJobKeys, DbRefreshLog, DbRefreshLogKeys
 } from '@shared/types/api/dbRefreshJobs';
-import dayjs from 'dayjs';
 
 /**
  * GraphQL запросы задач на перезаливку БД.
@@ -16,12 +15,12 @@ import dayjs from 'dayjs';
 export async function GetDbRefreshJobs(
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { list: Partial<DbRefreshJob>[] } } };
+    type Schema = { v1: { dbRefreshJobs: { list: Partial<DbRefreshJob>[] } } };
 
     const query = gql`
         query GetDbRefreshJobs{
           v1{
-            dbRefreshJob{
+            dbRefreshJobs{
               list{
                 ${propsToFetch.join('\n')}
               }
@@ -32,7 +31,7 @@ export async function GetDbRefreshJobs(
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJob.list;
+    return response.data.v1.dbRefreshJobs.list;
 }
 
 /**
@@ -42,12 +41,12 @@ export async function GetDbRefreshJobs(
 export async function GetDbGroups(
     propsToFetch = DbGroupKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { groups: Partial<DbGroup>[] } } };
+    type Schema = { v1: { dbRefreshJobs: { groups: Partial<DbGroup>[] } } };
 
     const query = gql`
         query GetDbGroups{
           v1{
-            dbRefreshJob{
+            dbRefreshJobs{
               groups{
                 ${propsToFetch.join('\n')}
               }
@@ -58,19 +57,19 @@ export async function GetDbGroups(
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJob.groups;
+    return response.data.v1.dbRefreshJobs.groups;
 }
 
 /**
  * Получить список id задач на перезаливку с персональным доступом.
  */
 export async function GetPersonalAccessIds() {
-    type Schema = { v1: { dbRefreshJob: { accessIds: number[] } } };
+    type Schema = { v1: { dbRefreshJobs: { accessIds: number[] } } };
 
     const query = gql`
         query GetPersonalAccessIds{
           v1{
-            dbRefreshJob{
+            dbRefreshJobs{
               accessIds: personalAccessIds
             }
           }
@@ -79,7 +78,7 @@ export async function GetPersonalAccessIds() {
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJob.accessIds;
+    return response.data.v1.dbRefreshJobs.accessIds;
 }
 
 /**
@@ -93,12 +92,12 @@ export async function GetDbRefreshLogs(
     startDate?: Date | null,
     propsToFetch = DbRefreshLogKeys
 ) {
-    type Schema = { v1: { dbRefreshJob: { logs: Partial<DbRefreshLog>[] } } };
+    type Schema = { v1: { dbRefreshJobs: { logs: Partial<DbRefreshLog>[] } } };
 
     const query = gql`
         query GetDbRefreshLogs($jobId: Int, $startDate: DateTime) {
           v1{
-            dbRefreshJob{
+            dbRefreshJobs{
               logs(jobId: $jobId, startDate: $startDate) {
                 ${propsToFetch.join('\n')}
               }
@@ -109,10 +108,10 @@ export async function GetDbRefreshLogs(
 
     const variables = {
         jobId: jobId,
-        startDate: !!startDate ? dayjs(startDate).toISOString() : null
+        startDate: !!startDate ? startDate.toISOString() : null
     };
 
     const response = await ApolloClient.query<Schema>({ query, variables });
 
-    return response.data?.v1.dbRefreshJob.logs;
+    return response.data?.v1.dbRefreshJobs.logs;
 }
