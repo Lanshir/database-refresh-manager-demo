@@ -1,77 +1,51 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель dto задачи перезаливки БД.
 /// </summary>
-public class DbRefreshJobDto
+/// <param name="Id">Id задачи.</param>
+/// <param name="DbName">Название БД.</param>
+/// <param name="InProgress">Перезаливка в процессе.</param>
+/// <param name="ScheduleIsActive">Перезаливка по расписанию активна.</param>
+/// <param name="ManualRefreshDate">Дата следующей ручной перезаливки.</param>
+/// <param name="ScheduleRefreshDate">Дата следующей перезаливки по расписанию.</param>
+/// <param name="LastRefreshDate">Дата последней перезаливки.</param>
+/// <param name="ScheduleChangeUser">Пользователь изменивший статус перезаливки по раписанию.</param>
+/// <param name="ScheduleChangeDate">Дата изменения статуса перезаливки по раписанию.</param>
+/// <param name="ReleaseComment">Комментарий установленных релизов.</param>
+/// <param name="UserComment">Последний комментарий пользователей.</param>
+/// <param name="GroupSortOrder">Порядок сортировки групп БД.</param>
+/// <param name="GroupCssColor">CSS-совместимая строка цвета группы БД.</param>
+/// <param name="GroupAccessRoles">Роли с доступом к группе БД.</param>
+public record DbRefreshJobDto(
+    int Id,
+    string DbName,
+    bool InProgress,
+    bool ScheduleIsActive,
+    DateTime? ManualRefreshDate,
+    DateTime ScheduleRefreshDate,
+    DateTime LastRefreshDate,
+    string? ScheduleChangeUser,
+    DateTime? ScheduleChangeDate,
+    string? ReleaseComment,
+    string? UserComment,
+    int GroupSortOrder,
+    string GroupCssColor,
+    List<string> GroupAccessRoles)
 {
-    /// <summary>
-    /// Id задачи.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// Название БД.
-    /// </summary>
-    public string DbName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Перезаливка в процессе.
-    /// </summary>
-    public bool InProgress { get; set; }
-
-    /// <summary>
-    /// Перезаливка по расписанию активна.
-    /// </summary>
-    public bool ScheduleIsActive { get; set; }
-
-    /// <summary>
-    /// Дата следующей ручной перезаливки.
-    /// </summary>
-    public DateTime? ManualRefreshDate { get; set; }
-
-    /// <summary>
-    /// Дата следующей перезаливки по расписанию.
-    /// </summary>
-    public DateTime ScheduleRefreshDate { get; set; }
-
-    /// <summary>
-    /// Дата последней перезаливки.
-    /// </summary>
-    public DateTime LastRefreshDate { get; set; }
-
-    /// <summary>
-    /// Пользователь изменивший статус перезаливки по раписанию.
-    /// </summary>
-    public string? ScheduleChangeUser { get; set; }
-
-    /// <summary>
-    /// Дата изменения статуса перезаливки по раписанию.
-    /// </summary>
-    public DateTime? ScheduleChangeDate { get; set; }
-
-    /// <summary>
-    /// Комментарий установленных релизов.
-    /// </summary>
-    public string? ReleaseComment { get; set; }
-
-    /// <summary>
-    /// Последний комментарий пользователей.
-    /// </summary>
-    public string? UserComment { get; set; }
-
-    /// <summary>
-    /// Порядок сортировки групп БД.
-    /// </summary>
-    public int GroupSortOrder { get; set; }
-
-    /// <summary>
-    /// CSS-совместимая строка цвета группы БД.
-    /// </summary>
-    public string GroupCssColor { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Роли с доступом к группе БД.
-    /// </summary>
-    public List<string> GroupAccessRoles { get; set; } = new(0);
+    public DbRefreshJobDto() : this(
+        default,
+        string.Empty,
+        default,
+        default,
+        null,
+        DateTime.UtcNow,
+        DateTime.UtcNow,
+        null,
+        null,
+        null,
+        null, 
+        default,
+        string.Empty,
+        []) {}
 }

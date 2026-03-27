@@ -1,27 +1,13 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель dto группы БД.
 /// </summary>
-public class DbGroupDto
+/// <param name="Id">Id записи.</param>
+/// <param name="SortOrder">Порядок сортировки.</param>
+/// <param name="Description">Описание группы.</param>
+/// <param name="CssColor">CSS-совместимая строка цвета.</param>
+public record DbGroupDto(int Id, int SortOrder, string Description, string CssColor)
 {
-    /// <summary>
-    /// Id записи.
-    /// </summary>
-    public int Id { get; set; }
-
-    /// <summary>
-    /// Порядок сортировки.
-    /// </summary>
-    public int SortOrder { get; set; }
-
-    /// <summary>
-    /// Описание группы.
-    /// </summary>
-    public string Description { get; set; } = string.Empty;
-
-    /// <summary>
-    /// CSS-совместимая строка цвета.
-    /// </summary>
-    public string CssColor { get; set; } = string.Empty;
+    public DbGroupDto() : this(default, default, string.Empty, string.Empty) { }
 }

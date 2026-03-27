@@ -41,12 +41,10 @@ public class AuthorizationController(
     [HttpGet]
     public async Task<ActionResult<ApiResponseDto<LoginResultDto>>> Get()
     {
-        return ApiResponse.Success(new LoginResultDto
-        {
-            Login = identityService.GetUserLogin(),
-            FullName = identityService.GetUserFullName(),
-            Roles = identityService.GetRoles()
-        });
+        return ApiResponse.Success(new LoginResultDto(
+            Login: identityService.GetUserLogin(),
+            FullName: identityService.GetUserFullName(),
+            Roles: identityService.GetRoles()));
     }
 
     /// <summary>
@@ -102,7 +100,7 @@ public class AuthorizationController(
                 dbUser.Id,
                 dto.Login,
                 dto.FullName,
-                dto.Roles.ToList());
+                [.. dto.Roles]);
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

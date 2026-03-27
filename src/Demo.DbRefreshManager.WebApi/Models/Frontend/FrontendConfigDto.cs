@@ -1,17 +1,13 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.Frontend;
+namespace Demo.DbRefreshManager.WebApi.Models.Frontend;
 
 /// <summary>
 /// Модель dto конфигуарции frontend.
 /// </summary>
-public class FrontendConfigDto
+/// <param name="ObjectsListUrl">Url метода просмотра списка обновлённых объектов.</param>
+/// <param name="InstructionUrl">Url интрукции к менеджеру.</param>
+public record FrontendConfigDto(
+    string ObjectsListUrl,
+    string InstructionUrl)
 {
-    /// <summary>
-    /// Url метода просмотра списка обновлённых объектов.
-    /// </summary>
-    public string ObjectsListUrl { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Url интрукции к менеджеру.
-    /// </summary>
-    public string InstructionUrl { get; set; } = string.Empty;
+    public FrontendConfigDto() : this(string.Empty, string.Empty) { }
 }

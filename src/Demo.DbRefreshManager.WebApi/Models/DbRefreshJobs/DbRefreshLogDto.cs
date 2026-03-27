@@ -1,57 +1,41 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель dto записи лога перезаливки БД.
 /// </summary>
-public class DbRefreshLogDto
+/// <param name="DbRefreshJobId">Id задачи на перезаливку БД.</param>
+/// <param name="DbName">Название БД.</param>
+/// <param name="RefreshStartDate">Дата начала перезаливки БД.</param>
+/// <param name="RefreshEndDate">Дата окончания перезаливки БД.</param>
+/// <param name="Code">Код результата.</param>
+/// <param name="Result">Текст результата команды перезаливки.</param>
+/// <param name="Error">Текст ошибки перезаливки.</param>
+/// <param name="ExecutedScript">Выполненный скрипт перезаливки.</param>
+/// <param name="Initiator">Инициатор перезаливки.</param>
+/// <param name="GroupCssColor">CSS-совместимая строка цвета группы БД.</param>
+public record DbRefreshLogDto(
+    int DbRefreshJobId,
+    string DbName,
+    DateTime RefreshStartDate,
+    DateTime? RefreshEndDate,
+    int? Code,
+    string? Result,
+    string? Error,
+    string? ExecutedScript,
+    string? Initiator,
+    string GroupCssColor)
 {
-    /// <summary>
-    /// Id задачи на перезаливку БД.
-    /// </summary>
-    public int DbRefreshJobId { get; set; }
-
-    /// <summary>
-    /// Название БД.
-    /// </summary>
-    public string DbName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Дата начала перезаливки БД.
-    /// </summary>
-    public DateTime RefreshStartDate { get; set; }
-
-    /// <summary>
-    /// Дата окончания перезаливки БД.
-    /// </summary>
-    public DateTime? RefreshEndDate { get; set; }
-
-    /// <summary>
-    /// Код результата.
-    /// </summary>
-    public int? Code { get; set; }
-
-    /// <summary>
-    /// Текст результата команды перезаливки.
-    /// </summary>
-    public string? Result { get; set; }
-
-    /// <summary>
-    /// Текст ошибки перезаливки.
-    /// </summary>
-    public string? Error { get; set; }
-
-    /// <summary>
-    /// Выполненный скрипт перезаливки.
-    /// </summary>
-    public string? ExecutedScript { get; set; }
-
-    /// <summary>
-    /// Инициатор перезаливки.
-    /// </summary>
-    public string? Initiator { get; set; }
-
-    /// <summary>
-    /// CSS-совместимая строка цвета группы БД.
-    /// </summary>
-    public string GroupCssColor { get; set; } = string.Empty;
+    public DbRefreshLogDto() : this(
+        default,
+        string.Empty,
+        DateTime.UtcNow,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        string.Empty
+        )
+    { }
 }

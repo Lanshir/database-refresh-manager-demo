@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Demo.DbRefreshManager.Common.Extensions;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;

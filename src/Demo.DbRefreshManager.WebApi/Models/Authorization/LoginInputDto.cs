@@ -1,22 +1,12 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.Authorization;
+namespace Demo.DbRefreshManager.WebApi.Models.Authorization;
 
 /// <summary>
 /// Модель dto данных ввода авторизации.
 /// </summary>
-public class LoginInputDto
+/// <param name="Login">Логин.</param>
+/// <param name="Password">Пароль.</param>
+/// <param name="RememberMe">Запомнить авторизацию.</param>
+public record LoginInputDto(string Login, string Password, bool RememberMe)
 {
-    /// <summary>
-    /// Логин.
-    /// </summary>
-    public string Login { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Пароль.
-    /// </summary>
-    public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Запомнить авторизацию.
-    /// </summary>
-    public bool RememberMe { get; set; }
-}
+    public LoginInputDto() : this(string.Empty, string.Empty, false) { }
+};

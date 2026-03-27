@@ -5,7 +5,7 @@ namespace Demo.DbRefreshManager.WebApi.Models.Api;
 /// <summary>
 /// Модель ответа api.
 /// </summary>
-public class ApiResponseDto<TData>
+public record ApiResponseDto<TData>
 {
     /// <summary>
     /// Код ответа.

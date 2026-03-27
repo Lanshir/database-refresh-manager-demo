@@ -1,22 +1,12 @@
-﻿namespace Demo.DbRefreshManager.WebApi.Models.Authorization;
+namespace Demo.DbRefreshManager.WebApi.Models.Authorization;
 
 /// <summary>
 /// Модель dto данных результата авторизации.
 /// </summary>
-public class LoginResultDto
+/// <param name="Login">Логин пользователя.</param>
+/// <param name="FullName">ФИО пользователя.</param>
+/// <param name="Roles">Роли пользователя.</param>
+public record LoginResultDto(string Login, string FullName, List<string> Roles)
 {
-    /// <summary>
-    /// Логин пользователя.
-    /// </summary>
-    public string Login { get; set; } = string.Empty;
-
-    /// <summary>
-    /// ФИО пользователя.
-    /// </summary>
-    public string FullName { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Роли пользователя.
-    /// </summary>
-    public IEnumerable<string> Roles { get; set; } = new string[0];
+    public LoginResultDto() : this(string.Empty, string.Empty, []) { }
 }
