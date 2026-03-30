@@ -44,8 +44,9 @@ public record DbRefreshJobDto(
         null,
         null,
         null,
-        null, 
+        null,
         default,
         string.Empty,
-        []) {}
+        [])
+    { }
 }

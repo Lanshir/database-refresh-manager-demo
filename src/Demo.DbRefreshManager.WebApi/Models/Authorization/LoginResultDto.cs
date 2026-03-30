@@ -10,4 +10,5 @@ public record LoginResultDto(
     string Login,
     string FullName,
     List<string> Roles
-    ) { }
+    )
+{ }

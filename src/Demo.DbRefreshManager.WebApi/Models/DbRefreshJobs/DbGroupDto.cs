@@ -18,5 +18,6 @@ public record DbGroupDto(
         default,
         string.Empty,
         string.Empty
-        ) { }
+        )
+    { }
 }

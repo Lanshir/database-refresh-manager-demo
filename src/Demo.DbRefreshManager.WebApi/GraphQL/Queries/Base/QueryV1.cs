@@ -1,5 +1,3 @@
-using Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;
-
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 
 /// <summary>
