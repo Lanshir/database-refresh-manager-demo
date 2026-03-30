@@ -7,7 +7,4 @@ namespace Demo.DbRefreshManager.WebApi.Models.Frontend;
 /// <param name="InstructionUrl">Url интрукции к менеджеру.</param>
 public record FrontendConfigDto(
     string ObjectsListUrl,
-    string InstructionUrl)
-{
-    public FrontendConfigDto() : this(string.Empty, string.Empty) { }
-}
+    string InstructionUrl);

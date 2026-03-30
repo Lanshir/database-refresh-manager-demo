@@ -1,9 +1,9 @@
-using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Common.Exceptions;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
+using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
@@ -21,7 +21,6 @@ public class DbRefreshJobsMutationsV1
     [Authorize]
     public async Task<DbRefreshJobDto> StartManualRefresh(
         ITopicEventSender eventSender,
-        ITypeMapper mapper,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
@@ -38,10 +37,10 @@ public class DbRefreshJobsMutationsV1
 
         var refreshDate = DateTime.UtcNow.AddMinutes(delayMinutes);
 
-        var updatedJob = await jobsRepository.StartManualRefresh
-            (job.Id, refreshDate, userIdentity.GetUserLogin(), comment);
+        await jobsRepository.StartManualRefresh(job.Id, refreshDate, userIdentity.GetUserLogin(), comment);
 
-        var dto = mapper.Map<DbRefreshJobDto>(updatedJob);
+        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -55,7 +54,6 @@ public class DbRefreshJobsMutationsV1
     [Authorize]
     public async Task<DbRefreshJobDto> StopManualRefresh(
         ITopicEventSender eventSender,
-        ITypeMapper mapper,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
@@ -67,10 +65,10 @@ public class DbRefreshJobsMutationsV1
             ?? throw GetJobNotFoundException(jobId);
 
         await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
+        await jobsRepository.StopManualRefresh(jobId);
 
-        var updatedJob = await jobsRepository.StopManualRefresh(jobId);
-
-        var dto = mapper.Map<DbRefreshJobDto>(updatedJob);
+        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -85,23 +83,23 @@ public class DbRefreshJobsMutationsV1
     [Authorize]
     public async Task<DbRefreshJobDto> SetScheduledRefreshActive(
         ITopicEventSender eventSender,
-        ITypeMapper mapper,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IUserIdentityHelper userIdentity,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
         int jobId, bool isActive)
     {
-        var changeuserId = userIdentity.GetUserId();
+        var changeUserId = userIdentity.GetUserId();
 
         // Поиск задачи, проверка прав.
         var job = await jobsRepository.FindJob(jobId)
             ?? throw GetJobNotFoundException(jobId);
 
         await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
+        await jobsRepository.SetJobScheduleActive(jobId, changeUserId, isActive);
 
-        var updatedJob = await jobsRepository.SetJobScheduleActive(jobId, changeuserId, isActive);
-        var dto = mapper.Map<DbRefreshJobDto>(updatedJob);
+        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -116,7 +114,6 @@ public class DbRefreshJobsMutationsV1
     [Authorize]
     public async Task<DbRefreshJobDto> SetUserComment(
         ITopicEventSender eventSender,
-        ITypeMapper mapper,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
@@ -130,12 +127,10 @@ public class DbRefreshJobsMutationsV1
                 ?? throw GetJobNotFoundException(jobId);
 
             await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
-
             await jobsRepository.SetUserComment(jobId, comment);
 
             job.UserComment = comment;
-
-            var dto = mapper.Map<DbRefreshJobDto>(job);
+            var dto = job.ToDto();
 
             await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -155,17 +150,22 @@ public class DbRefreshJobsMutationsV1
     /// <param name="isAppend">Добавить комментарий к предыдущему.</param>
     public async Task<DbRefreshJobDto> SetReleaseComment(
         ITopicEventSender eventSender,
-        ITypeMapper mapper,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         string dbName, string? comment, bool isAppend = false)
     {
         try
         {
-            await jobsRepository.SetReleaseComment(dbName, comment, isAppend);
+            // Поиск задачи, проверка прав.
+            var job = await jobsRepository.FindJob(dbName)
+                ?? throw new BusinessLogicException($"Задача для БД {dbName} не найдена");
 
-            var job = jobsRepository.FindJob(dbName);
-            var dto = mapper.Map<DbRefreshJobDto>(job);
+            var releaseComment = isAppend ? (job.ReleaseComment + comment).Trim('\n') : comment;
+
+            await jobsRepository.SetReleaseComment(dbName, releaseComment);
+
+            job.ReleaseComment = releaseComment;
+            var dto = job.ToDto();
 
             await SendJobChangeEventAsync(eventSender, logger, dto);
 

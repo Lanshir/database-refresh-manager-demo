@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Common.Config.Abstract;
+using Demo.DbRefreshManager.Common.Config.Abstract;
 using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract.Base;
 using Microsoft.EntityFrameworkCore;

@@ -1,12 +1,14 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
+using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
+using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;
 
+[ExtendObjectType<QueryV1>]
 public class DbRefreshJobsQueriesV1
 {
     /// <summary>
@@ -15,40 +17,41 @@ public class DbRefreshJobsQueriesV1
     /// <param name="id">Фильтр по id.</param>
     /// <param name="dbName">Фильтр по названию БД.</param>
     [UseProjection]
-    public async Task<IQueryable<DbRefreshJobDto>> GetList(
-        IMapper mapper,
+    public async Task<IQueryable<DbRefreshJobDto>> GetDbRefreshJobs(
         IDbRefreshJobsRepository jobsRepository,
-        int? id = null, string? dbName = null)
-        => jobsRepository.GetUserDisplayJobsListQuery(id, dbName)
-            .ProjectTo<DbRefreshJobDto>(mapper.ConfigurationProvider);
+        int? id = null,
+        string? dbName = null)
+        => jobsRepository
+            .GetUserDisplayJobsListQuery(id, dbName)
+            .Select(DbRefreshJob.ToDtoProjectionExpression);
 
     /// <summary>
     /// Получить группы БД.
     /// </summary>
     [UseProjection]
-    public async Task<IQueryable<DbGroupDto>> GetGroups(
-        IMapper mapper,
-        IDbGroupsRepository groupsRepository)
-        => groupsRepository.GetUserDisplayGroupsQuery()
-            .ProjectTo<DbGroupDto>(mapper.ConfigurationProvider);
+    public async Task<IQueryable<DbGroupDto>> GetDbGroups(IDbGroupsRepository groupsRepository)
+        => groupsRepository
+            .GetUserDisplayGroupsQuery()
+            .Select(DbGroup.ToDtoProjectionExpression);
 
     /// <summary>
     /// Получить логи перезаливок БД.
     /// </summary>
     [Authorize]
     [UseProjection]
-    public async Task<IQueryable<DbRefreshLogDto>> GetLogs(
-        IMapper mapper,
+    public async Task<IQueryable<DbRefreshLogDto>> GetDbRefreshLogs(
         IDbRefreshLogsRepository logsRepository,
-        int? jobId = null, DateTime? startDate = null)
-        => logsRepository.GetUserDisplayLogsQuery(jobId, startDate)
-            .ProjectTo<DbRefreshLogDto>(mapper.ConfigurationProvider);
+        int? jobId = null,
+        DateTime? startDate = null)
+        => logsRepository
+            .GetUserDisplayLogsQuery(jobId, startDate)
+            .Select(DbRefreshLog.ToDtoProjectionExpression);
 
     /// <summary>
-    /// Получить список id задач на перезаливку с персональным доступом.
+    /// Получить список id баз с персональным доступом.
     /// </summary>
     [Authorize]
-    public async Task<int[]> GetPersonalAccessIds(
+    public async Task<int[]> GetDbPersonalAccessIds(
         IDbPersonalAccessesRepository acessesRepository,
         IUserIdentityHelper userIdentity)
         => await acessesRepository.GetPersonalAccessJobIds(userIdentity.GetUserLogin());

@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Common.Converters.Abstract;
+using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Common.Enums;
 using System.Text.Json;
 
@@ -19,28 +19,18 @@ public class JsonConverter : IJsonConverter
     };
 
     public string Serialize<T>(T obj, TextStyle textStyle = TextStyle.CamelCase)
-    {
-        switch (textStyle)
+        => textStyle switch
         {
-            case TextStyle.None:
-                return JsonSerializer.Serialize(obj, _caseInsensitiveOptions);
-            case TextStyle.CamelCase:
-                return JsonSerializer.Serialize(obj, _camelCaseOptions);
-            default:
-                return JsonSerializer.Serialize(obj, _caseInsensitiveOptions);
-        }
-    }
+            TextStyle.None => JsonSerializer.Serialize(obj, _caseInsensitiveOptions),
+            TextStyle.CamelCase => JsonSerializer.Serialize(obj, _camelCaseOptions),
+            _ => JsonSerializer.Serialize(obj, _caseInsensitiveOptions),
+        };
 
     public T? Deserialize<T>(string json, TextStyle textStyle = TextStyle.None)
-    {
-        switch (textStyle)
+        => textStyle switch
         {
-            case TextStyle.None:
-                return JsonSerializer.Deserialize<T>(json, _caseInsensitiveOptions);
-            case TextStyle.CamelCase:
-                return JsonSerializer.Deserialize<T>(json, _camelCaseOptions);
-            default:
-                return JsonSerializer.Deserialize<T>(json, _caseInsensitiveOptions);
-        }
-    }
+            TextStyle.None => JsonSerializer.Deserialize<T>(json, _caseInsensitiveOptions),
+            TextStyle.CamelCase => JsonSerializer.Deserialize<T>(json, _camelCaseOptions),
+            _ => JsonSerializer.Deserialize<T>(json, _caseInsensitiveOptions),
+        };
 }

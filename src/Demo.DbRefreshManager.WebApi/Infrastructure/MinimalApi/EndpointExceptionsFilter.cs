@@ -21,7 +21,7 @@ public class EndpointExceptionsFilter : IEndpointFilter
         // Ошибка бизнес логики возвращает ApiResponseDto со статусом 400 и данными ошибки.
         catch (BusinessLogicException exc)
         {
-            var resultDto = ApiResponse.Default(exc.Code, exc.ErrorData, exc.Message);
+            var resultDto = ApiResponse.Create(exc.Code, exc.ErrorData, exc.Message);
 
             return Results.Json(resultDto, statusCode: StatusCodes.Status400BadRequest);
         }

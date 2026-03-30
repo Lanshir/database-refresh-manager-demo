@@ -32,30 +32,9 @@ public record ApiResponseDto<TData>
     public DateTime RequestTimeUTC { get; } = DateTime.UtcNow;
 
     /// <summary>
-    /// Текущая страница.
-    /// </summary>
-    [JsonPropertyOrder(4)]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? Page { get; set; }
-
-    /// <summary>
-    /// Всего страниц.
-    /// </summary>
-    [JsonPropertyOrder(5)]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? TotalPages { get; set; }
-
-    /// <summary>
-    /// Кол-во элементов на всех страницах.
-    /// </summary>
-    [JsonPropertyOrder(6)]
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public int? TotalItems { get; set; }
-
-    /// <summary>
     /// Объект данных.
     /// </summary>
-    [JsonPropertyOrder(7)]
+    [JsonPropertyOrder(1000)]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public TData? Data { get; set; }
 }

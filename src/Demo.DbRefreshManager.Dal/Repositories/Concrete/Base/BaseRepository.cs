@@ -57,22 +57,6 @@ public class BaseRepository<TEntity>(
             .ExecuteUpdateAsync(setPropertyCalls);
     }
 
-    protected virtual async Task<IQueryable<TEntity>> UpdatePropsReturningAsync(
-        Action<UpdateSettersBuilder<TEntity>> setPropertyCalls,
-        Expression<Func<TEntity, bool>> where)
-    {
-        var ctx = await ContextFactory.CreateDbContextAsync();
-        _contextsToDispose.Add(ctx);
-
-        await ctx.Set<TEntity>()
-            .Where(where)
-            .ExecuteUpdateAsync(setPropertyCalls);
-
-        var updated = ctx.Set<TEntity>().Where(where);
-
-        return updated;
-    }
-
     protected virtual async Task DeleteAsync(Expression<Func<TEntity, bool>> where)
     {
         using var ctx = await ContextFactory.CreateDbContextAsync();

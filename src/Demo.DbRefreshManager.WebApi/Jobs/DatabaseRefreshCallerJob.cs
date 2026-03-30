@@ -1,11 +1,10 @@
-﻿using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Common.Extensions;
 using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Models.SshServiceModels;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
-using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using HotChocolate.Subscriptions;
 using Quartz;
 
@@ -17,7 +16,6 @@ namespace Demo.DbRefreshManager.WebApi.Jobs;
 public class DatabaseRefreshCallerJob(
     IServiceProvider serviceProvider,
     ILogger<DatabaseRefreshCallerJob> logger,
-    ITypeMapper mapper,
     IDbRefreshJobsRepository jobsRepository,
     IDbRefreshLogsRepository logsRepository,
     ITopicEventSender eventSender
@@ -76,10 +74,12 @@ public class DatabaseRefreshCallerJob(
             // Обновление статуса задачи.
             var userComment = isScheduled ? null : job.UserComment;
 
-            var updatedJob = await jobsRepository.SetJobInProgressStatus(job.Id, userComment);
+            await jobsRepository.SetJobInProgressStatus(job.Id, userComment);
+
+            var updatedJob = (await jobsRepository.FindJob(job.Id))!;
 
             // Отправка сообщения о начале перезаливки.
-            var dto = mapper.Map<DbRefreshJobDto>(updatedJob);
+            var dto = updatedJob.ToDto();
 
             await eventSender.SendAsync(nameof(SubscriptionsBase.OnDbRefreshJobChange), dto);
 
@@ -103,10 +103,11 @@ public class DatabaseRefreshCallerJob(
         finally
         {
             // Сброс статуса на начальный.
-            var updatedJob = await jobsRepository.SetJobDefaultStatus(job.Id);
+            await jobsRepository.SetJobDefaultStatus(job.Id);
+            var updatedJob = (await jobsRepository.FindJob(job.Id))!;
 
             // Отправка сообщения об окончании перезаливки.
-            var dto = mapper.Map<DbRefreshJobDto>(updatedJob);
+            var dto = updatedJob.ToDto();
 
             await eventSender.SendAsync(nameof(SubscriptionsBase.OnDbRefreshJobChange), dto);
 

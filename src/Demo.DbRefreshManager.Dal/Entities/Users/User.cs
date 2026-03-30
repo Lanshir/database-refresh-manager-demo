@@ -58,5 +58,5 @@ public class User
     /// <summary>
     /// Роли пользователя.
     /// </summary>
-    public List<UserRole> Roles { get; set; } = new();
+    public List<UserRole> Roles { get; set; } = [];
 }

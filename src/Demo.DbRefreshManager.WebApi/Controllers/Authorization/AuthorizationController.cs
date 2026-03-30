@@ -1,12 +1,11 @@
 using Asp.Versioning;
 using Demo.DbRefreshManager.Common.Config.Abstract;
-using Demo.DbRefreshManager.Common.Converters.Abstract;
-using Demo.DbRefreshManager.Dal.Entities.Users;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
+using Demo.DbRefreshManager.WebApi.Mappings.Users;
 using Demo.DbRefreshManager.WebApi.Models.Api;
 using Demo.DbRefreshManager.WebApi.Models.Authorization;
 using Microsoft.AspNetCore.Authentication;
@@ -26,7 +25,6 @@ namespace Demo.DbRefreshManager.WebApi.Controllers.Authorization;
 [ApiController]
 public class AuthorizationController(
     IAppConfig appConfig,
-    ITypeMapper mapper,
     IUserIdentityHelper identityService,
     IDomainControllerService domainController,
     IWebHostEnvironment environment,
@@ -90,11 +88,8 @@ public class AuthorizationController(
                     "Ошибка авторизации, проверьте логин/пароль."));
             }
 
-            var dbUser = mapper.Map<User>(ldapUser);
-
-            dbUser = await usersRepository.MergeLdapUser(dbUser);
-
-            var dto = mapper.Map<LoginResultDto>(dbUser);
+            var dbUser = await usersRepository.MergeLdapUser(ldapUser.ToDto());
+            var dto = dbUser.ToLoginResultDto();
 
             var claims = identityService.CreateClaimsList(
                 dbUser.Id,

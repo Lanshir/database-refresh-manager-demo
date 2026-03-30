@@ -1,6 +1,6 @@
-using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Entities.Users;
+using Demo.DbRefreshManager.Dal.Mappings;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Dal.Repositories.Concrete.Base;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +8,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Demo.DbRefreshManager.Dal.Repositories.Concrete;
 
 /// <inheritdoc cref="IUsersRepository" />
-internal class UsersRepository(
-    IDbContextFactory<AppDbContext> contextFactory,
-    ITypeMapper mapper
-    ) : BaseRepository<User>(contextFactory), IUsersRepository
+internal class UsersRepository(IDbContextFactory<AppDbContext> contextFactory)
+    : BaseRepository<User>(contextFactory), IUsersRepository
 {
     public async Task<User> MergeLdapUser(User ldapUser)
     {
@@ -29,9 +27,10 @@ internal class UsersRepository(
                     .Contains(r.LdapGroup))
             .ToListAsync();
 
+        // Создание пользователя, если нет существующего.
         if (user == null)
         {
-            user = mapper.Map(ldapUser, new User());
+            user = ldapUser;
             user.Roles = ldapUserRoles;
 
             ctx.Add(user);
@@ -41,10 +40,10 @@ internal class UsersRepository(
             return user;
         }
 
-        // Обновление пользователя если данные ldap изменились.
+        // Обновление пользователя, если данные ldap изменились.
         if (user.LdapChangeDate != ldapUser.LdapChangeDate)
         {
-            user = mapper.Map(ldapUser, user);
+            user = ldapUser.MergeTo(user);
             user.ModifyDate = DateTime.UtcNow;
 
             // Синхронизация привязок ролей пользователя с ldap.

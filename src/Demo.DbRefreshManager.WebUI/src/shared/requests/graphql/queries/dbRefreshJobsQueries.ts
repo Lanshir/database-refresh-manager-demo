@@ -15,23 +15,21 @@ import {
 export async function GetDbRefreshJobs(
     propsToFetch = DbRefreshJobKeys
 ) {
-    type Schema = { v1: { dbRefreshJobs: { list: Partial<DbRefreshJob>[] } } };
+    type Schema = { v1: { dbRefreshJobs: Partial<DbRefreshJob>[] } };
 
     const query = gql`
         query GetDbRefreshJobs{
-          v1{
-            dbRefreshJobs{
-              list{
+            v1{
+              dbRefreshJobs{
                 ${propsToFetch.join('\n')}
               }
             }
-          }
         }
     `;
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJobs.list;
+    return response.data.v1.dbRefreshJobs;
 }
 
 /**
@@ -41,15 +39,13 @@ export async function GetDbRefreshJobs(
 export async function GetDbGroups(
     propsToFetch = DbGroupKeys
 ) {
-    type Schema = { v1: { dbRefreshJobs: { groups: Partial<DbGroup>[] } } };
+    type Schema = { v1: { dbGroups: Partial<DbGroup>[] } };
 
     const query = gql`
         query GetDbGroups{
           v1{
-            dbRefreshJobs{
-              groups{
-                ${propsToFetch.join('\n')}
-              }
+            dbGroups{
+              ${propsToFetch.join('\n')}
             }
           }
         }
@@ -57,28 +53,26 @@ export async function GetDbGroups(
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJobs.groups;
+    return response.data.v1.dbGroups;
 }
 
 /**
  * Получить список id задач на перезаливку с персональным доступом.
  */
-export async function GetPersonalAccessIds() {
-    type Schema = { v1: { dbRefreshJobs: { accessIds: number[] } } };
+export async function GetDbPersonalAccessIds() {
+    type Schema = { v1: { dbPersonalAccessIds: number[] } };
 
     const query = gql`
-        query GetPersonalAccessIds{
+        query GetDbPersonalAccessIds{
           v1{
-            dbRefreshJobs{
-              accessIds: personalAccessIds
-            }
+            dbPersonalAccessIds
           }
         }
     `;
 
     const response = await ApolloClient.query<Schema>({ query });
 
-    return response.data.v1.dbRefreshJobs.accessIds;
+    return response.data.v1.dbPersonalAccessIds;
 }
 
 /**
@@ -92,15 +86,13 @@ export async function GetDbRefreshLogs(
     startDate?: Date | null,
     propsToFetch = DbRefreshLogKeys
 ) {
-    type Schema = { v1: { dbRefreshJobs: { logs: Partial<DbRefreshLog>[] } } };
+    type Schema = { v1: { dbRefreshLogs: Partial<DbRefreshLog>[] } };
 
     const query = gql`
         query GetDbRefreshLogs($jobId: Int, $startDate: DateTime) {
           v1{
-            dbRefreshJobs{
-              logs(jobId: $jobId, startDate: $startDate) {
-                ${propsToFetch.join('\n')}
-              }
+            dbRefreshLogs(jobId: $jobId, startDate: $startDate) {
+              ${propsToFetch.join('\n')}
             }
           }
         }
@@ -113,5 +105,5 @@ export async function GetDbRefreshLogs(
 
     const response = await ApolloClient.query<Schema>({ query, variables });
 
-    return response.data?.v1.dbRefreshJobs.logs;
+    return response.data?.v1.dbRefreshLogs;
 }

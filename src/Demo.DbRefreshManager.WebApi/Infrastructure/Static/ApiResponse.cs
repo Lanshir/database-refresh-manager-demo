@@ -9,11 +9,11 @@ namespace Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 public class ApiResponse
 {
     /// <summary>
-    /// Стандартный ответ.
+    /// Создать стандартный ответ api.
     /// </summary>
     /// <param name="code">Код ответа.</param>
     /// <param name="message">Сообщение.</param>
-    public static ApiResponseDto<object> Default(int code, string message = "")
+    public static ApiResponseDto<object> Create(int code, string message = "")
     {
         return new ApiResponseDto<object>
         {
@@ -24,13 +24,13 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Стандартный ответ.
+    /// Создать стандартный ответ api.
     /// </summary>
     /// <typeparam name="TData">Тип вложенных данных.</typeparam>
     /// <param name="code">Код ответа.</param>
     /// <param name="data">Данные.</param>
     /// <param name="message">Сообщение.</param>
-    public static ApiResponseDto<TData> Default<TData>
+    public static ApiResponseDto<TData> Create<TData>
         (int code, TData? data = default, string message = "")
     {
         return new ApiResponseDto<TData>
@@ -43,7 +43,7 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Успех.
+    /// Успешный ответ api.
     /// </summary>
     /// <param name="message">Сообщение.</param>
     public static ApiResponseDto<object> Success(string message = "success")
@@ -57,7 +57,7 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Успех.
+    /// Успешный ответ api.
     /// </summary>
     /// <typeparam name="TData">Тип вложенных данных.</typeparam>
     /// <param name="data">Данные.</param>
@@ -75,7 +75,7 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Ошибка.
+    /// Ответ api с ошибкой.
     /// </summary>
     /// <param name="message">Сообщение.</param>
     public static ApiResponseDto<object> Error(string message = "error")
@@ -89,7 +89,7 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Ошибка.
+    /// Ответ api с ошибкой.
     /// </summary>
     /// <typeparam name="TData">Тип вложенных данных.</typeparam>
     /// <param name="data">Данные.</param>
@@ -107,7 +107,7 @@ public class ApiResponse
     }
 
     /// <summary>
-    /// Постраничные данные.
+    /// Ответ api с постраничными данными.
     /// </summary>
     /// <typeparam name="TData">Тип вложенных данных.</typeparam>
     /// <param name="data">Данные.</param>
@@ -115,7 +115,7 @@ public class ApiResponse
     /// <param name="pageSize">Размер страницы.</param>
     /// <param name="totalCount">Общее кол-во элементов.</param>
     /// <param name="message">Сообщение.</param>
-    public static ApiResponseDto<TData> PageData<TData>
+    public static ApiPaginatedResponseDto<TData> PageData<TData>
         (TData? data = default, int page = 1, int pageSize = 10, int totalCount = 0, string message = "success")
     {
         if (pageSize <= 0)
@@ -125,7 +125,7 @@ public class ApiResponse
 
         var pagesCount = (totalCount + pageSize - 1) / pageSize;
 
-        return new ApiResponseDto<TData>
+        return new ApiPaginatedResponseDto<TData>
         {
             Code = (int)DefaultStatusCodes.Success,
             Message = message,

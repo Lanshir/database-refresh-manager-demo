@@ -8,7 +8,7 @@ import {
 } from './dbRefreshState';
 import { dbRefreshJobsListItemsState, DbRefreshJobListItem } from '@store/listItems/listItemsState';
 import { pushErrorAction } from '@store/alerts/alertsActions';
-import { GetDbRefreshJobs, GetPersonalAccessIds } from '@requests/graphql/queries/dbRefreshJobsQueries';
+import { GetDbRefreshJobs, GetDbPersonalAccessIds } from '@requests/graphql/queries/dbRefreshJobsQueries';
 import {
     StartManualDbRefresh, StopManualDbRefresh, SetScheduledDbRefreshActive, SetUserComment
 } from '@requests/graphql/mutations/dbRefereshJobsMutations';
@@ -65,7 +65,7 @@ export const jobsListQuery = atom(null,
 export const personalAccessesQuery = atom(null,
     async (get, set) => {
         try {
-            const accessIds = await GetPersonalAccessIds();
+            const accessIds = await GetDbPersonalAccessIds();
             set(personalAccessIdsState, accessIds);
         }
         catch (e) {
