@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Demo.DbRefreshManager.Common.Config.Abstract;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
@@ -24,7 +23,6 @@ namespace Demo.DbRefreshManager.WebApi.Controllers.Authorization;
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class AuthorizationController(
-    IAppConfig appConfig,
     IUserIdentityHelper identityService,
     IDomainControllerService domainController,
     IWebHostEnvironment environment,

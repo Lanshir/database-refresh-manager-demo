@@ -1,17 +1,17 @@
-﻿namespace Demo.DbRefreshManager.Common.Config.Concrete;
+namespace Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 
 /// <summary>
 /// Конфигурация frontend.
 /// </summary>
-public class FrontendConfig
+public record FrontendOptions
 {
     /// <summary>
     /// Url метода просмотра списка обновлённых объектов.
     /// </summary>
-    public string ObjectsListUrl { get; set; } = string.Empty;
+    public string ObjectsListUrl { get; init; } = string.Empty;
 
     /// <summary>
     /// Url интрукции к менеджеру.
     /// </summary>
-    public string InstructionUrl { get; set; } = string.Empty;
+    public string InstructionUrl { get; init; } = string.Empty;
 }

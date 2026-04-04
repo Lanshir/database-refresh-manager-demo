@@ -1,4 +1,3 @@
-using Demo.DbRefreshManager.Common.Config.Abstract;
 using Demo.DbRefreshManager.Dal.Context;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract.Base;
 using Microsoft.EntityFrameworkCore;
@@ -20,8 +19,7 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration,
         bool enableSensitiveDataLogging = false)
     {
-        var connectionString = configuration
-            .GetValue<string>(nameof(IAppConfig.DbConnectionString));
+        var connectionString = configuration.GetConnectionString("Default");
 
         services.AddPooledDbContextFactory<AppDbContext>(o =>
         {
@@ -42,9 +40,7 @@ public static class ServiceCollectionExtensions
 
         foreach (var i in interfaces)
         {
-            var implementation = assemblyTypes
-                .Where(t => t.IsAssignableTo(i))
-                .First();
+            var implementation = assemblyTypes.First(t => t.IsAssignableTo(i));
 
             services.AddScoped(i, implementation);
         }

@@ -1,17 +1,16 @@
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
-using Demo.DbRefreshManager.Common.Config.Abstract;
 using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Concrete;
 using Demo.DbRefreshManager.WebApi.GraphQL.Mutations.Base;
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Config;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Converters;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Concrete;
 using Demo.DbRefreshManager.WebApi.Infrastructure.HotChocolate;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Serilog;
 using Demo.DbRefreshManager.WebApi.Jobs;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -35,13 +34,23 @@ public static class ServiceCollectionExtensions
         /// </summary>
         public IServiceCollection AddProjectCoreDependencies()
         {
-            services.AddSingleton<IAppConfig, AppConfig>();
             services.AddSingleton<IJsonConverter, JsonConverter>();
 
             services.AddScoped<IUserIdentityHelper, UserIdentityHelper>();
             services.AddScoped<IDomainControllerService, DomainControllerService>();
 
             services.AddTransient<ISshClientService, SshClientService>();
+
+            return services;
+        }
+
+        public IServiceCollection AddApiOptions()
+        {
+            services.AddOptions<AuthCookieOptions>()
+                .BindConfiguration(nameof(AuthCookieOptions));
+
+            services.AddOptions<FrontendOptions>()
+                .BindConfiguration(nameof(FrontendOptions));
 
             return services;
         }
@@ -65,7 +74,8 @@ public static class ServiceCollectionExtensions
         public IServiceCollection AddCookieAuthentication(IConfiguration configuration)
         {
             var cookieLifetimeMinutes = configuration
-                .GetValue<int>(nameof(IAppConfig.AuthCookieLifetimeMinutes));
+                .GetSection(nameof(AuthCookieOptions))
+                .GetValue<int>(nameof(AuthCookieOptions.LifetimeMinutes));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -73,13 +83,13 @@ public static class ServiceCollectionExtensions
                     // Unauthorized return 401.
                     options.Events.OnRedirectToLogin = context =>
                     {
-                        context.Response.StatusCode = 401;
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         return Task.CompletedTask;
                     };
                     // Access denied return 403.
                     options.Events.OnRedirectToAccessDenied = context =>
                     {
-                        context.Response.StatusCode = 403;
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         return Task.CompletedTask;
                     };
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(cookieLifetimeMinutes);

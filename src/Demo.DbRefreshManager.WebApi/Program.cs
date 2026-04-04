@@ -46,6 +46,7 @@ internal class Program
         services.AddHttpContextAccessor();
 
         services.AddProjectCoreDependencies();
+        services.AddApiOptions();
         services.AddLoggingServices(environment, config);
         services.AddDatabaseServices(config, environment.IsDevelopment());
         services.AddRestVersioning();

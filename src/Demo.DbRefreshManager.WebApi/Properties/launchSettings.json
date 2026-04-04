@@ -7,7 +7,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DISABLE_QUARTZ_JOBS": "false",
-        "DB_REFRESH_MANAGER_dbConnectionString": "Data Source=.\\..\\..\\sqlite\\demoapp.db"
+        "DB_REFRESH_MANAGER_ConnectionStrings__Default": "Data Source=.\\..\\..\\sqlite\\demoapp.db"
       },
       "dotnetRunMessages": true,
       "useSSL": true,
@@ -22,7 +22,7 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "DISABLE_QUARTZ_JOBS": "false",
-        "DB_REFRESH_MANAGER_dbConnectionString": "Data Source=/home/app/sqlite/demoapp.db"
+        "DB_REFRESH_MANAGER_ConnectionStrings__Default": "Data Source=/home/app/sqlite/demoapp.db"
       },
       "publishAllPorts": false,
       "useSSL": true,

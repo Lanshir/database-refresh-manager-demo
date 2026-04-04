@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
+using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
 
 namespace Demo.DbRefreshManager.Services.Abstract;
 
@@ -24,6 +24,12 @@ public interface IDomainControllerService : IDisposable
         int reconnectCount = 0,
         int reconnectDelayMs = 1000);
 
+    /// <summary>
+    /// Авторизация в домене.
+    /// </summary>
+    /// <param name="login">Логин пользователя</param>
+    /// <param name="password">Пароль.</param>
+    /// <returns>Автормзован.</returns>
     bool Authorize(string login, string password);
 
     /// <summary>

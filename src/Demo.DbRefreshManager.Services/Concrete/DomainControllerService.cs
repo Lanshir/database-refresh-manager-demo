@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Services.Abstract;
+using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Infrastructure.Constants;
 using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
 using Novell.Directory.Ldap;
@@ -134,8 +134,7 @@ public class DomainControllerService : IDomainControllerService
                 groups = userEntry.GetAttribute(LdapAttributes.GroupsList)
                     ?.StringValueArray.Select(grpDn => grpDn
                         .Split(",")
-                        .Where(s => s.StartsWith("CN="))
-                        .FirstOrDefault()
+                        .FirstOrDefault(s => s.StartsWith("CN="))
                         ?.Replace("CN=", "") ?? "")
                     .ToList();
             }
