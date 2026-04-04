@@ -29,7 +29,7 @@ export default defineConfig(({ command }) => {
                 },
                 proxy: {
                     '/api': devHttpsProxy,
-                    '/swagger': devHttpsProxy,
+                    '/scalar': devHttpsProxy,
                     '/graphql': { ...devHttpsProxy, ws: true },
                     '/healthz': devHttpsProxy,
                     '/env': devHttpsProxy
