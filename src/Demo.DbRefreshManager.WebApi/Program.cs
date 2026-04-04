@@ -7,6 +7,7 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.MinimalApi;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Scalar.AspNetCore;
 
 namespace Demo.DbRefreshManager.WebApi;
 
@@ -32,8 +33,7 @@ internal class Program
 
         if (!environment.IsProduction())
         {
-            // Swagger.
-            services.AddSwaggerGeneration();
+            services.AddOpenApi();
         }
 
         // Healthcheck services.
@@ -59,8 +59,10 @@ internal class Program
         // Configure the HTTP request pipeline.
         if (!environment.IsProduction())
         {
-            // Swagger.
-            app.UseProjectSwaggerUI();
+            app.MapOpenApi();
+            app.MapScalarApiReference(o => o
+                .EnableDarkMode()
+                .WithTheme(ScalarTheme.BluePlanet));
         }
 
         app.UseAuthentication();

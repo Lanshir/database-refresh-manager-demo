@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Asp.Versioning.ApiExplorer;
 using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Concrete;
@@ -14,11 +13,9 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Serilog;
 using Demo.DbRefreshManager.WebApi.Jobs;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.OpenApi;
 using Quartz;
 using Serilog;
 using System.Reflection;
-using Path = System.IO.Path;
 
 namespace Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 
@@ -46,9 +43,6 @@ public static class ServiceCollectionExtensions
 
         public IServiceCollection AddApiOptions()
         {
-            services.AddOptions<AuthCookieOptions>()
-                .BindConfiguration(nameof(AuthCookieOptions));
-
             services.AddOptions<FrontendOptions>()
                 .BindConfiguration(nameof(FrontendOptions));
 
@@ -76,6 +70,9 @@ public static class ServiceCollectionExtensions
             var cookieLifetimeMinutes = configuration
                 .GetSection(nameof(AuthCookieOptions))
                 .GetValue<int>(nameof(AuthCookieOptions.LifetimeMinutes));
+
+            services.AddOptions<AuthCookieOptions>()
+                .BindConfiguration(nameof(AuthCookieOptions));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -192,65 +189,6 @@ public static class ServiceCollectionExtensions
             {
                 o.WaitForJobsToComplete = true;
                 o.AwaitApplicationStarted = true;
-            });
-
-            return services;
-        }
-
-        /// <summary>
-        /// Добавление генерации документации swagger.
-        /// </summary>
-        public IServiceCollection AddSwaggerGeneration()
-        {
-            services.AddSwaggerGen(options =>
-            {
-                options.EnableAnnotations();
-
-                using var serviceProvider = services.BuildServiceProvider();
-
-                var assembly = typeof(Program).Assembly;
-
-                var environment = serviceProvider
-                    .GetRequiredService<IWebHostEnvironment>();
-
-                var provider = serviceProvider
-                    .GetRequiredService<IApiVersionDescriptionProvider>();
-
-                var assemblyDescription = assembly
-                    .GetCustomAttribute<AssemblyDescriptionAttribute>()
-                    ?.Description ?? string.Empty;
-
-                var assemblyProduct = assembly
-                    .GetCustomAttribute<AssemblyProductAttribute>()
-                    ?.Product ?? string.Empty;
-
-                // Add docs generation for each api version.
-                foreach (var description in provider.ApiVersionDescriptions)
-                {
-                    options.SwaggerDoc(description.GroupName, new OpenApiInfo()
-                    {
-                        Title = $"{assemblyProduct} {description.ApiVersion}",
-                        Version = description.ApiVersion.ToString(),
-                        Description = description.IsDeprecated
-                            ? $"{assemblyDescription} - DEPRECATED"
-                            : $"{assemblyDescription}"
-                    });
-                }
-
-                // Add xml comments.
-                var currentAssembly = Assembly.GetExecutingAssembly();
-                var contentPath = environment.ContentRootPath;
-
-                var xmlDocs = currentAssembly.GetReferencedAssemblies()
-                    .Append(currentAssembly.GetName())
-                    .Select(a => Path.Combine(contentPath, $"{a.Name}.xml"))
-                    .Where(f => File.Exists(f))
-                    .ToArray();
-
-                foreach (var xmlDoc in xmlDocs)
-                {
-                    options.IncludeXmlComments(xmlDoc);
-                }
             });
 
             return services;
