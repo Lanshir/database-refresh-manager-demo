@@ -90,7 +90,7 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
             */
 
             // DEMO AUTH.
-            var ldapUser = _demoUsers.FirstOrDefault(u => u.Key.Equals(input.Login)).Value;
+            var ldapUser = _demoUsers.FirstOrDefault(u => u.Login == input.Login);
 
             if (ldapUser == null || input.Password != "pwd")
             {
@@ -134,10 +134,9 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
         }
     }
 
-    private static readonly Dictionary<string, LdapUser> _demoUsers = new()
+    private static readonly List<LdapUser> _demoUsers = new()
     {
         {
-            "demoMaster",
             new LdapUser
             {
                 Dn = "demoMaster",
@@ -155,7 +154,6 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
             }
         },
         {
-            "demoAnalyst",
             new LdapUser
             {
                 Dn = "demoAnalyst",
@@ -173,7 +171,6 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
             }
         },
         {
-            "demoSupport",
             new LdapUser
             {
                 Dn = "demoSupport",
