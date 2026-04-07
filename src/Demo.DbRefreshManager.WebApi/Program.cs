@@ -6,7 +6,6 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using HotChocolate.AspNetCore;
-using Scalar.AspNetCore;
 
 namespace Demo.DbRefreshManager.WebApi;
 
@@ -42,9 +41,7 @@ internal class Program
 
         if (!environment.IsProduction())
         {
-            // OpenApi docs generation.
-            SupportedApiVersions.VersionsList.ForEach(v =>
-                services.AddOpenApi($"v{v}"));
+            services.AddVersionedOpenApiDocs();
         }
 
         var app = builder.Build();
@@ -53,12 +50,7 @@ internal class Program
         // Configure the HTTP request pipeline.
         if (!environment.IsProduction())
         {
-            // Open Api documents & Scalar UI.
-            app.MapOpenApi();
-            app.MapScalarApiReference(o => o
-                .AddDocuments(SupportedApiVersions.VersionsList.Select(v => $"v{v}"))
-                .EnableDarkMode()
-                .WithTheme(ScalarTheme.BluePlanet));
+            app.MapOpenApiWithScalar();
         }
 
         app.UseAuthentication();

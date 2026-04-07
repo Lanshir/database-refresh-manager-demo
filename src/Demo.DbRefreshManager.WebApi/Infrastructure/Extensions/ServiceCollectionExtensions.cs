@@ -1,4 +1,3 @@
-using Asp.Versioning.ApiExplorer;
 using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Concrete;
@@ -11,6 +10,7 @@ using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Concrete;
 using Demo.DbRefreshManager.WebApi.Infrastructure.HotChocolate;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Serilog;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using Demo.DbRefreshManager.WebApi.Jobs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Quartz;
@@ -114,6 +114,17 @@ public static class ServiceCollectionExtensions
                     o.GroupNameFormat = "'v'VVV";
                     o.SubstituteApiVersionInUrl = true;
                 });
+
+            return services;
+        }
+
+        /// <summary>
+        /// Регистрация генерации документов OpenApi для поддерживаемых версий Api.
+        /// </summary>
+        public IServiceCollection AddVersionedOpenApiDocs()
+        {
+            SupportedApiVersions.VersionsList.ForEach(v =>
+                services.AddOpenApi($"v{v}"));
 
             return services;
         }
