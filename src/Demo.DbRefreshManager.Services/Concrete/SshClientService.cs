@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Services.Abstract;
+using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Models.SshServiceModels;
 using Renci.SshNet;
 
@@ -17,7 +17,7 @@ public class SshClientService : ISshClientService
         // Проверка существующего подключения.
         if (_client?.IsConnected ?? false)
         {
-            return;
+            throw new Exception("Trying to call connect on already connected client.");
         }
 
         _client = new SshClient(host, user, pasword);
