@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using System.Security.Claims;
 
 namespace Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Concrete;

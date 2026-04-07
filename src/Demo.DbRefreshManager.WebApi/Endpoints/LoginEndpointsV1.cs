@@ -1,7 +1,6 @@
-using Asp.Versioning;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract;
-using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
+using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
@@ -9,51 +8,64 @@ using Demo.DbRefreshManager.WebApi.Models.Api;
 using Demo.DbRefreshManager.WebApi.Models.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Diagnostics;
 using System.Security.Claims;
 
-namespace Demo.DbRefreshManager.WebApi.Controllers.Authorization;
+namespace Demo.DbRefreshManager.WebApi.Endpoints;
 
-/// <summary>
-/// Контроллер авторизации.
-/// </summary>
-[ApiVersion("1.0")]
-[Route("api/v{version:apiVersion}/[controller]")]
-[ApiController]
-public class AuthorizationController(
-    IUserIdentityHelper identityService,
-    IDomainControllerService domainController,
-    IWebHostEnvironment environment,
-    IUsersRepository usersRepository
-    ) : ControllerBase
+public class LoginEndpointsV1 : IEndpointGroupSetup
 {
-
-    /// <summary>
-    /// Проверка авторизации.
-    /// </summary>
-    [Authorize]
-    [HttpGet]
-    public async Task<ActionResult<ApiResponseDto<LoginResultDto>>> Get()
+    public RouteGroupBuilder AddEndpointGroupSetup(RouteGroupBuilder builder)
     {
-        return ApiResponse.Success(new LoginResultDto(
-            Login: identityService.GetUserLogin(),
-            FullName: identityService.GetUserFullName(),
-            Roles: identityService.GetRoles()));
+        var grp = builder.MapGroup("auth")
+            .WithTags("Login")
+            .MapToApiVersion(1);
+
+        grp.MapGet("login", CheckAuth)
+            .RequireAuthorization()
+            .WithSummary("Проверка авторизации.");
+
+        grp.MapPost("login", Login)
+            .WithSummary("Авторизация");
+
+        grp.MapDelete("login", (Delegate)Logout)
+            .WithSummary("Деавторизация.");
+
+        return grp;
     }
 
-    /// <summary>
-    /// Авторизация.
-    /// </summary>
-    [HttpPost]
-    public async Task<ActionResult<ApiResponseDto<LoginResultDto>>> Post(LoginInputDto input)
+    private static async Task<Ok<ApiResponseDto<LoginResultDto>>> CheckAuth(
+        IUserIdentityHelper userIdentity)
+        => TypedResults.Ok(
+            ApiResponse.Success(
+                new LoginResultDto(
+                    Login: userIdentity.GetUserLogin(),
+                    FullName: userIdentity.GetUserFullName(),
+                    Roles: userIdentity.GetRoles())));
+
+    private static async Task<Ok<ApiResponseDto<object>>> Logout(HttpContext ctx)
+    {
+        await ctx.SignOutAsync();
+
+        return TypedResults.Ok(ApiResponse.Success());
+    }
+
+    private static async Task<Results<
+        Ok<ApiResponseDto<LoginResultDto>>,
+        JsonHttpResult<ApiResponseDto<object>>
+    >> Login(
+        HttpContext httpContext,
+        IWebHostEnvironment environment,
+        IUserIdentityHelper userIdentity,
+        IUsersRepository usersRepository,
+        LoginInputDto input)
     {
         try
         {
-            if (identityService.IsAuthenticated())
+            if (userIdentity.IsAuthenticated())
             {
-                await HttpContext.SignOutAsync();
+                await httpContext.SignOutAsync();
             }
 
             // Доменная авторизация, получение данных пользователя.
@@ -82,14 +94,15 @@ public class AuthorizationController(
 
             if (ldapUser == null || input.Password != "pwd")
             {
-                return Unauthorized(ApiResponse.Error(
-                    "Ошибка авторизации, проверьте логин/пароль."));
+                return TypedResults.Json(ApiResponse.Error(
+                    "Ошибка авторизации, проверьте логин/пароль."),
+                    statusCode: StatusCodes.Status401Unauthorized);
             }
 
-            var dbUser = await usersRepository.MergeLdapUser(ldapUser.ToDto());
+            var dbUser = await usersRepository.MergeLdapUser(ldapUser.ToDomainUser());
             var dto = dbUser.ToLoginResultDto();
 
-            var claims = identityService.CreateClaimsList(
+            var claims = userIdentity.CreateClaimsList(
                 dbUser.Id,
                 dto.Login,
                 dto.FullName,
@@ -98,7 +111,7 @@ public class AuthorizationController(
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
             // Аутентификация.
-            await HttpContext.SignInAsync(
+            await httpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(claimsIdentity),
                 new AuthenticationProperties
@@ -106,7 +119,7 @@ public class AuthorizationController(
                     IsPersistent = input.RememberMe
                 });
 
-            return ApiResponse.Success(dto);
+            return TypedResults.Ok(ApiResponse.Success(dto));
         }
         catch (Exception ex)
         {
@@ -115,22 +128,13 @@ public class AuthorizationController(
                 Debug.WriteLine(ex);
             }
 
-            return Unauthorized(ApiResponse.Error("Ошибка авторизации."));
+            return TypedResults.Json(
+                ApiResponse.Error("Ошибка авторизации."),
+                statusCode: StatusCodes.Status401Unauthorized);
         }
     }
 
-    /// <summary>
-    /// Деавторизация.
-    /// </summary>
-    [HttpDelete]
-    public async Task<ActionResult<ApiResponseDto<object>>> Delete()
-    {
-        await HttpContext.SignOutAsync();
-
-        return ApiResponse.Success();
-    }
-
-    private readonly Dictionary<string, LdapUser> _demoUsers = new()
+    private static readonly Dictionary<string, LdapUser> _demoUsers = new()
     {
         {
             "demoMaster",

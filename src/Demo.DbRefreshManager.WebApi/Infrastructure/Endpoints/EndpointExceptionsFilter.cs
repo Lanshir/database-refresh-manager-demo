@@ -1,7 +1,7 @@
 using Demo.DbRefreshManager.Common.Exceptions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 
-namespace Demo.DbRefreshManager.WebApi.Infrastructure.MinimalApi;
+namespace Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
 
 /// <summary>
 /// Обработка ошибок IEndpoint.
@@ -28,7 +28,7 @@ public class EndpointExceptionsFilter : IEndpointFilter
         // Другие ошибки возвращают статус 500 и dto ошибки.
         catch (Exception exc)
         {
-            var resultDto = ApiResponse.Error();
+            var resultDto = ApiResponse.Error("Unhandled error occured");
 
             logger.LogError(exc, "Unhandled endpoint exception at {path}", ctx.HttpContext.Request.Path);
 

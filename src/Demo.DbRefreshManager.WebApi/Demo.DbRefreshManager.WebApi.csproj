@@ -31,7 +31,7 @@
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.17.1" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.17.1" />
     <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.17.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.13.19" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.13.20" />
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
   </ItemGroup>

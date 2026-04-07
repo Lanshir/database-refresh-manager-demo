@@ -1,12 +1,11 @@
 using Demo.DbRefreshManager.Dal.Extensions;
+using Demo.DbRefreshManager.WebApi.Endpoints.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Constants;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Controllers;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
-using Demo.DbRefreshManager.WebApi.Infrastructure.MinimalApi;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using HotChocolate.AspNetCore;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Scalar.AspNetCore;
 
 namespace Demo.DbRefreshManager.WebApi;
@@ -23,18 +22,6 @@ internal class Program
         // Add config providers.
         // Environment.
         config.AddEnvironmentVariables(prefix: ProjectConstants.EnvironmentPrefix);
-
-        // Add services to the container.
-        services.AddControllers(o =>
-        {
-            // Kebab case controller names transform.
-            o.Conventions.Add(new RouteTokenTransformerConvention(new KebabCaseTransformer()));
-        });
-
-        if (!environment.IsProduction())
-        {
-            services.AddOpenApi();
-        }
 
         // Healthcheck services.
         services.AddHealthChecks().AddCheck<EfCheck>(nameof(EfCheck));
@@ -53,26 +40,36 @@ internal class Program
         services.AddGraphQLServices();
         services.AddQuartzJobsServices(environment);
 
+        if (!environment.IsProduction())
+        {
+            // OpenApi docs generation.
+            SupportedApiVersions.VersionsList.ForEach(v =>
+                services.AddOpenApi($"v{v}"));
+        }
+
         var app = builder.Build();
         var endpointExceptionsFilter = new EndpointExceptionsFilter();
 
         // Configure the HTTP request pipeline.
         if (!environment.IsProduction())
         {
+            // Open Api documents & Scalar UI.
             app.MapOpenApi();
             app.MapScalarApiReference(o => o
+                .AddDocuments(SupportedApiVersions.VersionsList.Select(v => $"v{v}"))
                 .EnableDarkMode()
                 .WithTheme(ScalarTheme.BluePlanet));
         }
 
         app.UseAuthentication();
         app.UseAuthorization();
+
         app.UseWebSockets();
 
         app.UseDefaultFiles();
         app.MapStaticAssets();
 
-        app.MapControllers().AddEndpointFilter(endpointExceptionsFilter);
+        app.MapApiEndpointGroups();
 
         app.MapGraphQL().WithOptions(new()
         {

@@ -1,4 +1,4 @@
-using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
 using Demo.DbRefreshManager.Common.Converters.Abstract;
 using Demo.DbRefreshManager.Services.Abstract;
 using Demo.DbRefreshManager.Services.Concrete;
@@ -107,8 +107,6 @@ public static class ServiceCollectionExtensions
             services
                 .AddApiVersioning(o =>
                 {
-                    o.DefaultApiVersion = new ApiVersion(1, 0);
-                    o.AssumeDefaultVersionWhenUnspecified = true;
                     o.ReportApiVersions = true;
                 })
                 .AddApiExplorer(o =>

@@ -10,8 +10,12 @@ public static class LdapUserMappings
         /// <summary>
         /// Конвертация модели пользователя из LDAP в доменную.
         /// </summary>
-        public User ToDto() => new()
+        public User ToDomainUser() => new()
         {
+            FirstName = src.FirstName,
+            LastName = src.LastName,
+            Patronymic = src.Patronymic,
+            Email = src.Email,
             LdapDn = src.Dn,
             LdapLogin = src.Login,
             LdapChangeDate = src.WhenChanged,
