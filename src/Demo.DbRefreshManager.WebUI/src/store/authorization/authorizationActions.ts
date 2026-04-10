@@ -8,8 +8,7 @@ import { ValidateLoginInput } from '@validation/validators/authorizationValidati
 import { Authorize, CheckAuth, Deauthorize } from '@requests/rest/authorizationRequests';
 import { pushErrorAction } from '@store/alerts/alertsActions';
 import { IRequestError } from '@shared/types/errors';
-import { ApiResponse } from '@shared/types/api/rest';
-import { EnsureApiResponseSuccess } from '@helpers';
+import { ProblemDetails } from '@shared/types/api/rest/problemDetails.interface';
 import Routes from '@constants/routes';
 
 /** Запрос авторизации. */
@@ -32,9 +31,7 @@ export const authorizeQuery = atom(null,
 
             set(loginLoadingState, true);
 
-            const result = await Authorize({ login, password, rememberMe })
-                .then(EnsureApiResponseSuccess)
-                .then(r => r.data!);
+            const result = await Authorize({ login, password, rememberMe });
 
             set(authorizationState, {
                 isAuthorized: true,
@@ -48,8 +45,8 @@ export const authorizeQuery = atom(null,
             onSuccess();
         }
         catch (e) {
-            const err = e as IRequestError<ApiResponse>;
-            const message = err.response?.data?.message ?? err.message;
+            const err = e as IRequestError<ProblemDetails>;
+            const message = err.response?.data?.detail ?? err.message;
 
             set(alertState, { severity: 'error', text: message });
         }
@@ -62,9 +59,7 @@ export const authorizeQuery = atom(null,
 export const checkAuthQuery = atom(null,
     async (get, set, navigate: NavigateFunction, location: Location) => {
         try {
-            const result = await CheckAuth()
-                .then(EnsureApiResponseSuccess)
-                .then(r => r.data!);
+            const result = await CheckAuth();
 
             set(authorizationState, {
                 isAuthorized: true,
@@ -89,7 +84,7 @@ export const checkAuthQuery = atom(null,
 export const deauthorizeQuery = atom(null,
     async (get, set, onSuccess: () => void) => {
         try {
-            await Deauthorize().then(EnsureApiResponseSuccess);
+            await Deauthorize();
             onSuccess();
         }
         catch (e) {

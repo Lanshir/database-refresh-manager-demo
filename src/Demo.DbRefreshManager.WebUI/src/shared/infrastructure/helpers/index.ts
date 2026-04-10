@@ -1,4 +1,3 @@
-export { default as EnsureApiResponseSuccess } from './ensureApiResponseSuccess';
 export { default as FormatRequestErrorMessage } from './formatRequestErrorMessage';
 export { default as GetGqlErrorsFromNetworkError } from './getGqlErrorsFromNetworkError';
 export { default as nameof } from './nameof';

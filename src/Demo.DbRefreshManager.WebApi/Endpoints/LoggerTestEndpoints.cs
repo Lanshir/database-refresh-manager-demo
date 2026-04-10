@@ -1,6 +1,4 @@
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
-using Demo.DbRefreshManager.WebApi.Models.Api;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints;
@@ -19,7 +17,7 @@ public class LoggerTestEndpoints : IEndpointGroupSetup
         return grp;
     }
 
-    private static async Task<Ok<ApiResponseDto<object>>> RunLoggerTest(
+    private static async Task<Ok> RunLoggerTest(
         ILogger<LoggerTestEndpoints> logger)
     {
         logger.LogDebug("debug logging test");
@@ -39,6 +37,6 @@ public class LoggerTestEndpoints : IEndpointGroupSetup
             logger.LogError(exc, "Exception logging test");
         }
 
-        return TypedResults.Ok(ApiResponse.Success());
+        return TypedResults.Ok();
     }
 }

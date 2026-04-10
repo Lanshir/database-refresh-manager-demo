@@ -2,9 +2,7 @@ using Demo.DbRefreshManager.Dal.Repositories.Abstract;
 using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
-using Demo.DbRefreshManager.WebApi.Models.Api;
 using Demo.DbRefreshManager.WebApi.Models.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -35,26 +33,22 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
         return grp;
     }
 
-    private static async Task<Ok<ApiResponseDto<LoginResultDto>>> CheckAuth(
+    private static async Task<Ok<LoginResultDto>> CheckAuth(
         IUserIdentityHelper userIdentity)
         => TypedResults.Ok(
-            ApiResponse.Success(
-                new LoginResultDto(
-                    Login: userIdentity.GetUserLogin(),
-                    FullName: userIdentity.GetUserFullName(),
-                    Roles: userIdentity.GetRoles())));
+            new LoginResultDto(
+                Login: userIdentity.GetUserLogin(),
+                FullName: userIdentity.GetUserFullName(),
+                Roles: userIdentity.GetRoles()));
 
-    private static async Task<Ok<ApiResponseDto<object>>> Logout(HttpContext ctx)
+    private static async Task<Ok> Logout(HttpContext ctx)
     {
         await ctx.SignOutAsync();
 
-        return TypedResults.Ok(ApiResponse.Success());
+        return TypedResults.Ok();
     }
 
-    private static async Task<Results<
-        Ok<ApiResponseDto<LoginResultDto>>,
-        JsonHttpResult<ApiResponseDto<object>>
-    >> Login(
+    private static async Task<Results<Ok<LoginResultDto>, ProblemHttpResult>> Login(
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityHelper userIdentity,
@@ -94,9 +88,10 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
 
             if (ldapUser == null || input.Password != "pwd")
             {
-                return TypedResults.Json(ApiResponse.Error(
-                    "Ошибка авторизации, проверьте логин/пароль."),
-                    statusCode: StatusCodes.Status401Unauthorized);
+                return TypedResults.Problem(
+                    statusCode: StatusCodes.Status401Unauthorized,
+                    title: "Ошибка аутентификации",
+                    detail: "Ошибка входа, проверьте логин/пароль");
             }
 
             var dbUser = await usersRepository.MergeLdapUser(ldapUser.ToDomainUser());
@@ -119,7 +114,7 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
                     IsPersistent = input.RememberMe
                 });
 
-            return TypedResults.Ok(ApiResponse.Success(dto));
+            return TypedResults.Ok(dto);
         }
         catch (Exception ex)
         {
@@ -128,9 +123,10 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
                 Debug.WriteLine(ex);
             }
 
-            return TypedResults.Json(
-                ApiResponse.Error("Ошибка авторизации."),
-                statusCode: StatusCodes.Status401Unauthorized);
+            return TypedResults.Problem(
+                statusCode: StatusCodes.Status401Unauthorized,
+                title: "Ошибка аутентификации",
+                detail: "При попытке входа произошла неожиданная ошибка, попробуйте позже");
         }
     }
 

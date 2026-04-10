@@ -1,14 +1,14 @@
 import { ServerError } from '@apollo/client';
 import { IRequestError } from '@shared/types/errors';
-import { ApiResponse } from '@shared/types/api/rest';
+import { ProblemDetails } from '@shared/types/api/rest/problemDetails.interface';
 import { GetGqlErrorsFromNetworkError } from '@helpers';
 
 /**
  * Получить отформатированное сообщение ошибки IRequestError.
  */
 export default function FormatRequestErrorMessage(error: IRequestError | Error): string {
-    const reqError = error as IRequestError<ApiResponse>;
-    const restApiResponseMessage = reqError.responseData?.message;
+    const reqError = error as IRequestError<ProblemDetails>;
+    const restApiResponseMessage = reqError.response?.data?.detail;
 
     const gqlServerError = reqError.networkError as ServerError | undefined;
     const gqlNetworkErrors = GetGqlErrorsFromNetworkError(reqError.networkError);

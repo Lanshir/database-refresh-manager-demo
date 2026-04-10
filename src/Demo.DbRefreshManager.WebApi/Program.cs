@@ -25,6 +25,8 @@ internal class Program
         // Healthcheck services.
         services.AddHealthChecks().AddCheck<EfCheck>(nameof(EfCheck));
 
+        services.AddProblemDetails();
+
         services.AddCookieAuthentication(config);
         services.AddAuthorization();
 
