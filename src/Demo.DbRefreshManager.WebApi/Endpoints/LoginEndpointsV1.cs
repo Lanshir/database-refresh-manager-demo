@@ -1,7 +1,8 @@
-using Demo.DbRefreshManager.Dal.Repositories.Abstract;
-using Demo.DbRefreshManager.Services.Models.ActiveDirectory;
+using Demo.DbRefreshManager.Application.Repositories;
+using Demo.DbRefreshManager.Application.Services;
+using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Mappings;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
 using Demo.DbRefreshManager.WebApi.Models.Authorization;
 using Microsoft.AspNetCore.Authentication;
@@ -12,9 +13,9 @@ using System.Security.Claims;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints;
 
-public class LoginEndpointsV1 : IEndpointGroupSetup
+public class LoginEndpointsV1 : IEndpointsSetup
 {
-    public RouteGroupBuilder AddEndpointGroupSetup(RouteGroupBuilder builder)
+    public IEndpointRouteBuilder SetupEndpoints(IEndpointRouteBuilder builder)
     {
         var grp = builder.MapGroup("auth")
             .WithTags("Login")
@@ -34,7 +35,7 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
     }
 
     private static async Task<Ok<LoginResultDto>> CheckAuth(
-        IUserIdentityHelper userIdentity)
+        IUserIdentityProvider userIdentity)
         => TypedResults.Ok(
             new LoginResultDto(
                 Login: userIdentity.GetUserLogin(),
@@ -51,7 +52,7 @@ public class LoginEndpointsV1 : IEndpointGroupSetup
     private static async Task<Results<Ok<LoginResultDto>, ProblemHttpResult>> Login(
         HttpContext httpContext,
         IWebHostEnvironment environment,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         IUsersRepository usersRepository,
         LoginInputDto input)
     {

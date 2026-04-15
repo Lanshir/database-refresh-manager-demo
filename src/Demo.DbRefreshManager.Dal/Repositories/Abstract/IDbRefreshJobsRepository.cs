@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Dal.Repositories.Abstract.Base;
 
 namespace Demo.DbRefreshManager.Dal.Repositories.Abstract;

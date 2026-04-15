@@ -1,6 +1,4 @@
-using Demo.DbRefreshManager.Common.Exceptions;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
-using Microsoft.AspNetCore.Mvc;
+using Demo.DbRefreshManager.Domain.Exceptions;
 
 namespace Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
 
@@ -26,7 +24,7 @@ public class EndpointExceptionsFilter : IEndpointFilter
         {
             return Results.Problem(
                 statusCode: StatusCodes.Status400BadRequest,
-                title: "BusinessLogic.Error",
+                title: exc.Code,
                 detail: exc.Message,
                 instance: instance);
         }
@@ -37,7 +35,7 @@ public class EndpointExceptionsFilter : IEndpointFilter
 
             return Results.Problem(
                 statusCode: StatusCodes.Status500InternalServerError,
-                title: "Default.UnexpectedError",
+                title: "Unexpected error",
                 detail: "Unexpected error occured, view logs for details",
                 instance: instance);
         }

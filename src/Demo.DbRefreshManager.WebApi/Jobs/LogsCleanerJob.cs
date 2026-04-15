@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Repositories.Abstract;
+using Demo.DbRefreshManager.Application.Repositories;
 using Quartz;
 
 namespace Demo.DbRefreshManager.WebApi.Jobs;

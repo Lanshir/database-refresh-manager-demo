@@ -1,7 +1,7 @@
-using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
-using Demo.DbRefreshManager.Dal.Repositories.Abstract;
+using Demo.DbRefreshManager.Application.Repositories;
+using Demo.DbRefreshManager.Application.Services;
+using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
@@ -53,6 +53,6 @@ public class DbRefreshJobsQueriesV1
     [Authorize]
     public async Task<int[]> GetDbPersonalAccessIds(
         IDbPersonalAccessesRepository acessesRepository,
-        IUserIdentityHelper userIdentity)
+        IUserIdentityProvider userIdentity)
         => await acessesRepository.GetPersonalAccessJobIds(userIdentity.GetUserLogin());
 }

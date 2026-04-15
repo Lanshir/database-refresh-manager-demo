@@ -13,7 +13,7 @@ public static class EndpointRouteBuilderExtensions
         /// <summary>
         /// Регистрация групп эндпоинтов api.
         /// </summary>
-        public IEndpointRouteBuilder MapApiEndpointGroups()
+        public IEndpointRouteBuilder MapApiEndpoints()
         {
             // Настройка базовой группы /api/v{version}.
             var apiVersionSet = builder
@@ -28,15 +28,15 @@ public static class EndpointRouteBuilderExtensions
                 .AddEndpointFilter<EndpointExceptionsFilter>();
 
             // Получение реализаций и вызов конфигураторов эндпоинтов.
-            var assembly = typeof(IEndpointGroupSetup).Assembly;
+            var assembly = typeof(IEndpointsSetup).Assembly;
             var grpSetupTypes = assembly
                 .GetTypes()
-                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IEndpointGroupSetup)));
+                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IEndpointsSetup)));
 
             foreach (var setupType in grpSetupTypes)
             {
-                var grpSetup = (Activator.CreateInstance(setupType) as IEndpointGroupSetup)!;
-                var grpBuilder = grpSetup.AddEndpointGroupSetup(baseApiGroup);
+                var grpSetup = (Activator.CreateInstance(setupType) as IEndpointsSetup)!;
+                var grpBuilder = grpSetup.SetupEndpoints(baseApiGroup);
             }
 
             return builder;

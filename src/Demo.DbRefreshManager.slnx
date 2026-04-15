@@ -3,9 +3,11 @@
     <File Path=".dockerignore" />
     <File Path=".editorconfig" />
   </Folder>
-  <Project Path="Demo.DbRefreshManager.Common/Demo.DbRefreshManager.Common.csproj" />
-  <Project Path="Demo.DbRefreshManager.Dal/Demo.DbRefreshManager.Dal.csproj" />
-  <Project Path="Demo.DbRefreshManager.Services/Demo.DbRefreshManager.Services.csproj" />
+  <Project Path="Demo.DbRefreshManager.Application/Demo.DbRefreshManager.Application.csproj" Id="4b99a2b6-0693-4c1c-94f8-871e16560dde" />
+  <Project Path="Demo.DbRefreshManager.Core/Demo.DbRefreshManager.Core.csproj" Id="975d92a3-c476-4b0f-9b4a-b98ebdda26cb" />
+  <Project Path="Demo.DbRefreshManager.Domain/Demo.DbRefreshManager.Domain.csproj" Id="0044c857-ad84-4e28-ac16-ffcbfeac1d6f" />
+  <Project Path="Demo.DbRefreshManager.Infrastructure.Db/Demo.DbRefreshManager.Infrastructure.Db.csproj" Id="b8dea97a-bbe9-4db6-8e7a-4790482b25af" />
+  <Project Path="Demo.DbRefreshManager.Infrastructure/Demo.DbRefreshManager.Infrastructure.csproj" Id="d50ceed2-52d7-4981-92cc-4333323c3d9e" />
   <Project Path="Demo.DbRefreshManager.WebApi/Demo.DbRefreshManager.WebApi.csproj" />
   <Project Path="Demo.DbRefreshManager.WebUI/Demo.DbRefreshManager.WebUI.esproj">
     <Build />

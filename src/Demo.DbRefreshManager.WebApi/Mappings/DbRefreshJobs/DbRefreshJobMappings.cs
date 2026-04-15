@@ -1,5 +1,5 @@
-using Demo.DbRefreshManager.Common.Extensions;
-using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Core.Extensions;
+using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using System.Linq.Expressions;
 

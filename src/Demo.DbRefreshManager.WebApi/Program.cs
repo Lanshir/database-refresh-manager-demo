@@ -1,7 +1,7 @@
-using Demo.DbRefreshManager.Dal.Extensions;
+using Demo.DbRefreshManager.Infrastructure;
+using Demo.DbRefreshManager.Infrastructure.Db;
 using Demo.DbRefreshManager.WebApi.Endpoints.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Constants;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
@@ -20,26 +20,27 @@ internal class Program
 
         // Add config providers.
         // Environment.
-        config.AddEnvironmentVariables(prefix: ProjectConstants.EnvironmentPrefix);
-
-        // Healthcheck services.
-        services.AddHealthChecks().AddCheck<EfCheck>(nameof(EfCheck));
-
-        services.AddProblemDetails();
-
-        services.AddCookieAuthentication(config);
-        services.AddAuthorization();
+        config.AddEnvironmentVariables(prefix: AppConstants.EnvironmentPrefix);
 
         // Доступ к HttpContext через инъекции.
         services.AddHttpContextAccessor();
 
-        services.AddProjectCoreDependencies();
-        services.AddApiOptions();
-        services.AddLoggingServices(environment, config);
-        services.AddDatabaseServices(config, environment.IsDevelopment());
+        services.AddInfrastructure();
+        services.AddDatabase(config, environment.IsDevelopment());
+        services.AddWebApiServices();
+        services.AddWebApiOptions();
+        services.AddWebApiLogging(environment, config);
         services.AddRestVersioning();
-        services.AddGraphQLServices();
-        services.AddQuartzJobsServices(environment);
+        services.AddGraphQL();
+        services.AddQuartzJobs(environment);
+        services.AddProblemDetails();
+
+        // Api auth.
+        services.AddCookieAuthentication(config);
+        services.AddAuthorization();
+
+        // Healthcheck services.
+        services.AddHealthChecks().AddCheck<EfCheck>(nameof(EfCheck));
 
         if (!environment.IsProduction())
         {
@@ -47,7 +48,6 @@ internal class Program
         }
 
         var app = builder.Build();
-        var endpointExceptionsFilter = new EndpointExceptionsFilter();
 
         // Configure the HTTP request pipeline.
         if (!environment.IsProduction())
@@ -63,7 +63,7 @@ internal class Program
         app.UseDefaultFiles();
         app.MapStaticAssets();
 
-        app.MapApiEndpointGroups();
+        app.MapApiEndpoints();
 
         app.MapGraphQL().WithOptions(new()
         {

@@ -37,9 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Demo.DbRefreshManager.Common\Demo.DbRefreshManager.Common.csproj" />
-    <ProjectReference Include="..\Demo.DbRefreshManager.Dal\Demo.DbRefreshManager.Dal.csproj" />
-    <ProjectReference Include="..\Demo.DbRefreshManager.Services\Demo.DbRefreshManager.Services.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.Application\Demo.DbRefreshManager.Application.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.Infrastructure\Demo.DbRefreshManager.Infrastructure.csproj" />
     <ProjectReference Include="..\Demo.DbRefreshManager.WebUI\Demo.DbRefreshManager.WebUI.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

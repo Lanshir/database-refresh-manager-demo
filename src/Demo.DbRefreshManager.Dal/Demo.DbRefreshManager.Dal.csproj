@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Demo.DbRefreshManager.Common\Demo.DbRefreshManager.Common.csproj" />
+    <ProjectReference Include="..\Demo.DbRefreshManager.Domain\Demo.DbRefreshManager.Domain.csproj" />
   </ItemGroup>
 
 </Project>

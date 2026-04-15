@@ -1,5 +1,5 @@
-using Demo.DbRefreshManager.Common.Enums;
-using Demo.DbRefreshManager.Common.Exceptions;
+using Demo.DbRefreshManager.Domain.Errors;
+using Demo.DbRefreshManager.Domain.Exceptions;
 
 namespace Demo.DbRefreshManager.WebApi.Infrastructure.HotChocolate;
 
@@ -18,7 +18,7 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
         {
             case BusinessLogicException blException:
                 errBuilder
-                    .SetCode(blException.Code.ToString())
+                    .SetCode(blException.Code)
                     .SetMessage(blException.Message);
                 break;
             // GraphQL errors without exception.
@@ -27,7 +27,7 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
             default:
                 {
                     errBuilder
-                        .SetCode(((int)DefaultStatusCodes.Error).ToString())
+                        .SetCode(DefaultErrors.Unexpected)
                         .SetMessage("Ошибка сервера при отправке запроса");
 
                     logger.LogError(error.Exception,

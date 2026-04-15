@@ -7,4 +7,8 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Demo.DbRefreshManager.Core\Demo.DbRefreshManager.Core.csproj" />
+  </ItemGroup>
+
 </Project>

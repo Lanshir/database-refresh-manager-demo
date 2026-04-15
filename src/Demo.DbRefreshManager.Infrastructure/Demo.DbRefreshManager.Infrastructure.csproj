@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Novell.Directory.Ldap.NETStandard" Version="3.6.0" />
+		<PackageReference Include="SSH.NET" Version="2025.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Demo.DbRefreshManager.Application\Demo.DbRefreshManager.Application.csproj" />
+	  <ProjectReference Include="..\Demo.DbRefreshManager.Infrastructure.Db\Demo.DbRefreshManager.Infrastructure.Db.csproj" />
+	</ItemGroup>
+
+</Project>

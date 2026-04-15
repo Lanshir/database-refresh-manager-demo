@@ -1,8 +1,8 @@
-using Demo.DbRefreshManager.Common.Exceptions;
-using Demo.DbRefreshManager.Dal.Entities.DbRefreshJobs;
-using Demo.DbRefreshManager.Dal.Repositories.Abstract;
+using Demo.DbRefreshManager.Application.Repositories;
+using Demo.DbRefreshManager.Application.Services;
+using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Exceptions;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Helpers.Abstract;
 using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
@@ -24,7 +24,7 @@ public class DbRefreshJobsMutationsV1
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         int jobId, int delayMinutes, string? comment)
     {
         delayMinutes = delayMinutes > 0 ? delayMinutes : 1;
@@ -57,7 +57,7 @@ public class DbRefreshJobsMutationsV1
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         int jobId)
     {
         // Поиск задачи, проверка прав.
@@ -84,7 +84,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetScheduledRefreshActive(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
         int jobId, bool isActive)
@@ -117,7 +117,7 @@ public class DbRefreshJobsMutationsV1
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         int jobId, string? comment)
     {
         try
@@ -187,7 +187,7 @@ public class DbRefreshJobsMutationsV1
     /// </summary>
     private static async Task ValidateJobAccessAsync(
         IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityHelper userIdentity,
+        IUserIdentityProvider userIdentity,
         DbRefreshJob job)
     {
         var login = userIdentity.GetUserLogin();

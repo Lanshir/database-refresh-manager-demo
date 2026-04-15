@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.Dal.Context;
+using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 

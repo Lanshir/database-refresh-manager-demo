@@ -12,9 +12,4 @@
     <PackageReference Include="SSH.NET" Version="2025.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Demo.DbRefreshManager.Common\Demo.DbRefreshManager.Common.csproj" />
-    <ProjectReference Include="..\Demo.DbRefreshManager.Dal\Demo.DbRefreshManager.Dal.csproj" />
-  </ItemGroup>
-
 </Project>
