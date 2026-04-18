@@ -25,15 +25,19 @@ internal class Program
         // Доступ к HttpContext через инъекции.
         services.AddHttpContextAccessor();
 
+        // Infrastructure.
         services.AddInfrastructure();
         services.AddDatabase(config, environment.IsDevelopment());
+        services.AddDatabaseFeatures();
+
+        // Presentation (WebApi).
         services.AddWebApiServices();
         services.AddWebApiOptions();
         services.AddWebApiLogging(environment, config);
+        services.AddProblemDetails();
         services.AddRestVersioning();
         services.AddGraphQL();
         services.AddQuartzJobs(environment);
-        services.AddProblemDetails();
 
         // Api auth.
         services.AddCookieAuthentication(config);

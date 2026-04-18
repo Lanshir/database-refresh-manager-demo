@@ -1,11 +1,11 @@
-using Demo.DbRefreshManager.Application.Converters;
+using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Enums;
 using System.Text.Json;
 
-namespace Demo.DbRefreshManager.Infrastructure.Converters;
+namespace Demo.DbRefreshManager.Infrastructure.Services;
 
 /// <inheritdoc cref="IJsonConverter" />
-public class JsonConverter : IJsonConverter
+internal class JsonConverter : IJsonConverter
 {
     private readonly JsonSerializerOptions _caseInsensitiveOptions = new(JsonSerializerDefaults.General)
     {

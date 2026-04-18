@@ -1,5 +1,7 @@
+using Demo.DbRefreshManager.Application.Features.Healthchecks;
 using Demo.DbRefreshManager.Application.Repositories.Base;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
+using Demo.DbRefreshManager.Infrastructure.Db.Features.Healthchecks;
 using Demo.DbRefreshManager.Infrastructure.Db.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,40 +11,52 @@ namespace Demo.DbRefreshManager.Infrastructure.Db;
 
 public static class Di
 {
-    /// <summary>
-    /// Регистрация сервисов БД.
-    /// </summary>
-    public static IServiceCollection AddDatabase(
-        this IServiceCollection services,
-        IConfiguration configuration,
-        bool enableSensitiveDataLogging = false)
+    extension(IServiceCollection services)
     {
-        var connectionString = configuration.GetConnectionString("Default");
-
-        services.AddPooledDbContextFactory<AppDbContext>(o =>
+        /// <summary>
+        /// Регистрация сервисов БД.
+        /// </summary>
+        public IServiceCollection AddDatabase(
+            IConfiguration configuration,
+            bool enableSensitiveDataLogging = false)
         {
-            o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            o.UseSqlite(connectionString);
-            o.EnableSensitiveDataLogging(enableSensitiveDataLogging);
-        });
+            var connectionString = configuration.GetConnectionString("Default");
 
-        // Repositories injection.
-        var interfaces = typeof(IRepository<>).Assembly
-            .GetTypes()
-            .Where(t => t.IsInterface
-                && t.GetInterfaces().Any(i => i.IsGenericType
-                    && i.GetGenericTypeDefinition() == typeof(IRepository<>)))
-            .ToArray();
+            services.AddPooledDbContextFactory<AppDbContext>(o =>
+            {
+                o.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                o.UseSqlite(connectionString);
+                o.EnableSensitiveDataLogging(enableSensitiveDataLogging);
+            });
 
-        foreach (var i in interfaces)
-        {
-            var implementation = typeof(BaseRepository<>).Assembly
+            // Repositories injection.
+            var interfaces = typeof(IRepository<>).Assembly
                 .GetTypes()
-                .First(t => t.IsAssignableTo(i));
+                .Where(t => t.IsInterface
+                    && t.GetInterfaces().Any(i => i.IsGenericType
+                        && i.GetGenericTypeDefinition() == typeof(IRepository<>)))
+                .ToArray();
 
-            services.AddScoped(i, implementation);
+            foreach (var i in interfaces)
+            {
+                var implementation = typeof(BaseRepository<>).Assembly
+                    .GetTypes()
+                    .First(t => t.IsAssignableTo(i));
+
+                services.AddScoped(i, implementation);
+            }
+
+            return services;
         }
 
-        return services;
+        /// <summary>
+        /// Регистрация фич БД.
+        /// </summary>
+        public IServiceCollection AddDatabaseFeatures()
+        {
+            services.AddTransient<IEfCoreHealthcheckHandler, EfCoreHealthcheck.Handler>();
+
+            return services;
+        }
     }
 }

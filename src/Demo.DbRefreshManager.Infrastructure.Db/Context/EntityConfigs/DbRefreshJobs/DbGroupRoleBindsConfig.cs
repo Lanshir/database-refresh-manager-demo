@@ -7,7 +7,7 @@ namespace Demo.DbRefreshManager.Infrastructure.Db.Context.EntityConfigs.DbRefres
 /// <summary>
 /// Конфигурация связок группа БД - роль пользователя.
 /// </summary>
-public class DbGroupRoleBindsConfig : IEntityTypeConfiguration<DbGroupRoleBind>
+internal class DbGroupRoleBindsConfig : IEntityTypeConfiguration<DbGroupRoleBind>
 {
     public void Configure(EntityTypeBuilder<DbGroupRoleBind> builder)
     {

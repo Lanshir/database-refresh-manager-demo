@@ -9,7 +9,7 @@ namespace Demo.DbRefreshManager.Infrastructure.Db.Repositories.Base;
 /// <summary>
 /// Базовый репозиторий.
 /// </summary>
-public class BaseRepository<TEntity>(
+internal class BaseRepository<TEntity>(
     IDbContextFactory<AppDbContext> contextFactory
     ) : IDisposable, IRepository<TEntity> where TEntity : class
 {

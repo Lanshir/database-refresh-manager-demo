@@ -1,5 +1,4 @@
-using Demo.DbRefreshManager.Infrastructure.Db.Context;
-using Microsoft.EntityFrameworkCore;
+using Demo.DbRefreshManager.Application.Features.Healthchecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
@@ -7,25 +6,21 @@ namespace Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
 /// <summary>
 /// Проверка подключения EF Core.
 /// </summary>
-public class EfCheck(IDbContextFactory<AppDbContext> ctxFactory) : IHealthCheck
+public class EfCheck(IEfCoreHealthcheckHandler efHealthcheck) : IHealthCheck
 {
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
-        CancellationToken cancellationToken = default)
+        CancellationToken ct)
     {
         try
         {
-            var ctx = await ctxFactory.CreateDbContextAsync(cancellationToken);
+            await efHealthcheck.HandleAsync(ct);
 
-            await ctx.Database.ExecuteSqlRawAsync("select 1", cancellationToken);
-
-            return HealthCheckResult.Healthy(
-                "Entity Framework request ok");
+            return HealthCheckResult.Healthy("Entity Framework request ok");
         }
         catch (Exception exc)
         {
-            return HealthCheckResult.Unhealthy(
-                "Entity Framework request fail", exc);
+            return HealthCheckResult.Unhealthy("Entity Framework request fail", exc);
         }
     }
 }

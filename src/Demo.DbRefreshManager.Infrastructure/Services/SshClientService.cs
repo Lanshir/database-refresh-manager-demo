@@ -5,7 +5,7 @@ using Renci.SshNet;
 namespace Demo.DbRefreshManager.Infrastructure.Services;
 
 /// <inheritdoc cref="ISshClientService" />
-public class SshClientService : ISshClientService
+internal class SshClientService : ISshClientService
 {
     public bool IsConnected { get; private set; }
 

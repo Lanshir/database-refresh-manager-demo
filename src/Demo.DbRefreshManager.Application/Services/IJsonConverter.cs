@@ -1,6 +1,6 @@
 using Demo.DbRefreshManager.Core.Enums;
 
-namespace Demo.DbRefreshManager.Application.Converters;
+namespace Demo.DbRefreshManager.Application.Services;
 
 /// <summary>
 /// Сериализатор/десериализатор json.

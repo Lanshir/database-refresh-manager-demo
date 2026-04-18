@@ -7,7 +7,7 @@ namespace Demo.DbRefreshManager.Infrastructure.Db.Context.EntityConfigs.DbRefres
 /// <summary>
 /// Конфигурация персональных доступов к БД.
 /// </summary>
-public class DbPersonalAccessesConfig : IEntityTypeConfiguration<DbPersonalAccess>
+internal class DbPersonalAccessesConfig : IEntityTypeConfiguration<DbPersonalAccess>
 {
     public void Configure(EntityTypeBuilder<DbPersonalAccess> builder)
     {

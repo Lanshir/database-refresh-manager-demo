@@ -1,6 +1,6 @@
 using Demo.DbRefreshManager.Application.Services;
+using Demo.DbRefreshManager.Domain.Constants;
 using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
-using Demo.DbRefreshManager.Infrastructure.Constants;
 using Novell.Directory.Ldap;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,7 +10,7 @@ namespace Demo.DbRefreshManager.Infrastructure.Services;
 /// <summary>
 /// Провайдер авторизации через контроллер домена (Windows Active Directory).
 /// </summary>
-public class DomainControllerService : IDomainControllerService
+internal class DomainControllerService : IDomainControllerService
 {
     /// <summary>
     /// Подключение к домену.

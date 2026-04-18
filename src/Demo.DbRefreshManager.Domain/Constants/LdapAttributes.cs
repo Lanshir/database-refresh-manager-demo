@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.Infrastructure.Constants;
+namespace Demo.DbRefreshManager.Domain.Constants;
 
 /// <summary>
 /// Названия атрибутов LDAP.

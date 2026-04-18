@@ -5,7 +5,7 @@ namespace Demo.DbRefreshManager.Infrastructure.Db.Context;
 /// <summary>
 /// Контекст Entity Framework приложения.
 /// </summary>
-public class AppDbContext : DbContext
+internal class AppDbContext : DbContext
 {
     /// <inheritdoc cref="AppDbContext" />
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
