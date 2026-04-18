@@ -6,7 +6,7 @@ namespace Demo.DbRefreshManager.WebApi.Infrastructure.Healthchecks;
 /// <summary>
 /// Проверка подключения EF Core.
 /// </summary>
-public class EfCheck(IEfCoreHealthcheckHandler efHealthcheck) : IHealthCheck
+public class EfCheck(IEfCoreHealthcheckCommandHandler efHealthcheckCmd) : IHealthCheck
 {
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
@@ -14,7 +14,7 @@ public class EfCheck(IEfCoreHealthcheckHandler efHealthcheck) : IHealthCheck
     {
         try
         {
-            await efHealthcheck.HandleAsync(ct);
+            await efHealthcheckCmd.HandleAsync(ct);
 
             return HealthCheckResult.Healthy("Entity Framework request ok");
         }

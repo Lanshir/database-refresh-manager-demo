@@ -1,7 +1,6 @@
-using Demo.DbRefreshManager.Application.Features.Healthchecks;
 using Demo.DbRefreshManager.Application.Repositories.Base;
+using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
-using Demo.DbRefreshManager.Infrastructure.Db.Features.Healthchecks;
 using Demo.DbRefreshManager.Infrastructure.Db.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +53,13 @@ public static class Di
         /// </summary>
         public IServiceCollection AddDatabaseFeatures()
         {
-            services.AddTransient<IEfCoreHealthcheckHandler, EfCoreHealthcheck.Handler>();
+            // Поиск всех реализаций IHandlerBase,
+            // регистрация в di под близжайшим реализованным интерфейсом.
+            typeof(Di).Assembly
+                .GetTypes()
+                .Where(t => t.IsClass & t.IsAssignableTo(typeof(IHandlerBase)))
+                .ToList()
+                .ForEach(t => services.AddTransient(t.GetInterfaces().First(), t));
 
             return services;
         }

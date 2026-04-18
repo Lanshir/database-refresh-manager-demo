@@ -3,7 +3,7 @@ namespace Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
 /// <summary>
 /// Конфигуратор эндпоинтов Minimal Api.
 /// </summary>
-public interface IEndpointsSetup
+public interface IEndpointsMapper
 {
-    IEndpointRouteBuilder SetupEndpoints(IEndpointRouteBuilder builder);
+    IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder);
 }

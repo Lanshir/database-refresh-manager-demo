@@ -4,7 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Description>$(AssemblyName)</Description>
     <Nullable>enable</Nullable>
-    <WarningsAsErrors>Nullable</WarningsAsErrors>
+    <WarningsAsErrors>Nullable, CA2016</WarningsAsErrors>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>0b05aaea-1a7d-4123-b282-844c34ff69c9</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>

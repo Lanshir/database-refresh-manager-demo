@@ -28,15 +28,15 @@ public static class EndpointRouteBuilderExtensions
                 .AddEndpointFilter<EndpointExceptionsFilter>();
 
             // Получение реализаций и вызов конфигураторов эндпоинтов.
-            var assembly = typeof(IEndpointsSetup).Assembly;
+            var assembly = typeof(IEndpointsMapper).Assembly;
             var grpSetupTypes = assembly
                 .GetTypes()
-                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IEndpointsSetup)));
+                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IEndpointsMapper)));
 
             foreach (var setupType in grpSetupTypes)
             {
-                var grpSetup = (Activator.CreateInstance(setupType) as IEndpointsSetup)!;
-                var grpBuilder = grpSetup.SetupEndpoints(baseApiGroup);
+                var grpSetup = (Activator.CreateInstance(setupType) as IEndpointsMapper)!;
+                var grpBuilder = grpSetup.MapEndpoints(baseApiGroup);
             }
 
             return builder;

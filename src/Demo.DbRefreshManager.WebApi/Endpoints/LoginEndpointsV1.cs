@@ -1,7 +1,6 @@
-using Demo.DbRefreshManager.Application.Repositories;
+using Demo.DbRefreshManager.Application.Features.Users;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
-using Demo.DbRefreshManager.Domain.Mappings;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
 using Demo.DbRefreshManager.WebApi.Models.Authorization;
@@ -13,9 +12,9 @@ using System.Security.Claims;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints;
 
-public class LoginEndpointsV1 : IEndpointsSetup
+public class LoginEndpointsV1 : IEndpointsMapper
 {
-    public IEndpointRouteBuilder SetupEndpoints(IEndpointRouteBuilder builder)
+    public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder)
     {
         var grp = builder.MapGroup("auth")
             .WithTags("Login")
@@ -53,8 +52,9 @@ public class LoginEndpointsV1 : IEndpointsSetup
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityProvider userIdentity,
-        IUsersRepository usersRepository,
-        LoginInputDto input)
+        IMergeLdapUserToDbCommandHandler mergeLdapUserToDbCmd,
+        LoginInputDto input,
+        CancellationToken ct)
     {
         try
         {
@@ -95,7 +95,7 @@ public class LoginEndpointsV1 : IEndpointsSetup
                     detail: "Ошибка входа, проверьте логин/пароль");
             }
 
-            var dbUser = await usersRepository.MergeLdapUser(ldapUser.ToDomainUser());
+            var dbUser = await mergeLdapUserToDbCmd.HandleAsync(ldapUser, ct);
             var dto = dbUser.ToLoginResultDto();
 
             var claims = userIdentity.CreateClaimsList(

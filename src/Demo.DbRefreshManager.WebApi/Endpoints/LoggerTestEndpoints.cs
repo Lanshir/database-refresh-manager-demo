@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints;
 
-public class LoggerTestEndpoints : IEndpointsSetup
+public class LoggerTestEndpoints : IEndpointsMapper
 {
-    public IEndpointRouteBuilder SetupEndpoints(IEndpointRouteBuilder builder)
+    public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder)
     {
         var grp = builder.MapGroup("logging")
             .WithTags("Logging")
