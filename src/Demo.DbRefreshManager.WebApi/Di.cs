@@ -119,7 +119,11 @@ public static class Di
         public IServiceCollection AddVersionedOpenApiDocs()
         {
             SupportedApiVersions.VersionsList.ForEach(v =>
-                services.AddOpenApi($"v{v}"));
+                services.AddOpenApi($"v{v}", options =>
+                {
+                    options.ShouldInclude = description =>
+                        string.Equals(description.GroupName, $"v{v}", StringComparison.OrdinalIgnoreCase);
+                }));
 
             return services;
         }

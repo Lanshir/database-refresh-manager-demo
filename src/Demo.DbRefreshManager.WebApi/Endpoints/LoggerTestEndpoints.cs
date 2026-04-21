@@ -8,6 +8,7 @@ public class LoggerTestEndpoints : IEndpointsMapper
     public IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder builder)
     {
         var grp = builder.MapGroup("logging")
+            .MapToApiVersion(1)
             .WithTags("Logging")
             .WithSummary("Логирование api.");
 
