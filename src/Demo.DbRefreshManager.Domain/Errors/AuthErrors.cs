@@ -11,15 +11,15 @@ public static class AuthErrors
 
     public const string Title = "Ошибка аутентификации";
 
-    public static Error BadCredentials = new(
+    public static readonly Error BadCredentials = new(
         Code: $"{_prefix}.BadCredentials",
         Message: "Ошибка входа, проверьте логин/пароль");
 
-    public static Error LdapUserNotFound = new(
+    public static readonly Error LdapUserNotFound = new(
         Code: $"{_prefix}.LdapUserNotFound",
         Message: "Не удалось получить данные пользователя в домене");
 
-    public static Error Unexpected = new(
+    public static readonly Error Unexpected = new(
         Code: $"{_prefix}.Unexpected",
         Message: "При попытке входа произошла неожиданная ошибка, попробуйте позже");
 }
