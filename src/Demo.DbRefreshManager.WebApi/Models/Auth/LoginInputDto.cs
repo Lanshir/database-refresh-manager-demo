@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.WebApi.Models.Authorization;
+namespace Demo.DbRefreshManager.WebApi.Models.Auth;
 
 /// <summary>
 /// Модель dto данных ввода авторизации.

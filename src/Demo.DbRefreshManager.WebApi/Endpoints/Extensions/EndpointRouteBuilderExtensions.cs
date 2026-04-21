@@ -1,7 +1,7 @@
 using Asp.Versioning;
 using Asp.Versioning.Conventions;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
+using Demo.DbRefreshManager.WebApi.Endpoints.EndpointFilters;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints.Extensions;

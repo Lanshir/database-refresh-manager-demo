@@ -38,6 +38,12 @@ public static class Di
             services.AddOptions<FrontendOptions>()
                 .BindConfiguration(nameof(FrontendOptions));
 
+            services.AddOptions<AuthCookieOptions>()
+                .BindConfiguration(nameof(AuthCookieOptions));
+
+            services.AddOptions<LdapOptions>()
+                .BindConfiguration(nameof(LdapOptions));
+
             return services;
         }
 

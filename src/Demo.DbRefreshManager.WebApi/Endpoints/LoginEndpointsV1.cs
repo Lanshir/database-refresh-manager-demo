@@ -1,12 +1,15 @@
 using Demo.DbRefreshManager.Application.Features.Users;
 using Demo.DbRefreshManager.Application.Services;
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Errors;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
+using Demo.DbRefreshManager.WebApi.Infrastructure.HttpResults;
+using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
-using Demo.DbRefreshManager.WebApi.Models.Authorization;
+using Demo.DbRefreshManager.WebApi.Models.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Options;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -52,7 +55,9 @@ public class LoginEndpointsV1 : IEndpointsMapper
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityProvider userIdentity,
+        IDomainControllerService domainController,
         IMergeLdapUserToDbCommandHandler mergeLdapUserToDbCmd,
+        IOptions<LdapOptions> ldapOptions,
         LoginInputDto input,
         CancellationToken ct)
     {
@@ -64,45 +69,43 @@ public class LoginEndpointsV1 : IEndpointsMapper
             }
 
             // Доменная авторизация, получение данных пользователя.
-            /*
-            domainController.Connect(appConfig.Ldap.Host, 5, 2000);
-            domainController.Authorize(input.Login, input.Password);
+            domainController.Connect(ldapOptions.Value.Host, 5, 2000);
+            domainController.Authenticate(input.Login, input.Password);
 
-            if (!domainController.IsAuthorized)
+            if (!domainController.IsAuthenticated)
             {
-                return Unauthorized(ApiResponse.Error(
-                    "Ошибка авторизации, проверьте логин/пароль."));
+                return TypedResults.Problem(new ExtendedProblemDetails
+                {
+                    Status = StatusCodes.Status401Unauthorized,
+                    Title = AuthErrors.Title,
+                    ErrorCode = AuthErrors.BadCredentials.Code,
+                    Detail = AuthErrors.BadCredentials.Message
+                });
             }
 
             var ldapUser = domainController.GetUserData
-                (input.Login, appConfig.Ldap.UserSearchDnBases);
+                (input.Login, ldapOptions.Value.UserSearchDnBases);
 
             if (ldapUser == null)
             {
-                return Unauthorized(ApiResponse.Error(
-                    "Не удалось получить данные пользователя."));
-            }
-            */
-
-            // DEMO AUTH.
-            var ldapUser = _demoUsers.FirstOrDefault(u => u.Login == input.Login);
-
-            if (ldapUser == null || input.Password != "pwd")
-            {
                 return TypedResults.Problem(
-                    statusCode: StatusCodes.Status401Unauthorized,
-                    title: "Ошибка аутентификации",
-                    detail: "Ошибка входа, проверьте логин/пароль");
+                    new ExtendedProblemDetails
+                    {
+                        Status = StatusCodes.Status401Unauthorized,
+                        Title = AuthErrors.Title,
+                        ErrorCode = AuthErrors.LdapUserNotFound.Code,
+                        Detail = AuthErrors.LdapUserNotFound.Message
+                    });
             }
 
             var dbUser = await mergeLdapUserToDbCmd.HandleAsync(ldapUser, ct);
             var dto = dbUser.ToLoginResultDto();
 
             var claims = userIdentity.CreateClaimsList(
-                dbUser.Id,
-                dto.Login,
-                dto.FullName,
-                [.. dto.Roles]);
+                userId: dbUser.Id,
+                login: dto.Login,
+                fullName: dto.FullName,
+                roles: [.. dto.Roles]);
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -124,65 +127,13 @@ public class LoginEndpointsV1 : IEndpointsMapper
                 Debug.WriteLine(ex);
             }
 
-            return TypedResults.Problem(
-                statusCode: StatusCodes.Status401Unauthorized,
-                title: "Ошибка аутентификации",
-                detail: "При попытке входа произошла неожиданная ошибка, попробуйте позже");
+            return TypedResults.Problem(new ExtendedProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Title = AuthErrors.Title,
+                ErrorCode = AuthErrors.Unexpected.Code,
+                Detail = AuthErrors.Unexpected.Message
+            });
         }
     }
-
-    private static readonly List<LdapUser> _demoUsers = new()
-    {
-        {
-            new LdapUser
-            {
-                Dn = "demoMaster",
-                Login = "demoMaster",
-                Company = "Рога и копыта",
-                Department = "Отдел прокрастинации",
-                Email = "demo@demo.ru",
-                FirstName = "Иван",
-                Patronymic = "Иванович",
-                LastName = "Иванов",
-                FullName = "Иванов Иван Иванович",
-                Position = "Мастер",
-                WhenChanged = DateTime.UtcNow,
-                Groups = ["RefreshManagerMaster"]
-            }
-        },
-        {
-            new LdapUser
-            {
-                Dn = "demoAnalyst",
-                Login = "demoAnalyst",
-                Company = "Рога и копыта",
-                Department = "Отдел прокрастинации",
-                Email = "demo@demo.ru",
-                FirstName = "Иван",
-                Patronymic = "Иванович",
-                LastName = "Иванов",
-                FullName = "Иванов Иван Иванович",
-                Position = "Аналитик",
-                WhenChanged = DateTime.UtcNow,
-                Groups = ["RefreshManagerAnalyst"]
-            }
-        },
-        {
-            new LdapUser
-            {
-                Dn = "demoSupport",
-                Login = "demoSupport",
-                Company = "Рога и копыта",
-                Department = "Отдел прокрастинации",
-                Email = "demo@demo.ru",
-                FirstName = "Иван",
-                Patronymic = "Иванович",
-                LastName = "Иванов",
-                FullName = "Иванов Иван Иванович",
-                Position = "Тех. поддержка",
-                WhenChanged = DateTime.UtcNow,
-                Groups = ["RefreshManagerSupport"]
-            }
-        }
-    };
 }

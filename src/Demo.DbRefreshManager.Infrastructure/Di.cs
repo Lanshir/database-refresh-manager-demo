@@ -14,7 +14,7 @@ public static class Di
         public IServiceCollection AddInfrastructure()
         {
             services.AddSingleton<IJsonConverter, JsonConverter>();
-            services.AddScoped<IDomainControllerService, DomainControllerService>();
+            services.AddScoped<IDomainControllerService, StubDomainControllerService>();
 
             services.AddTransient<ISshClientService, SshClientService>();
 

@@ -2,7 +2,7 @@ using Demo.DbRefreshManager.Domain.Errors;
 using Demo.DbRefreshManager.Domain.Exceptions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.HttpResults;
 
-namespace Demo.DbRefreshManager.WebApi.Infrastructure.Endpoints;
+namespace Demo.DbRefreshManager.WebApi.Endpoints.EndpointFilters;
 
 /// <summary>
 /// Обработка ошибок IEndpoint.

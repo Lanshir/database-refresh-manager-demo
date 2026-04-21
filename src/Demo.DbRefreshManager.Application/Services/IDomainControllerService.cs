@@ -10,7 +10,7 @@ public interface IDomainControllerService : IDisposable
     /// <summary>
     /// Пользователь авторизован.
     /// </summary>
-    bool IsAuthorized { get; }
+    bool IsAuthenticated { get; }
 
     /// <summary>
     /// Подключиться к контроллеру домена windows.
@@ -25,12 +25,12 @@ public interface IDomainControllerService : IDisposable
         int reconnectDelayMs = 1000);
 
     /// <summary>
-    /// Авторизация в домене.
+    /// Аутентификация в домене.
     /// </summary>
     /// <param name="login">Логин пользователя</param>
     /// <param name="password">Пароль.</param>
-    /// <returns>Автормзован.</returns>
-    bool Authorize(string login, string password);
+    /// <returns>Пользователь аутентифицирован.</returns>
+    bool Authenticate(string login, string password);
 
     /// <summary>
     /// Получить данные пользователя.

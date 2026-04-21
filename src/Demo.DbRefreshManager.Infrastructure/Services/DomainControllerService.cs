@@ -17,7 +17,7 @@ internal class DomainControllerService : IDomainControllerService
     /// </summary>
     private LdapConnection? _connection;
 
-    public bool IsAuthorized { get; private set; }
+    public bool IsAuthenticated { get; private set; }
 
     public bool Connect(
         string domainHost,
@@ -58,7 +58,7 @@ internal class DomainControllerService : IDomainControllerService
         return false;
     }
 
-    public bool Authorize(string login, string password)
+    public bool Authenticate(string login, string password)
     {
         try
         {
@@ -66,7 +66,7 @@ internal class DomainControllerService : IDomainControllerService
 
             _connection?.Bind(userDomainName, password);
 
-            IsAuthorized = _connection?.Bound ?? false;
+            IsAuthenticated = _connection?.Bound ?? false;
 
             return _connection?.Bound ?? false;
         }
@@ -74,7 +74,7 @@ internal class DomainControllerService : IDomainControllerService
         {
             Debug.WriteLine(exc);
 
-            IsAuthorized = false;
+            IsAuthenticated = false;
 
             return false;
         }
@@ -82,6 +82,9 @@ internal class DomainControllerService : IDomainControllerService
 
     public LdapUser? GetUserData(string login, IEnumerable<string> searchDnBases)
     {
+        if (IsAuthenticated is false)
+            throw new Exception("Unauthenticated attempt to get ldap user data");
+
         try
         {
             LdapEntry? userEntry = null;
