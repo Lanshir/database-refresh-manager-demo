@@ -11,7 +11,7 @@ public class BusinessLogicException : Exception
     /// <summary>
     /// Код ошибки.
     /// </summary>
-    public string Code { get; set; } = DefaultErrors.Unexpected;
+    public string Code { get; set; } = DefaultErrors.Unexpected.Code;
 
     /// <inheritdoc cref="BusinessLogicException" />
     /// <param name="message">Сообщение.</param>

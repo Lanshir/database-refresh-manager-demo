@@ -27,7 +27,7 @@ public class GraphQLErrorFilter(ILogger<GraphQLErrorFilter> logger) : IErrorFilt
             default:
                 {
                     errBuilder
-                        .SetCode(DefaultErrors.Unexpected)
+                        .SetCode(DefaultErrors.Unexpected.Code)
                         .SetMessage("Ошибка сервера при отправке запроса");
 
                     logger.LogError(error.Exception,

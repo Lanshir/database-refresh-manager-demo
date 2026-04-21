@@ -54,7 +54,7 @@ public static class Di
         public IServiceCollection AddDatabaseFeatures()
         {
             // Поиск всех реализаций IHandlerBase,
-            // регистрация в di под близжайшим реализованным интерфейсом.
+            // регистрация в di под ближайшим реализованным интерфейсом.
             typeof(Di).Assembly
                 .GetTypes()
                 .Where(t => t.IsClass & t.IsAssignableTo(typeof(IHandlerBase)))

@@ -1,7 +1,7 @@
 using Demo.DbRefreshManager.Application.Services;
 using System.Security.Claims;
 
-namespace Demo.DbRefreshManager.WebApi.Infrastructure.Providers;
+namespace Demo.DbRefreshManager.WebApi.Infrastructure.Services;
 
 /// <inheritdoc cref="IUserIdentityProvider" />
 public class UserIdentityProvider(IHttpContextAccessor httpContextAccessor) : IUserIdentityProvider

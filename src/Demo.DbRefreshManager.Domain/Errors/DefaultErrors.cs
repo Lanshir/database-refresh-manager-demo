@@ -1,3 +1,5 @@
+using Demo.DbRefreshManager.Core.Results;
+
 namespace Demo.DbRefreshManager.Domain.Errors;
 
 /// <summary>
@@ -7,5 +9,7 @@ public static class DefaultErrors
 {
     private const string _prefix = "Default";
 
-    public const string Unexpected = $"{_prefix}.Unexpected";
+    public static readonly Error Unexpected = new(
+        Code: $"{_prefix}.Unexpected",
+        Message: "Произошла непредвиденная ошибка приложения");
 }
