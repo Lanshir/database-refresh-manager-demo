@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.WebApi.Infrastructure.Options;
+namespace Demo.DbRefreshManager.WebApi.Models.Options;
 
 /// <summary>
 /// Конфигурация frontend.

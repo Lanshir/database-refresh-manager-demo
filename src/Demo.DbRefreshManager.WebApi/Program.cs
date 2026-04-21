@@ -1,3 +1,4 @@
+using Demo.DbRefreshManager.Application;
 using Demo.DbRefreshManager.Infrastructure;
 using Demo.DbRefreshManager.Infrastructure.Db;
 using Demo.DbRefreshManager.WebApi.Endpoints.Extensions;
@@ -24,6 +25,10 @@ internal class Program
 
         // Доступ к HttpContext через инъекции.
         services.AddHttpContextAccessor();
+
+        // Application.
+        services.AddApplicationOptions();
+        services.AddApplicationFeatures();
 
         // Infrastructure.
         services.AddInfrastructure();

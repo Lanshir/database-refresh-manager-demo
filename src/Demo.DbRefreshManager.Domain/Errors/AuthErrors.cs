@@ -9,8 +9,6 @@ public static class AuthErrors
 {
     private const string _prefix = "Auth";
 
-    public const string Title = "Ошибка аутентификации";
-
     public static readonly Error BadCredentials = new(
         Code: $"{_prefix}.BadCredentials",
         Message: "Ошибка входа, проверьте логин/пароль");

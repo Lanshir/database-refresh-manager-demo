@@ -4,11 +4,11 @@ using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Extensions;
 using Demo.DbRefreshManager.WebApi.Infrastructure.HotChocolate;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Serilog;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Services;
 using Demo.DbRefreshManager.WebApi.Infrastructure.Static;
 using Demo.DbRefreshManager.WebApi.Jobs;
+using Demo.DbRefreshManager.WebApi.Models.Options;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Quartz;
 using Serilog;
@@ -40,9 +40,6 @@ public static class Di
 
             services.AddOptions<AuthCookieOptions>()
                 .BindConfiguration(nameof(AuthCookieOptions));
-
-            services.AddOptions<LdapOptions>()
-                .BindConfiguration(nameof(LdapOptions));
 
             return services;
         }

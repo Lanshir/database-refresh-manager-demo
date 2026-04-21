@@ -63,5 +63,5 @@ public class LdapUser
     /// <summary>
     /// Группы пользователя.
     /// </summary>
-    public List<string> Groups { get; set; } = new(0);
+    public List<string> Groups { get; set; } = [];
 }

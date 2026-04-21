@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.WebApi.Infrastructure.Options;
+namespace Demo.DbRefreshManager.Application.Models.Options;
 
 public class LdapOptions
 {

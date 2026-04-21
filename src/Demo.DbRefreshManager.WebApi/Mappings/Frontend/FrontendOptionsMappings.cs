@@ -1,5 +1,5 @@
-using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Models.Frontend;
+using Demo.DbRefreshManager.WebApi.Models.Options;
 
 namespace Demo.DbRefreshManager.WebApi.Mappings.Frontend;
 

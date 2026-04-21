@@ -1,7 +1,7 @@
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
 using Demo.DbRefreshManager.WebApi.Mappings.Frontend;
 using Demo.DbRefreshManager.WebApi.Models.Frontend;
+using Demo.DbRefreshManager.WebApi.Models.Options;
 using Microsoft.Extensions.Options;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;

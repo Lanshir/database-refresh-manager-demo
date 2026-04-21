@@ -1,16 +1,13 @@
+using Demo.DbRefreshManager.Application.Features.Auth;
 using Demo.DbRefreshManager.Application.Features.Users;
 using Demo.DbRefreshManager.Application.Services;
-using Demo.DbRefreshManager.Domain.Errors;
 using Demo.DbRefreshManager.WebApi.Endpoints.Abstract;
-using Demo.DbRefreshManager.WebApi.Infrastructure.HttpResults;
-using Demo.DbRefreshManager.WebApi.Infrastructure.Options;
+using Demo.DbRefreshManager.WebApi.Mappings.Results;
 using Demo.DbRefreshManager.WebApi.Mappings.Users;
 using Demo.DbRefreshManager.WebApi.Models.Auth;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.Options;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace Demo.DbRefreshManager.WebApi.Endpoints;
@@ -55,85 +52,47 @@ public class LoginEndpointsV1 : IEndpointsMapper
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityProvider userIdentity,
-        IDomainControllerService domainController,
+        ILoginToDomainCommandHandler loginToDomainCmd,
         IMergeLdapUserToDbCommandHandler mergeLdapUserToDbCmd,
-        IOptions<LdapOptions> ldapOptions,
         LoginInputDto input,
         CancellationToken ct)
     {
-        try
+        if (userIdentity.IsAuthenticated())
         {
-            if (userIdentity.IsAuthenticated())
-            {
-                await httpContext.SignOutAsync();
-            }
-
-            // Доменная авторизация, получение данных пользователя.
-            domainController.Connect(ldapOptions.Value.Host, 5, 2000);
-            domainController.Authenticate(input.Login, input.Password);
-
-            if (!domainController.IsAuthenticated)
-            {
-                return TypedResults.Problem(new ExtendedProblemDetails
-                {
-                    Status = StatusCodes.Status401Unauthorized,
-                    Title = AuthErrors.Title,
-                    ErrorCode = AuthErrors.BadCredentials.Code,
-                    Detail = AuthErrors.BadCredentials.Message
-                });
-            }
-
-            var ldapUser = domainController.GetUserData
-                (input.Login, ldapOptions.Value.UserSearchDnBases);
-
-            if (ldapUser == null)
-            {
-                return TypedResults.Problem(
-                    new ExtendedProblemDetails
-                    {
-                        Status = StatusCodes.Status401Unauthorized,
-                        Title = AuthErrors.Title,
-                        ErrorCode = AuthErrors.LdapUserNotFound.Code,
-                        Detail = AuthErrors.LdapUserNotFound.Message
-                    });
-            }
-
-            var dbUser = await mergeLdapUserToDbCmd.HandleAsync(ldapUser, ct);
-            var dto = dbUser.ToLoginResultDto();
-
-            var claims = userIdentity.CreateClaimsList(
-                userId: dbUser.Id,
-                login: dto.Login,
-                fullName: dto.FullName,
-                roles: [.. dto.Roles]);
-
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Аутентификация.
-            await httpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                new AuthenticationProperties
-                {
-                    IsPersistent = input.RememberMe
-                });
-
-            return TypedResults.Ok(dto);
+            await httpContext.SignOutAsync();
         }
-        catch (Exception ex)
-        {
-            if (environment.IsDevelopment())
-            {
-                Debug.WriteLine(ex);
-            }
 
-            return TypedResults.Problem(new ExtendedProblemDetails
+        var ldapLoginResult = loginToDomainCmd.Handle(new(input.Login, input.Password));
+
+        if (ldapLoginResult.IsFailure)
+        {
+            return TypedResults.Problem(
+                ldapLoginResult.ToProblemDetails(
+                    "Ошибка аутентификации",
+                    StatusCodes.Status401Unauthorized));
+        }
+
+        var ldapUser = ldapLoginResult.Value!;
+        var dbUser = await mergeLdapUserToDbCmd.HandleAsync(ldapUser, ct);
+        var dto = dbUser.ToLoginResultDto();
+
+        var claims = userIdentity.CreateClaimsList(
+            userId: dbUser.Id,
+            login: dto.Login,
+            fullName: dto.FullName,
+            roles: [.. dto.Roles]);
+
+        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        // Аутентификация.
+        await httpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            new ClaimsPrincipal(claimsIdentity),
+            new AuthenticationProperties
             {
-                Status = StatusCodes.Status401Unauthorized,
-                Title = AuthErrors.Title,
-                ErrorCode = AuthErrors.Unexpected.Code,
-                Detail = AuthErrors.Unexpected.Message
+                IsPersistent = input.RememberMe
             });
-        }
+
+        return TypedResults.Ok(dto);
     }
 }

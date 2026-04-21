@@ -3,7 +3,7 @@ using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
 
 namespace Demo.DbRefreshManager.Infrastructure.Services;
 
-internal class DomainControllerServiceStub : IDomainControllerService
+internal class DomainControllerServiceFake : IDomainControllerService
 {
     public bool IsAuthenticated { get; private set; } = false;
 
