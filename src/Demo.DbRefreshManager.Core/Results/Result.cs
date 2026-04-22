@@ -20,14 +20,14 @@ public class Result
     /// </summary>
     public Error Error { get; }
 
-    public Result()
+    internal Result()
     {
         IsSuccess = true;
         IsFailure = false;
         Error = Error.None;
     }
 
-    public Result(Error error)
+    protected Result(Error error)
     {
         IsSuccess = error == Error.None;
         IsFailure = IsSuccess is false;
@@ -41,12 +41,22 @@ public class Result
 }
 
 /// <inheritdoc cref="Result" />
-public sealed class Result<TValue>(TValue value, Error error) : Result(error)
+public sealed class Result<TValue> : Result
 {
     ///// <summary>
     ///// Данные результата выполнения операции.
     ///// </summary>
-    public TValue? Value { get; } = value;
+    public TValue? Value { get; }
+
+    private Result(TValue value, Error error) : base(error)
+    {
+        Value = value;
+    }
+
+    /// <summary>
+    /// Неявная конвертация значения в Result.
+    /// </summary>
+    public static implicit operator Result<TValue>(TValue value) => new(value, Error.None);
 
     /// <summary>
     /// Неявная конвертация Error в Result.

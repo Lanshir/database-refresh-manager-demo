@@ -42,7 +42,7 @@ public static class LoginToDomainCommand
                 if (ldapUser == null)
                     return AuthErrors.LdapUserNotFound;
 
-                return Result.Success(ldapUser);
+                return ldapUser;
             }
             catch (Exception ex)
             {

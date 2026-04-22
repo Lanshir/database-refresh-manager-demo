@@ -7,12 +7,24 @@ public static class ResultsFactory
 {
     extension(Result _)
     {
+        /// <summary>
+        /// Создание успешного результата.
+        /// </summary>
         public static Result Success() => new();
 
-        public static Result Failure(Error error) => new(error);
+        /// <summary>
+        /// Создание ошибочного результата.
+        /// </summary>
+        public static Result Failure(Error error) => error;
 
-        public static Result<TValue> Success<TValue>(TValue value) => new(value, Error.None);
+        /// <summary>
+        /// Создание успешного результата со значением.
+        /// </summary>
+        public static Result<TValue> Success<TValue>(TValue value) => value;
 
-        public static Result<TValue> Failure<TValue>() => new(default!, Error.None);
+        /// <summary>
+        /// Создание ошибочного результата.
+        /// </summary>
+        public static Result<TValue> Failure<TValue>(Error error) => error;
     }
 }
