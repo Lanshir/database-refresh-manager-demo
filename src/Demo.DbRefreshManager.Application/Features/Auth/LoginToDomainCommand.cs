@@ -21,38 +21,25 @@ public static class LoginToDomainCommand
     public record InputDto(string Login, string Password);
 
     public class Handler(
-        IHostEnvironment environment,
         IDomainControllerService domainController,
         IOptions<LdapOptions> ldapOptions
         ) : ILoginToDomainCommandHandler
     {
         public Result<LdapUser> Handle(InputDto input)
         {
-            try
-            {
-                domainController.Connect(ldapOptions.Value.Host, 5, 2000);
-                domainController.Authenticate(input.Login, input.Password);
+            domainController.Connect(ldapOptions.Value.Host, 5, 2000);
+            domainController.Authenticate(input.Login, input.Password);
 
-                if (!domainController.IsAuthenticated)
-                    return AuthErrors.BadCredentials;
+            if (!domainController.IsAuthenticated)
+                return AuthErrors.BadCredentials;
 
-                var ldapUser = domainController.GetUserData(
-                    input.Login, ldapOptions.Value.UserSearchDnBases);
+            var ldapUser = domainController.GetUserData(
+                input.Login, ldapOptions.Value.UserSearchDnBases);
 
-                if (ldapUser == null)
-                    return AuthErrors.LdapUserNotFound;
+            if (ldapUser == null)
+                return AuthErrors.LdapUserNotFound;
 
-                return ldapUser;
-            }
-            catch (Exception ex)
-            {
-                if (environment.IsDevelopment())
-                {
-                    Debug.WriteLine(ex);
-                }
-
-                return AuthErrors.Unexpected;
-            }
+            return ldapUser;
         }
     }
 }

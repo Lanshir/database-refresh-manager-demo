@@ -1,12 +1,12 @@
-import { FC } from 'react';
-import { useNavigate } from 'react-router';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { authorizationState } from '@store/authorization/authorizationState';
-import { deauthorizeQuery } from '@store/authorization/authorizationActions';
+import Routes from '@constants/routes';
+import { ShortenFullName } from '@helpers';
 import { Button, Typography } from '@mui/material';
 import { FlexRow } from '@shared/components';
-import { ShortenFullName } from '@helpers';
-import Routes from '@constants/routes';
+import { deauthorizeQuery } from '@store/authorization/authorizationActions';
+import { authorizationState } from '@store/authorization/authorizationState';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { FC } from 'react';
+import { useNavigate } from 'react-router';
 
 /**
  * Блок меню авторизованного пользователя.

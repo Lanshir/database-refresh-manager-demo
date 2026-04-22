@@ -16,8 +16,4 @@ public static class AuthErrors
     public static readonly Error LdapUserNotFound = new(
         Code: $"{_prefix}.LdapUserNotFound",
         Message: "Не удалось получить данные пользователя в домене");
-
-    public static readonly Error Unexpected = new(
-        Code: $"{_prefix}.Unexpected",
-        Message: "При попытке входа произошла неожиданная ошибка, попробуйте позже");
 }

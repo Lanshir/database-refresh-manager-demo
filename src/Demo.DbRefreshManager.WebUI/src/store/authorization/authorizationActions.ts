@@ -1,23 +1,22 @@
+import Routes from '@constants/routes';
+import { Authorize, CheckAuth, Deauthorize } from '@requests/rest/authorizationRequests';
+import { ProblemDetails } from '@shared/types/api/rest/problemDetails.interface';
+import { IRequestError } from '@shared/types/errors';
+import { pushErrorAction } from '@store/alerts/alertsActions';
+import { ValidateLoginInput } from '@validation/validators/authorizationValidations';
 import { atom } from 'jotai';
 import { RESET } from 'jotai/utils';
 import { Location, NavigateFunction } from 'react-router';
 import {
-    authorizationState, loginLoadingState, loginErrorsState, alertState
+    alertState, authorizationState, loginErrorsState, loginLoadingState
 } from './authorizationState';
-import { ValidateLoginInput } from '@validation/validators/authorizationValidations';
-import { Authorize, CheckAuth, Deauthorize } from '@requests/rest/authorizationRequests';
-import { pushErrorAction } from '@store/alerts/alertsActions';
-import { IRequestError } from '@shared/types/errors';
-import { ProblemDetails } from '@shared/types/api/rest/problemDetails.interface';
-import Routes from '@constants/routes';
 
 /** Запрос авторизации. */
 export const authorizeQuery = atom(null,
     async (get, set,
         login: string,
         password: string,
-        rememberMe: boolean,
-        onSuccess: () => void
+        rememberMe: boolean
     ) => {
         try {
             set(alertState, { text: '' });
@@ -41,8 +40,6 @@ export const authorizeQuery = atom(null,
                     roles: result.roles
                 }
             });
-
-            onSuccess();
         }
         catch (e) {
             const err = e as IRequestError<ProblemDetails>;

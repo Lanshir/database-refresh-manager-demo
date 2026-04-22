@@ -1,27 +1,28 @@
-import './login-styles.scss';
-import { FC, useState } from 'react';
-import { useMount, useUnmount } from 'react-use';
-import { useNavigate } from 'react-router';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { useResetAtom } from 'jotai/utils';
-import { useCheckboxState, useKeyboardEventHandler, useTextInputState } from '@hooks';
+import Routes from '@constants/routes';
 import { MaxLength } from '@filters';
-import {
-    loginLoadingState, loginErrorsState, authorizationState, alertState
-} from '@store/authorization/authorizationState';
-import { authorizeQuery } from '@store/authorization/authorizationActions';
+import { useCheckboxState, useKeyboardEventHandler, useTextInputState } from '@hooks';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
     Alert, Button, Card, CardActions, CardContent, Checkbox, FormControlLabel,
     IconButton, InputAdornment, TextField, Typography
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { AlertMessage, FlexCol } from '@shared/components';
-import Routes from '@constants/routes';
+import { authorizeQuery } from '@store/authorization/authorizationActions';
+import {
+    alertState, authorizationState, loginErrorsState, loginLoadingState
+} from '@store/authorization/authorizationState';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useResetAtom } from 'jotai/utils';
+import { FC, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { useMount, useUnmount } from 'react-use';
+import './login-styles.scss';
 
 /**
  * Форма авторизации.
  */
 const Login: FC = () => {
+    const { isAuthorized } = useAtomValue(authorizationState);
     const isLoading = useAtomValue(loginLoadingState);
     const errors = useAtomValue(loginErrorsState);
     const resetErrors = useResetAtom(loginErrorsState);
@@ -36,8 +37,7 @@ const Login: FC = () => {
     const authorize = useSetAtom(authorizeQuery);
     const navigate = useNavigate();
 
-    const onLogin = () => authorize(login, password, rememberMe,
-        () => navigate({ pathname: Routes.home }));
+    const onLogin = () => authorize(login, password, rememberMe);
 
     const onTogglePassClick = () => setPassVisible(!isPassVisible);
     const onEnterKeyUp = useKeyboardEventHandler(e => e.key === 'Enter', onLogin);
@@ -47,6 +47,13 @@ const Login: FC = () => {
 
     // Unmount cleanup.
     useUnmount(resetErrors);
+
+    // Переадресация если пользователь авторизован.
+    useEffect(() => {
+        if (isAuthorized) {
+            navigate({ pathname: Routes.home });
+        }
+    }, [navigate, isAuthorized]);
 
     return (
         <FlexCol className="login-container" onKeyUp={onEnterKeyUp}>
@@ -90,14 +97,17 @@ const Login: FC = () => {
                         disabled={isLoading}
                         type={isPassVisible ? 'text' : 'password'}
                         // Toggle button.
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={onTogglePassClick}>
-                                        {isPassVisible ? <Visibility /> : <VisibilityOff />}
-                                    </IconButton>
-                                </InputAdornment>
-                            )
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton onClick={onTogglePassClick}>
+                                            {isPassVisible ? <Visibility /> : <VisibilityOff />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+
+                            }
                         }}
                     />
 

@@ -1,6 +1,6 @@
+import IAlert from '@shared/types/mui/muiAlert.interface';
 import { atom } from 'jotai';
 import { atomWithReset, RESET } from 'jotai/utils';
-import IAlert from '@shared/types/mui/muiAlert.interface';
 
 export const authorizationState = atomWithReset<IAuthState>({
     isAuthorized: false,
