@@ -4,9 +4,7 @@ using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
 using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
 using Demo.DbRefreshManager.Domain.Errors;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Diagnostics;
 
 namespace Demo.DbRefreshManager.Application.Features.Auth;
 
@@ -14,27 +12,27 @@ namespace Demo.DbRefreshManager.Application.Features.Auth;
 /// Команда входа пользователя в домен.
 /// </summary>
 public interface ILoginToDomainCommandHandler
-    : IHandler<Result<LdapUser>, LoginToDomainCommand.InputDto>;
+    : IHandler<Result<LdapUser>, LoginToDomainCommand.Dto>;
 
 public static class LoginToDomainCommand
 {
-    public record InputDto(string Login, string Password);
+    public record struct Dto(string Login, string Password);
 
     public class Handler(
         IDomainControllerService domainController,
         IOptions<LdapOptions> ldapOptions
         ) : ILoginToDomainCommandHandler
     {
-        public Result<LdapUser> Handle(InputDto input)
+        public Result<LdapUser> Handle(Dto cmd)
         {
             domainController.Connect(ldapOptions.Value.Host, 5, 2000);
-            domainController.Authenticate(input.Login, input.Password);
+            domainController.Authenticate(cmd.Login, cmd.Password);
 
             if (!domainController.IsAuthenticated)
                 return AuthErrors.BadCredentials;
 
             var ldapUser = domainController.GetUserData(
-                input.Login, ldapOptions.Value.UserSearchDnBases);
+                cmd.Login, ldapOptions.Value.UserSearchDnBases);
 
             if (ldapUser == null)
                 return AuthErrors.LdapUserNotFound;

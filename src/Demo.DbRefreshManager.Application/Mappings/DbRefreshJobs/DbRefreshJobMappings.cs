@@ -1,9 +1,9 @@
+using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Core.Extensions;
 using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
-using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using System.Linq.Expressions;
 
-namespace Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
+namespace Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 
 public static class DbRefreshJobMappings
 {

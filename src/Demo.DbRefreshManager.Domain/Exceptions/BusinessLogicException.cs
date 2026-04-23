@@ -1,4 +1,5 @@
 using Demo.DbRefreshManager.Core.Extensions;
+using Demo.DbRefreshManager.Core.Results;
 using Demo.DbRefreshManager.Domain.Errors;
 
 namespace Demo.DbRefreshManager.Domain.Exceptions;
@@ -21,13 +22,12 @@ public class BusinessLogicException : Exception
     { }
 
     /// <inheritdoc cref="BusinessLogicException" />
-    /// <param name="code">Код ошибки.</param>
-    /// <param name="message">Сообщение.</param>
+    /// <param name="error">Ошибка приложения.</param>
     /// <param name="innerException">Вложенный Exception.</param>
-    public BusinessLogicException(string code, string message, Exception? innerException = null)
-        : base(MapNestedMessage(message, innerException), innerException)
+    public BusinessLogicException(Error error, Exception? innerException = null)
+        : base(MapNestedMessage(error.Message, innerException), innerException)
     {
-        Code = code;
+        Code = error.Code;
     }
 
     /// <summary>

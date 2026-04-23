@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+namespace Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель dto записи лога перезаливки БД.

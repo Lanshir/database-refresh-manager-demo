@@ -1,9 +1,11 @@
+using Demo.DbRefreshManager.Application.Features.DbGroups;
+using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
-using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
-using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Queries.V1;
@@ -29,10 +31,9 @@ public class DbRefreshJobsQueriesV1
     /// Получить группы БД.
     /// </summary>
     [UseProjection]
-    public async Task<IQueryable<DbGroupDto>> GetDbGroups(IDbGroupsRepository groupsRepository)
-        => groupsRepository
-            .GetUserDisplayGroupsQuery()
-            .Select(DbGroup.ToDtoProjectionExpression);
+    public async Task<IQueryable<DbGroupDto>> GetDbGroups(
+        IGetUserDisplayGroupsQueryHandler getUserDisplayGroupsQuery)
+        => getUserDisplayGroupsQuery.Handle();
 
     /// <summary>
     /// Получить логи перезаливок БД.
@@ -52,7 +53,9 @@ public class DbRefreshJobsQueriesV1
     /// </summary>
     [Authorize]
     public async Task<int[]> GetDbPersonalAccessIds(
-        IDbPersonalAccessesRepository acessesRepository,
-        IUserIdentityProvider userIdentity)
-        => await acessesRepository.GetPersonalAccessJobIds(userIdentity.GetUserLogin());
+        IGetPersonalAccessJobIdsQueryHandler getPersonalAccessesQuery,
+        IUserIdentityProvider userIdentity,
+        CancellationToken ct)
+        => await getPersonalAccessesQuery
+            .HandleAsync(new(userIdentity.GetUserLogin()), ct);
 }

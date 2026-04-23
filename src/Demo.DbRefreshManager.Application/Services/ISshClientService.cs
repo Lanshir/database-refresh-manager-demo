@@ -37,6 +37,6 @@ public interface ISshClientService : IDisposable
     /// Запуск команды.
     /// </summary>
     /// <param name="commandText">Текст команды.</param>
-    /// <returns></returns>
+    /// <returns>Результат выполнения.</returns>
     SshCommandResult RunCommand(string commandText);
 }

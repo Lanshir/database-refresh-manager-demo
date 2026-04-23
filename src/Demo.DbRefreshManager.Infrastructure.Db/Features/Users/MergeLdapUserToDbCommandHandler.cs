@@ -13,7 +13,7 @@ internal class MergeLdapUserToDbCommandHandler(
 {
     public async Task<User> HandleAsync(LdapUser ldapUser, CancellationToken ct)
     {
-        using var ctx = await contextFactory.CreateDbContextAsync(ct);
+        using var ctx = contextFactory.CreateDbContext();
         ctx.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.TrackAll;
 
         var dbUser = await ctx.Set<User>()

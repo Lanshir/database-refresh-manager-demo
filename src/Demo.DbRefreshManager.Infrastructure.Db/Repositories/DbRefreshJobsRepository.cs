@@ -22,17 +22,17 @@ internal class DbRefreshJobsRepository(
 
     public async Task<DbRefreshJob?> FindJob(int jobId)
         => await GetQueriable()
-            .Include(j => j.Group)
-            .Include(j => j.Group!.AccessRoles)
             .Include(j => j.ScheduleChangeUser)
-            .SingleOrDefaultAsync(j => j.Id == jobId);
+            .Include(j => j.Group)
+            .ThenInclude(g => g!.AccessRoles)
+            .FirstOrDefaultAsync(j => j.Id == jobId);
 
     public async Task<DbRefreshJob?> FindJob(string dbName)
         => await GetQueriable()
-            .Include(j => j.Group)
-            .Include(j => j.Group!.AccessRoles)
             .Include(j => j.ScheduleChangeUser)
-            .SingleOrDefaultAsync(j => j.DbName.ToUpper() == dbName.ToUpper());
+            .Include(j => j.Group)
+            .ThenInclude(g => g!.AccessRoles)
+            .FirstOrDefaultAsync(j => j.DbName.ToUpper() == dbName.ToUpper());
 
     public async Task<List<DbRefreshJob>> GetJobsToRun()
     {

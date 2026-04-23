@@ -1,10 +1,10 @@
+using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Domain.Exceptions;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
-using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
-using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
 using HotChocolate.Subscriptions;
 
@@ -23,23 +23,25 @@ public class DbRefreshJobsMutationsV1
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
-        IDbPersonalAccessesRepository accessesRepository,
         IUserIdentityProvider userIdentity,
-        int jobId, int delayMinutes, string? comment)
+        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        int jobId,
+        int delayMinutes,
+        string? comment,
+        CancellationToken ct)
     {
         delayMinutes = delayMinutes > 0 ? delayMinutes : 1;
 
-        // Поиск задачи, проверка прав.
-        var job = await jobsRepository.FindJob(jobId)
-            ?? throw GetJobNotFoundException(jobId);
+        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
 
-        await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
+        if (userHasAccess.IsFailure)
+            throw new BusinessLogicException(userHasAccess.Error);
 
         var refreshDate = DateTime.UtcNow.AddMinutes(delayMinutes);
 
-        await jobsRepository.StartManualRefresh(job.Id, refreshDate, userIdentity.GetUserLogin(), comment);
+        await jobsRepository.StartManualRefresh(jobId, refreshDate, userIdentity.GetUserLogin(), comment);
 
-        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var updatedJob = (await jobsRepository.FindJob(jobId))!;
         var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
@@ -56,18 +58,18 @@ public class DbRefreshJobsMutationsV1
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
-        IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityProvider userIdentity,
-        int jobId)
+        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        int jobId,
+        CancellationToken ct)
     {
-        // Поиск задачи, проверка прав.
-        var job = await jobsRepository.FindJob(jobId)
-            ?? throw GetJobNotFoundException(jobId);
+        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
 
-        await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
+        if (userHasAccess.IsFailure)
+            throw new BusinessLogicException(userHasAccess.Error);
+
         await jobsRepository.StopManualRefresh(jobId);
 
-        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var updatedJob = (await jobsRepository.FindJob(jobId))!;
         var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
@@ -86,19 +88,20 @@ public class DbRefreshJobsMutationsV1
         ILogger<DbRefreshJobsMutationsV1> logger,
         IUserIdentityProvider userIdentity,
         IDbRefreshJobsRepository jobsRepository,
-        IDbPersonalAccessesRepository accessesRepository,
-        int jobId, bool isActive)
+        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        int jobId,
+        bool isActive,
+        CancellationToken ct)
     {
         var changeUserId = userIdentity.GetUserId();
+        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
 
-        // Поиск задачи, проверка прав.
-        var job = await jobsRepository.FindJob(jobId)
-            ?? throw GetJobNotFoundException(jobId);
+        if (userHasAccess.IsFailure)
+            throw new BusinessLogicException(userHasAccess.Error);
 
-        await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
         await jobsRepository.SetJobScheduleActive(jobId, changeUserId, isActive);
 
-        var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+        var updatedJob = (await jobsRepository.FindJob(jobId))!;
         var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
@@ -116,21 +119,22 @@ public class DbRefreshJobsMutationsV1
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
-        IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityProvider userIdentity,
-        int jobId, string? comment)
+        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        int jobId,
+        string? comment,
+        CancellationToken ct)
     {
         try
         {
-            // Поиск задачи, проверка прав.
-            var job = await jobsRepository.FindJob(jobId)
-                ?? throw GetJobNotFoundException(jobId);
+            var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
 
-            await ValidateJobAccessAsync(accessesRepository, userIdentity, job);
+            if (userHasAccess.IsFailure)
+                throw new BusinessLogicException(userHasAccess.Error);
+
             await jobsRepository.SetUserComment(jobId, comment);
 
-            job.UserComment = comment;
-            var dto = job.ToDto();
+            var updatedJob = (await jobsRepository.FindJob(jobId))!;
+            var dto = updatedJob.ToDto();
 
             await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -152,7 +156,9 @@ public class DbRefreshJobsMutationsV1
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
-        string dbName, string? comment, bool isAppend = false)
+        string dbName,
+        string? comment,
+        bool isAppend = false)
     {
         try
         {
@@ -177,32 +183,6 @@ public class DbRefreshJobsMutationsV1
         }
     }
 
-    #region Private
-
-    private static BusinessLogicException GetJobNotFoundException(int jobId)
-        => new($"Задача с id: {jobId} не найдена");
-
-    /// <summary>
-    /// Валидация доступа пользователя к задаче перезаливки БД.
-    /// </summary>
-    private static async Task ValidateJobAccessAsync(
-        IDbPersonalAccessesRepository accessesRepository,
-        IUserIdentityProvider userIdentity,
-        DbRefreshJob job)
-    {
-        var login = userIdentity.GetUserLogin();
-        var userRoles = userIdentity.GetRoles();
-
-        var personalAccess = await accessesRepository.UserHasAccess(login, job.Id);
-
-        if (!personalAccess
-            && !job.Group!.AccessRoles.Any(r => userRoles.Contains(r.Name.ToUpper())))
-        {
-            throw new BusinessLogicException(
-                $"У пользователя {login} нет прав для изменения задачи id: {job.Id}");
-        }
-    }
-
     /// <summary>
     /// Отправить событие об изменении задачи на перезаливку.
     /// </summary>
@@ -223,6 +203,4 @@ public class DbRefreshJobsMutationsV1
                 "Ошибка отправки события об обновлении задачи на перезаливку БД");
         }
     }
-
-    #endregion
 }

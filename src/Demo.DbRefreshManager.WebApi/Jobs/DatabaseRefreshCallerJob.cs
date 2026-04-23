@@ -1,10 +1,10 @@
+using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.SshService;
 using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Extensions;
 using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
-using Demo.DbRefreshManager.WebApi.Mappings.DbRefreshJobs;
 using HotChocolate.Subscriptions;
 using Quartz;
 

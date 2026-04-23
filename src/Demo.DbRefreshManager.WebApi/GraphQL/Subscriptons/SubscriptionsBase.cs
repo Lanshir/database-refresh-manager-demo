@@ -1,4 +1,4 @@
-﻿using Demo.DbRefreshManager.WebApi.Models.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using HotChocolate.Authorization;
 
 namespace Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
