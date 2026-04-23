@@ -27,7 +27,7 @@ public class Result
         Error = Error.None;
     }
 
-    protected Result(Error error)
+    internal Result(Error error)
     {
         IsSuccess = error == Error.None;
         IsFailure = IsSuccess is false;
@@ -48,7 +48,7 @@ public sealed class Result<TValue> : Result
     ///// </summary>
     public TValue? Value { get; }
 
-    private Result(TValue value, Error error) : base(error)
+    internal Result(TValue value, Error error) : base(error)
     {
         Value = value;
     }
