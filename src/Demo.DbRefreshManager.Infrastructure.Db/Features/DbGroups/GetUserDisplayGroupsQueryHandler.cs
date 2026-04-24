@@ -14,12 +14,10 @@ internal class GetUserDisplayGroupsQueryHandler(
     private readonly AppDbContext _ctx = contextFactory.CreateDbContext();
 
     public IQueryable<DbGroupDto> Handle()
-    {
-        return _ctx.Set<DbGroup>()
+        => _ctx.Set<DbGroup>()
             .Where(g => g.IsVisible)
             .OrderBy(g => g.SortOrder)
             .Select(DbGroup.ToDtoProjectionExpression);
-    }
 
     public void Dispose() => _ctx.Dispose();
 }

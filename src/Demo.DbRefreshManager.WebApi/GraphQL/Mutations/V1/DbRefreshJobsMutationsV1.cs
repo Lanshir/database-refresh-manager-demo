@@ -1,3 +1,4 @@
+using Demo.DbRefreshManager.Application.Features.DbRefresh;
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
@@ -22,27 +23,19 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StartManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IDbRefreshJobsRepository jobsRepository,
-        IUserIdentityProvider userIdentity,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        IStartManualRefreshCommandHandler startManualRefreshCmd,
         int jobId,
         int delayMinutes,
         string? comment,
         CancellationToken ct)
     {
-        delayMinutes = delayMinutes > 0 ? delayMinutes : 1;
+        var result = await startManualRefreshCmd
+            .HandleAsync(new(jobId, delayMinutes, comment), ct);
 
-        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
+        if (result.IsFailure)
+            throw new BusinessLogicException(result.Error);
 
-        if (userHasAccess.IsFailure)
-            throw new BusinessLogicException(userHasAccess.Error);
-
-        var refreshDate = DateTime.UtcNow.AddMinutes(delayMinutes);
-
-        await jobsRepository.StartManualRefresh(jobId, refreshDate, userIdentity.GetUserLogin(), comment);
-
-        var updatedJob = (await jobsRepository.FindJob(jobId))!;
-        var dto = updatedJob.ToDto();
+        var dto = result.Value!;
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 
