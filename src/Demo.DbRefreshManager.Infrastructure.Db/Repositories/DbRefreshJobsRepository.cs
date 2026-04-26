@@ -66,12 +66,6 @@ internal class DbRefreshJobsRepository(
             .SetProperty(j => j.ScheduleChangeDate, DateTime.UtcNow),
             where: job => job.Id == jobId);
 
-    public async Task StopManualRefresh(int jobId)
-        => await UpdatePropsAsync(c =>
-            c.SetProperty(j => j.ManualRefreshDate, j => null)
-            .SetProperty(j => j.ManualRefreshInitiator, j => null),
-            where: job => job.Id == jobId);
-
     public async Task SetUserComment(int jobId, string? comment)
         => await UpdatePropsAsync(c =>
             c.SetProperty(j => j.UserComment, comment),

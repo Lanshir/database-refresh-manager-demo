@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Application.Features.DbRefresh;
+using Demo.DbRefreshManager.Application.Features.DbRefreshing;
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
@@ -50,20 +50,16 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StopManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IDbRefreshJobsRepository jobsRepository,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        IStopManualRefreshCommandHandler stopManualRefreshCmd,
         int jobId,
         CancellationToken ct)
     {
-        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
+        var result = await stopManualRefreshCmd.HandleAsync(new(jobId), ct);
 
-        if (userHasAccess.IsFailure)
-            throw new BusinessLogicException(userHasAccess.Error);
+        if (result.IsFailure)
+            throw new BusinessLogicException(result.Error);
 
-        await jobsRepository.StopManualRefresh(jobId);
-
-        var updatedJob = (await jobsRepository.FindJob(jobId))!;
-        var dto = updatedJob.ToDto();
+        var dto = result.Value!;
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 

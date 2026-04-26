@@ -1,17 +1,16 @@
-using Demo.DbRefreshManager.Application.Features.DbRefresh;
+using Demo.DbRefreshManager.Application.Features.DbRefreshing;
 using Demo.DbRefreshManager.Core.Extensions;
-using Demo.DbRefreshManager.Core.Results;
 using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefresh;
+namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshing;
 
 internal class SetManualRefreshStartedCommandHandler(
     IDbContextFactory<AppDbContext> contextFactory)
     : ISetManualRefreshStartedCommandHandler
 {
-    public async Task<Result> HandleAsync(
+    public async Task<bool> HandleAsync(
         SetManualRefreshStartedCommand.Dto cmd,
         CancellationToken ct)
     {
@@ -28,6 +27,6 @@ internal class SetManualRefreshStartedCommandHandler(
                 .SetProperty(j => j.UserComment, comment),
                 ct);
 
-        return Result.Success();
+        return true;
     }
 }

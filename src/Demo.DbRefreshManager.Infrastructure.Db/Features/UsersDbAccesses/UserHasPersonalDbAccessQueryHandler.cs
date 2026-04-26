@@ -3,7 +3,7 @@ using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbUsersAccesses;
+namespace Demo.DbRefreshManager.Infrastructure.Db.Features.UsersDbAccesses;
 
 internal class UserHasPersonalDbAccessQueryHandler(
     IDbContextFactory<AppDbContext> contextFactory)

@@ -6,7 +6,7 @@ using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
 
-namespace Demo.DbRefreshManager.Application.Features.DbRefresh;
+namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 
 /// <summary>
 /// Команда запуска ручной перезаливки.

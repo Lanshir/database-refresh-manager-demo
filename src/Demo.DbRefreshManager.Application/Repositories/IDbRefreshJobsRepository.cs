@@ -41,12 +41,6 @@ public interface IDbRefreshJobsRepository : IRepository<DbRefreshJob>
     Task SetJobScheduleActive(int jobId, int changedUserId, bool isActive);
 
     /// <summary>
-    /// Остановка ручной перезаливки БД.
-    /// </summary>
-    /// <param name="jobId">Id задачи на перезаливку.</param>
-    Task StopManualRefresh(int jobId);
-
-    /// <summary>
     /// Установка пользовательского комментария  к задаче.
     /// </summary>
     /// <param name="jobId">Id задачи на перезаливку.</param>
