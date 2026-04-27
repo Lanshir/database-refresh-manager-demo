@@ -1,4 +1,5 @@
 using Demo.DbRefreshManager.Application.Features.DbGroups;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
@@ -20,12 +21,10 @@ public class DbRefreshJobsQueriesV1
     /// <param name="dbName">Фильтр по названию БД.</param>
     [UseProjection]
     public async Task<IQueryable<DbRefreshJobDto>> GetDbRefreshJobs(
-        IDbRefreshJobsRepository jobsRepository,
+        IGetDbRefreshJobsForDisplayQueryHandler getDbRefreshJobsForDisplay,
         int? id = null,
         string? dbName = null)
-        => jobsRepository
-            .GetUserDisplayJobsListQuery(id, dbName)
-            .Select(DbRefreshJob.ToDtoProjectionExpression);
+        => getDbRefreshJobsForDisplay.Handle(new(id, dbName));
 
     /// <summary>
     /// Получить группы БД.

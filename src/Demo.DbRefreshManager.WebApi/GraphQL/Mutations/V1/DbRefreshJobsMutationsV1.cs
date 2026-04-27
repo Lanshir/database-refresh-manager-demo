@@ -1,4 +1,5 @@
 using Demo.DbRefreshManager.Application.Features.DbRefreshing;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
@@ -78,6 +79,7 @@ public class DbRefreshJobsMutationsV1
         IUserIdentityProvider userIdentity,
         IDbRefreshJobsRepository jobsRepository,
         ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
         int jobId,
         bool isActive,
         CancellationToken ct)
@@ -90,7 +92,7 @@ public class DbRefreshJobsMutationsV1
 
         await jobsRepository.SetJobScheduleActive(jobId, changeUserId, isActive);
 
-        var updatedJob = (await jobsRepository.FindJob(jobId))!;
+        var updatedJob = await getDbRefreshJobById.HandleAsync(jobId, ct);
         var dto = updatedJob.ToDto();
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
@@ -109,6 +111,7 @@ public class DbRefreshJobsMutationsV1
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
         ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
         int jobId,
         string? comment,
         CancellationToken ct)
@@ -122,7 +125,7 @@ public class DbRefreshJobsMutationsV1
 
             await jobsRepository.SetUserComment(jobId, comment);
 
-            var updatedJob = (await jobsRepository.FindJob(jobId))!;
+            var updatedJob = await getDbRefreshJobById.HandleAsync(jobId, ct);
             var dto = updatedJob.ToDto();
 
             await SendJobChangeEventAsync(eventSender, logger, dto);
@@ -145,14 +148,16 @@ public class DbRefreshJobsMutationsV1
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         IDbRefreshJobsRepository jobsRepository,
+        IFindDbRefreshJobQueryHandler findDbRefreshJob,
         string dbName,
         string? comment,
-        bool isAppend = false)
+        bool isAppend = false,
+        CancellationToken ct = default)
     {
         try
         {
             // Поиск задачи, проверка прав.
-            var job = await jobsRepository.FindJob(dbName)
+            var job = await findDbRefreshJob.HandleAsync(new(DbName: dbName), ct)
                 ?? throw new BusinessLogicException($"Задача для БД {dbName} не найдена");
 
             var releaseComment = isAppend ? (job.ReleaseComment + comment).Trim('\n') : comment;

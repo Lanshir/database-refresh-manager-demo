@@ -9,25 +9,6 @@ namespace Demo.DbRefreshManager.Application.Repositories;
 public interface IDbRefreshJobsRepository : IRepository<DbRefreshJob>
 {
     /// <summary>
-    /// Запрос задач на перезаливку БД для отображения пользователю.
-    /// </summary>
-    /// <param name="id">Фильтр по id.</param>
-    /// <param name="dbName">Фильтр по названию БД.</param>
-    IQueryable<DbRefreshJob> GetUserDisplayJobsListQuery(int? id = null, string? dbName = null);
-
-    /// <summary>
-    /// Поиск задачи на перезаливку БД.
-    /// </summary>
-    /// <param name="jobId">Id задачи.</param>
-    Task<DbRefreshJob?> FindJob(int jobId);
-
-    /// <summary>
-    /// Поиск задачи на перезаливку БД.
-    /// </summary>
-    /// <param name="dbName">азвание БД.</param>
-    Task<DbRefreshJob?> FindJob(string dbName);
-
-    /// <summary>
     /// Получить задачи для запуска перезаливки.
     /// </summary>
     Task<List<DbRefreshJob>> GetJobsToRun();

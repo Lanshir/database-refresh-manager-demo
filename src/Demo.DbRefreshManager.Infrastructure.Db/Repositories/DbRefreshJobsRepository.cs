@@ -12,28 +12,6 @@ internal class DbRefreshJobsRepository(
     IDbContextFactory<AppDbContext> contextFactory
     ) : BaseRepository<DbRefreshJob>(contextFactory), IDbRefreshJobsRepository, IDisposable
 {
-    public IQueryable<DbRefreshJob> GetUserDisplayJobsListQuery(int? id = null, string? dbName = null)
-        => GetQueriable()
-            .Where(j => !j.IsDeleted && j.Group!.IsVisible
-                && (id == null || j.Id == id)
-                && (dbName == null || j.DbName.ToUpper() == dbName.ToUpper()))
-            .OrderBy(j => j.Group!.SortOrder)
-            .ThenBy(j => j.Id);
-
-    public async Task<DbRefreshJob?> FindJob(int jobId)
-        => await GetQueriable()
-            .Include(j => j.ScheduleChangeUser)
-            .Include(j => j.Group)
-            .ThenInclude(g => g!.AccessRoles)
-            .FirstOrDefaultAsync(j => j.Id == jobId);
-
-    public async Task<DbRefreshJob?> FindJob(string dbName)
-        => await GetQueriable()
-            .Include(j => j.ScheduleChangeUser)
-            .Include(j => j.Group)
-            .ThenInclude(g => g!.AccessRoles)
-            .FirstOrDefaultAsync(j => j.DbName.ToUpper() == dbName.ToUpper());
-
     public async Task<List<DbRefreshJob>> GetJobsToRun()
     {
         var nowDateTime = DateTime.UtcNow.CeilToMinutes();

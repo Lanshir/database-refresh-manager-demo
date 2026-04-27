@@ -1,3 +1,4 @@
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.SshService;
 using Demo.DbRefreshManager.Application.Repositories;
@@ -18,6 +19,7 @@ public class DatabaseRefreshCallerJob(
     ILogger<DatabaseRefreshCallerJob> logger,
     IDbRefreshJobsRepository jobsRepository,
     IDbRefreshLogsRepository logsRepository,
+    IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
     ITopicEventSender eventSender
     ) : IJob
 {
@@ -76,7 +78,8 @@ public class DatabaseRefreshCallerJob(
 
             await jobsRepository.SetJobInProgressStatus(job.Id, userComment);
 
-            var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+            var updatedJob = await getDbRefreshJobById
+                .HandleAsync(job.Id, CancellationToken.None);
 
             // Отправка сообщения о начале перезаливки.
             var dto = updatedJob.ToDto();
@@ -104,7 +107,9 @@ public class DatabaseRefreshCallerJob(
         {
             // Сброс статуса на начальный.
             await jobsRepository.SetJobDefaultStatus(job.Id);
-            var updatedJob = (await jobsRepository.FindJob(job.Id))!;
+
+            var updatedJob = await getDbRefreshJobById
+                .HandleAsync(job.Id, CancellationToken.None);
 
             // Отправка сообщения об окончании перезаливки.
             var dto = updatedJob.ToDto();
