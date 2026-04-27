@@ -1,4 +1,5 @@
 using Demo.DbRefreshManager.Core.Handlers;
+using Demo.DbRefreshManager.Core.Results;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 
@@ -6,7 +7,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 /// Запись отмены ручной перезаливки.
 /// </summary>
 public interface ISetManualRefreshCanceledCommandHandler
-    : IAsyncHandler<bool, SetManualRefreshCanceled.Command>;
+    : IAsyncHandler<Result, SetManualRefreshCanceled.Command>;
 
 public static class SetManualRefreshCanceled
 {

@@ -1,4 +1,5 @@
 using Demo.DbRefreshManager.Application.Features.DbRefreshing;
+using Demo.DbRefreshManager.Core.Results;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,7 @@ internal class SetManualRefreshCanceledCommandHandler(
     IDbContextFactory<AppDbContext> contextFactory)
     : ISetManualRefreshCanceledCommandHandler
 {
-    public async Task<bool> HandleAsync(
+    public async Task<Result> HandleAsync(
         SetManualRefreshCanceled.Command cmd,
         CancellationToken ct)
     {
@@ -22,6 +23,6 @@ internal class SetManualRefreshCanceledCommandHandler(
                 .SetProperty(j => j.ManualRefreshInitiator, j => null),
                 ct);
 
-        return true;
+        return Result.Success();
     }
 }
