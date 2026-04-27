@@ -1,5 +1,5 @@
 using Demo.DbRefreshManager.Application.Repositories.Base;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 
 namespace Demo.DbRefreshManager.Application.Repositories;
 

@@ -1,6 +1,6 @@
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Domain.Constants;
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
 using Novell.Directory.Ldap;
 using System.Diagnostics;
 using System.Globalization;

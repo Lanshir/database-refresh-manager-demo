@@ -1,7 +1,7 @@
 using Demo.DbRefreshManager.Application.Features.DbGroups;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 

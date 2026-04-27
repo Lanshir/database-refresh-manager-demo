@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Domain.Entities.Users;
+using Demo.DbRefreshManager.Domain.Models.Users;
 
 namespace Demo.DbRefreshManager.Domain.Mappings;
 

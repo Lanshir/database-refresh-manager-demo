@@ -52,8 +52,8 @@ public class LoginEndpointsV1 : IEndpointsMapper
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityProvider userIdentity,
-        ILoginToDomainCommandHandler loginToDomainCmd,
-        IMergeLdapUserToDbCommandHandler mergeLdapUserToDbCmd,
+        ILoginToDomainCommandHandler loginToDomain,
+        IMergeLdapUserToDbCommandHandler mergeLdapUserToDb,
         LoginInputDto input,
         CancellationToken ct)
     {
@@ -62,7 +62,7 @@ public class LoginEndpointsV1 : IEndpointsMapper
             await httpContext.SignOutAsync();
         }
 
-        var ldapLoginResult = loginToDomainCmd.Handle(new(input.Login, input.Password));
+        var ldapLoginResult = loginToDomain.Handle(new(input.Login, input.Password));
 
         if (ldapLoginResult.IsFailure)
         {
@@ -73,7 +73,7 @@ public class LoginEndpointsV1 : IEndpointsMapper
         }
 
         var ldapUser = ldapLoginResult.Value!;
-        var dbUser = await mergeLdapUserToDbCmd.HandleAsync(ldapUser, ct);
+        var dbUser = await mergeLdapUserToDb.HandleAsync(ldapUser, ct);
         var dto = dbUser.ToLoginResultDto();
 
         var claims = userIdentity.CreateClaimsList(

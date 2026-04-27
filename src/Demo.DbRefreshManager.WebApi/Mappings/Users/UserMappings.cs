@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Domain.Entities.Users;
+using Demo.DbRefreshManager.Domain.Models.Users;
 using Demo.DbRefreshManager.WebApi.Models.Auth;
 
 namespace Demo.DbRefreshManager.WebApi.Mappings.Users;

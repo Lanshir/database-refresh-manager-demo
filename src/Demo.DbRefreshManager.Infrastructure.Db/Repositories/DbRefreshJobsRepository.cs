@@ -1,6 +1,6 @@
 using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Core.Extensions;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Demo.DbRefreshManager.Infrastructure.Db.Repositories.Base;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
 
 namespace Demo.DbRefreshManager.Application.Services;
 

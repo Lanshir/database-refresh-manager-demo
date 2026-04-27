@@ -1,6 +1,6 @@
-using Demo.DbRefreshManager.Domain.Entities.Users;
+using Demo.DbRefreshManager.Domain.Models.Users;
 
-namespace Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+namespace Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель задачи перезаливки БД.

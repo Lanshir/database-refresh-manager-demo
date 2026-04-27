@@ -3,6 +3,6 @@ using Demo.DbRefreshManager.Core.Handlers;
 namespace Demo.DbRefreshManager.Application.Features.Healthchecks;
 
 /// <summary>
-/// Команда проверки работоспособности EfCore.
+/// Проверка работоспособности EfCore.
 /// </summary>
 public interface IEfCoreHealthcheckCommandHandler : IAsyncHandler;

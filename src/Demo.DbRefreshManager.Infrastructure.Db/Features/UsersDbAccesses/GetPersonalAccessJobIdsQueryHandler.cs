@@ -1,5 +1,5 @@
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +10,7 @@ internal class GetPersonalAccessJobIdsQueryHandler(
     : IGetPersonalAccessJobIdsQueryHandler
 {
     public async Task<int[]> HandleAsync(
-        GetPersonalAccessJobIdsQuery.Dto query,
+        GetPersonalAccessJobIds.Query query,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

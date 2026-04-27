@@ -5,10 +5,10 @@ namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 /// <summary>
 /// Проверка наличия доступа к группе БД у пользователя.
 /// </summary>
-public interface IUserHasJobGroupAccessQueryHandler
-    : IAsyncHandler<bool, UserHasJobGroupAccessQuery.Dto>;
+public interface ICheckUserHasJobGroupAccessQueryHandler
+    : IAsyncHandler<bool, CheckUserHasJobGroupAccess.Query>;
 
-public static class UserHasJobGroupAccessQuery
+public static class CheckUserHasJobGroupAccess
 {
-    public record struct Dto(int JobId, List<string> UserRoles);
+    public record struct Query(int JobId, List<string> UserRoles);
 }

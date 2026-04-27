@@ -9,23 +9,23 @@ using Demo.DbRefreshManager.Core.Results;
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 
 /// <summary>
-/// Команда запуска ручной перезаливки.
+/// Запуск ручной перезаливки.
 /// </summary>
 public interface IStartManualRefreshCommandHandler
-    : IAsyncHandler<Result<DbRefreshJobDto>, StartManualRefreshCommand.Dto>;
+    : IAsyncHandler<Result<DbRefreshJobDto>, StartManualRefresh.Command>;
 
-public static class StartManualRefreshCommand
+public static class StartManualRefresh
 {
-    public record struct Dto(int JobId, int DelayMinutes, string? Comment);
+    public record struct Command(int JobId, int DelayMinutes, string? Comment);
 
-    public class Handler(
+    internal class CommandHandler(
         IUserIdentityProvider userIdentity,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccessCmd,
-        ISetManualRefreshStartedCommandHandler setManualRefreshStartedCmd,
-        IGetDbRefreshJobByIdQueryHandler getJobByIdQuery)
+        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
+        ISetManualRefreshStartedCommandHandler setManualRefreshStarted,
+        IGetDbRefreshJobByIdQueryHandler getJobById)
         : IStartManualRefreshCommandHandler
     {
-        public async Task<Result<DbRefreshJobDto>> HandleAsync(Dto cmd, CancellationToken ct)
+        public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
             var jobId = cmd.JobId;
             var comment = cmd.Comment;
@@ -33,15 +33,15 @@ public static class StartManualRefreshCommand
             var delayMinutes = cmd.DelayMinutes > 0 ? cmd.DelayMinutes : 1;
             var refreshDate = DateTime.UtcNow.AddMinutes(delayMinutes);
 
-            var userHasAccess = await checkUserHasAccessCmd.HandleAsync(new(jobId), ct);
+            var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
 
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await setManualRefreshStartedCmd.HandleAsync(
+            await setManualRefreshStarted.HandleAsync(
                 new(jobId, refreshDate, initiator, comment), ct);
 
-            var updatedJob = await getJobByIdQuery.HandleAsync(jobId, ct);
+            var updatedJob = await getJobById.HandleAsync(jobId, ct);
             var dto = updatedJob.ToDto();
 
             return dto;

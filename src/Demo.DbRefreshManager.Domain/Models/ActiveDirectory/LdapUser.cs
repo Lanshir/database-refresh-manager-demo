@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+namespace Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
 
 /// <summary>
 /// Модель данных пользователя из LDAP.

@@ -4,7 +4,7 @@ using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
 using HotChocolate.Authorization;
 
@@ -32,8 +32,8 @@ public class DbRefreshJobsQueriesV1
     /// </summary>
     [UseProjection]
     public async Task<IQueryable<DbGroupDto>> GetDbGroups(
-        IGetUserDisplayGroupsQueryHandler getUserDisplayGroupsQuery)
-        => getUserDisplayGroupsQuery.Handle();
+        IGetUserDisplayGroupsQueryHandler getUserDisplayGroups)
+        => getUserDisplayGroups.Handle();
 
     /// <summary>
     /// Получить логи перезаливок БД.

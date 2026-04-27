@@ -1,5 +1,5 @@
 using Demo.DbRefreshManager.Core.Handlers;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 

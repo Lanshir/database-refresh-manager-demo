@@ -1,16 +1,16 @@
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.UsersDbAccesses;
 
-internal class UserHasJobGroupAccessQueryHandler(
+internal class CheckUserHasJobGroupAccessQueryHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : IUserHasJobGroupAccessQueryHandler
+    : ICheckUserHasJobGroupAccessQueryHandler
 {
     public async Task<bool> HandleAsync(
-        UserHasJobGroupAccessQuery.Dto query,
+        CheckUserHasJobGroupAccess.Query query,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+namespace Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 
 /// <summary>
 /// Модель записи лога перезаливки БД.

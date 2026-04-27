@@ -1,4 +1,4 @@
-namespace Demo.DbRefreshManager.Domain.Entities.Users;
+namespace Demo.DbRefreshManager.Domain.Models.Users;
 
 /// <summary>
 /// Модель роли пользователя.

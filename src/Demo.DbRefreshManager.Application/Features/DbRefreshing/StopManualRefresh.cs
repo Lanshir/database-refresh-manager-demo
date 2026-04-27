@@ -8,31 +8,31 @@ using Demo.DbRefreshManager.Core.Results;
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 
 /// <summary>
-/// Команда оствновки ручной перезаливки БД.
+/// Остановка ручной перезаливки БД.
 /// </summary>
 public interface IStopManualRefreshCommandHandler
-    : IAsyncHandler<Result<DbRefreshJobDto>, StopManualRefreshCommand.Dto>;
+    : IAsyncHandler<Result<DbRefreshJobDto>, StopManualRefresh.Command>;
 
-public static class StopManualRefreshCommand
+public static class StopManualRefresh
 {
-    public record struct Dto(int JobId);
+    public record struct Command(int JobId);
 
-    public class Handler(
+    internal class CommandHandler(
         ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISetManualRefreshCanceledCommandHandler setManualRefreshCanceledCmd,
-        IGetDbRefreshJobByIdQueryHandler getJobByIdQuery)
+        ISetManualRefreshCanceledCommandHandler setManualRefreshCanceled,
+        IGetDbRefreshJobByIdQueryHandler getJobById)
         : IStopManualRefreshCommandHandler
     {
-        public async Task<Result<DbRefreshJobDto>> HandleAsync(Dto cmd, CancellationToken ct)
+        public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
             var userHasAccess = await checkUserHasAccess.HandleAsync(new(cmd.JobId), ct);
 
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await setManualRefreshCanceledCmd.HandleAsync(new(cmd.JobId), ct);
+            await setManualRefreshCanceled.HandleAsync(new(cmd.JobId), ct);
 
-            var updatedJob = await getJobByIdQuery.HandleAsync(cmd.JobId, ct);
+            var updatedJob = await getJobById.HandleAsync(cmd.JobId, ct);
             var dto = updatedJob.ToDto();
 
             return dto;

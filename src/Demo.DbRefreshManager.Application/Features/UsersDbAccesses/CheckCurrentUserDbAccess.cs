@@ -9,32 +9,32 @@ namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 /// Проверка наличия у текущего пользователя доступа к задаче на перезаливку БД.
 /// </summary>
 public interface ICheckCurrentUserDbAccessQueryHandler
-    : IAsyncHandler<Result, CheckCurrentUserDbAccessQuery.Dto>;
+    : IAsyncHandler<Result, CheckCurrentUserDbAccess.Query>;
 
-public static class CheckCurrentUserDbAccessQuery
+public static class CheckCurrentUserDbAccess
 {
-    public record struct Dto(int JobId);
+    public record struct Query(int JobId);
 
-    public class Handler(
+    internal class QueryHandler(
         IUserIdentityProvider userIdentity,
-        IUserHasJobGroupAccessQueryHandler userHasGroupAccessQuery,
-        IUserHasPersonalDbAccessQueryHandler userHasPersonalAccessQuery)
+        ICheckUserHasJobGroupAccessQueryHandler checkUserHasGroupAccess,
+        ICheckUserHasPersonalDbAccessQueryHandler checkUserHasPersonalAccess)
         : ICheckCurrentUserDbAccessQueryHandler
     {
-        public async Task<Result> HandleAsync(Dto query, CancellationToken ct)
+        public async Task<Result> HandleAsync(Query query, CancellationToken ct)
         {
             var login = userIdentity.GetUserLogin();
             var userRoles = userIdentity.GetRoles();
 
             // Проверка доступа к группе.
-            var hasGroupAccess = await userHasGroupAccessQuery
+            var hasGroupAccess = await checkUserHasGroupAccess
                 .HandleAsync(new(query.JobId, userRoles), ct);
 
             if (hasGroupAccess)
                 return Result.Success();
 
             // Проверка персонального доступа.
-            var hasPersonalAccess = await userHasPersonalAccessQuery
+            var hasPersonalAccess = await checkUserHasPersonalAccess
                 .HandleAsync(new(query.JobId, login), ct);
 
             if (hasPersonalAccess)

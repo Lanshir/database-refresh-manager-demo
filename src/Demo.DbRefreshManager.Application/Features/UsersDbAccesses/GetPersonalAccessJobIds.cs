@@ -6,9 +6,9 @@ namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 /// Запрос id задач с персональным доступом для пользователя.
 /// </summary>
 public interface IGetPersonalAccessJobIdsQueryHandler
-    : IAsyncHandler<int[], GetPersonalAccessJobIdsQuery.Dto>;
+    : IAsyncHandler<int[], GetPersonalAccessJobIds.Query>;
 
-public static class GetPersonalAccessJobIdsQuery
+public static class GetPersonalAccessJobIds
 {
-    public record struct Dto(string Login);
+    public record struct Query(string Login);
 }

@@ -5,10 +5,10 @@ namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 /// <summary>
 /// Проверка наличия персонального доступа к БД у пользователя.
 /// </summary>
-public interface IUserHasPersonalDbAccessQueryHandler
-    : IAsyncHandler<bool, UserHasPersonalDbAccessQuery.Dto>;
+public interface ICheckUserHasPersonalDbAccessQueryHandler
+    : IAsyncHandler<bool, CheckUserHasPersonalDbAccess.Query>;
 
-public static class UserHasPersonalDbAccessQuery
+public static class CheckUserHasPersonalDbAccess
 {
-    public record struct Dto(int JobId, string Login);
+    public record struct Query(int JobId, string Login);
 }

@@ -2,28 +2,28 @@ using Demo.DbRefreshManager.Application.Models.Options;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
 using Demo.DbRefreshManager.Domain.Errors;
+using Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
 using Microsoft.Extensions.Options;
 
 namespace Demo.DbRefreshManager.Application.Features.Auth;
 
 /// <summary>
-/// Команда входа пользователя в домен.
+/// Вход пользователя в домен.
 /// </summary>
 public interface ILoginToDomainCommandHandler
-    : IHandler<Result<LdapUser>, LoginToDomainCommand.Dto>;
+    : IHandler<Result<LdapUser>, LoginToDomain.Command>;
 
-public static class LoginToDomainCommand
+public static class LoginToDomain
 {
-    public record struct Dto(string Login, string Password);
+    public record struct Command(string Login, string Password);
 
-    public class Handler(
+    internal class CommandHandler(
         IDomainControllerService domainController,
         IOptions<LdapOptions> ldapOptions
         ) : ILoginToDomainCommandHandler
     {
-        public Result<LdapUser> Handle(Dto cmd)
+        public Result<LdapUser> Handle(Command cmd)
         {
             domainController.Connect(ldapOptions.Value.Host, 5, 2000);
             domainController.Authenticate(cmd.Login, cmd.Password);

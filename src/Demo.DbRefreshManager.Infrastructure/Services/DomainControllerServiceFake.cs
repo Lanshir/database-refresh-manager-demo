@@ -1,5 +1,5 @@
 using Demo.DbRefreshManager.Application.Services;
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
 
 namespace Demo.DbRefreshManager.Infrastructure.Services;
 

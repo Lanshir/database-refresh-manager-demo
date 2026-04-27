@@ -1,16 +1,17 @@
 using Demo.DbRefreshManager.Core.Handlers;
+using Demo.DbRefreshManager.Core.Results;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 
 /// <summary>
-/// Команда записи начала ручной перезаливки.
+/// Запись начала ручной перезаливки.
 /// </summary>
 public interface ISetManualRefreshStartedCommandHandler
-    : IAsyncHandler<bool, SetManualRefreshStartedCommand.Dto>;
+    : IAsyncHandler<Result, SetManualRefreshStarted.Command>;
 
-public class SetManualRefreshStartedCommand
+public class SetManualRefreshStarted
 {
-    public record struct Dto(
+    public record struct Command(
         int JobId,
         DateTime RefreshDate,
         string RefreshInitiator,

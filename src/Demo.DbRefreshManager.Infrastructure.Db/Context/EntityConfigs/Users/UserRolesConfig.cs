@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Domain.Entities.Users;
+using Demo.DbRefreshManager.Domain.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

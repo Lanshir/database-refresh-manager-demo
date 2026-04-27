@@ -1,5 +1,5 @@
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using System.Linq.Expressions;
 
 namespace Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;

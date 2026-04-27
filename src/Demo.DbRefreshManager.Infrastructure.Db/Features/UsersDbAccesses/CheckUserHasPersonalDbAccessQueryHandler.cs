@@ -1,16 +1,16 @@
 using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
-using Demo.DbRefreshManager.Domain.Entities.DbRefreshJobs;
+using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.UsersDbAccesses;
 
-internal class UserHasPersonalDbAccessQueryHandler(
+internal class CheckUserHasPersonalDbAccessQueryHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : IUserHasPersonalDbAccessQueryHandler
+    : ICheckUserHasPersonalDbAccessQueryHandler
 {
     public async Task<bool> HandleAsync(
-        UserHasPersonalDbAccessQuery.Dto query,
+        CheckUserHasPersonalDbAccess.Query query,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

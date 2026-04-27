@@ -23,13 +23,13 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StartManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IStartManualRefreshCommandHandler startManualRefreshCmd,
+        IStartManualRefreshCommandHandler startManualRefresh,
         int jobId,
         int delayMinutes,
         string? comment,
         CancellationToken ct)
     {
-        var result = await startManualRefreshCmd
+        var result = await startManualRefresh
             .HandleAsync(new(jobId, delayMinutes, comment), ct);
 
         if (result.IsFailure)
@@ -50,11 +50,11 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StopManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IStopManualRefreshCommandHandler stopManualRefreshCmd,
+        IStopManualRefreshCommandHandler stopManualRefresh,
         int jobId,
         CancellationToken ct)
     {
-        var result = await stopManualRefreshCmd.HandleAsync(new(jobId), ct);
+        var result = await stopManualRefresh.HandleAsync(new(jobId), ct);
 
         if (result.IsFailure)
             throw new BusinessLogicException(result.Error);

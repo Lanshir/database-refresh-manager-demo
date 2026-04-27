@@ -1,7 +1,7 @@
 using Demo.DbRefreshManager.Application.Features.Users;
-using Demo.DbRefreshManager.Domain.Entities.ActiveDirectory;
-using Demo.DbRefreshManager.Domain.Entities.Users;
 using Demo.DbRefreshManager.Domain.Mappings;
+using Demo.DbRefreshManager.Domain.Models.ActiveDirectory;
+using Demo.DbRefreshManager.Domain.Models.Users;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
