@@ -1,9 +1,9 @@
-import { FC } from 'react';
 import {
     Button, Dialog, DialogActions, DialogContent, DialogTitle, FormGroup
 } from '@mui/material';
-import { AtomicTextField, AtomicNumberField } from '@shared/components';
-import { confirmRefreshDelayMinutesState, confirmRefreshCommentState } from '@store/dbRefresh/dbRefreshState';
+import { AtomicNumberField, AtomicTextField } from '@shared/components';
+import { confirmRefreshCommentState, confirmRefreshDelayMinutesState } from '@store/dbRefresh/dbRefreshState';
+import { FC } from 'react';
 
 type DialogProps = {
     open: boolean

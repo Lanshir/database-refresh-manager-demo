@@ -1,6 +1,6 @@
-import { FC } from 'react';
 import {
-    Button, Dialog, DialogActions, DialogContent, DialogTitle, Typography, SxProps
+    Button, Dialog, DialogActions, DialogContent, DialogTitle,
+    SxProps, Typography
 } from '@mui/material';
 
 export type ConfirmDialogProps = {
@@ -17,7 +17,7 @@ export type ConfirmDialogProps = {
 const buttonSx = { width: 80 } as SxProps;
 
 /** Диалоговое окно подтверждения действия. */
-export const ConfirmDialog: FC<ConfirmDialogProps> = (props) => {
+export const ConfirmDialog = (props: ConfirmDialogProps) => {
     const { open, title, text, buttons, onYes, onNo, onCancel, onClose } = props;
 
     return (

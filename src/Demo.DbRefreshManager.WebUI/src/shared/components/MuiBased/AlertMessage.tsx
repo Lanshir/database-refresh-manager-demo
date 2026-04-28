@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Alert, AlertColor, Collapse, CollapseProps } from '@mui/material';
 
 export type AlertMessageProps = CollapseProps & {
@@ -11,7 +10,7 @@ export type AlertMessageProps = CollapseProps & {
 };
 
 /** Сворачиваемый Alert с сообщением. */
-export const AlertMessage: FC<AlertMessageProps> = (props) => {
+export const AlertMessage = (props: AlertMessageProps) => {
     const { open, severity, variant, title, text, onClose, children, sx, ...other } = props;
 
     return (
