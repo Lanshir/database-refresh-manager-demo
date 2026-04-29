@@ -7,7 +7,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
 /// Запись начала ручной перезаливки.
 /// </summary>
 public interface ISetManualRefreshStartedCommandHandler
-    : IAsyncHandler<Result, SetManualRefreshStarted.Command>;
+    : IAsyncHandler<bool, SetManualRefreshStarted.Command>;
 
 public class SetManualRefreshStarted
 {
