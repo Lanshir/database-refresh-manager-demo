@@ -12,4 +12,8 @@ public static class DbRefreshJobErrors
     public static readonly Error Forbidden = new(
         Code: $"{_prefix}.Forbidden",
         Message: "У пользователя не прав для изменения задачи");
+
+    public static readonly Error NotFound = new(
+        Code: $"{_prefix}.NotFound",
+        Message: "Задача на перезаливку не найдена");
 }

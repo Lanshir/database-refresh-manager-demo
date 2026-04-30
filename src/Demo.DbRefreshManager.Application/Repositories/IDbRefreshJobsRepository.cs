@@ -14,28 +14,6 @@ public interface IDbRefreshJobsRepository : IRepository<DbRefreshJob>
     Task<List<DbRefreshJob>> GetJobsToRun();
 
     /// <summary>
-    /// Установка активности перезаливки БД по расписанию.
-    /// </summary>
-    /// <param name="jobId">Id задачи на перезаливку.</param>
-    /// <param name="changedUserId">Id автора изменений.</param>
-    /// <param name="isActive">Активность перезаливки.</param>
-    Task SetJobScheduleActive(int jobId, int changedUserId, bool isActive);
-
-    /// <summary>
-    /// Установка пользовательского комментария  к задаче.
-    /// </summary>
-    /// <param name="jobId">Id задачи на перезаливку.</param>
-    /// <param name="comment">Комментарий.</param>
-    Task SetUserComment(int jobId, string? comment);
-
-    /// <summary>
-    /// Установка релизного комментария задачи на перезаливку БД.
-    /// </summary>
-    /// <param name="dbName">Название базы.</param>
-    /// <param name="comment">Комментарий.</param>
-    Task SetReleaseComment(string dbName, string? comment);
-
-    /// <summary>
     /// Перевод задачи в процесс обновления.
     /// </summary>
     /// <param name="jobId">Id задачи на перезаливку.</param>

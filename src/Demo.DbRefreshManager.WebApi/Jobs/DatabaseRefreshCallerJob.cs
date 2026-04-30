@@ -53,7 +53,8 @@ public class DatabaseRefreshCallerJob(
     {
         // Log start.
         logger.LogInformation(
-            $"Run refresh for {job.DbName}\n\tat {DateTime.UtcNow:dd.MM.yyyy HH:mm} (UTC)");
+            "Run refresh for {dbName}\n\tat {refreshStartDate} (UTC)",
+            job.DbName, $"{DateTime.UtcNow:dd.MM.yyyy HH:mm}");
 
         var startDate = DateTime.UtcNow;
         var isScheduled = CheckScheduledRefresh(job);
@@ -101,7 +102,7 @@ public class DatabaseRefreshCallerJob(
         catch (Exception exc)
         {
             error = exc.Message;
-            logger.LogError(exc, $"Ошибка перезаливки БД {job.DbName}");
+            logger.LogError(exc, "Ошибка перезаливки БД {dbName}", job.DbName);
         }
         finally
         {
@@ -128,7 +129,8 @@ public class DatabaseRefreshCallerJob(
             }
 
             logger.LogInformation(
-                $"Finish refresh for {job.DbName}\n\tat {DateTime.UtcNow:dd.MM.yyyy HH:mm} (UTC)");
+                "Finish refresh for {dbName}\n\tat {refreshEndDate} (UTC)",
+                job.DbName, $"{DateTime.UtcNow:dd.MM.yyyy HH:mm}");
         }
     }
 

@@ -37,23 +37,6 @@ internal class DbRefreshJobsRepository(
         return jobsToRun;
     }
 
-    public async Task SetJobScheduleActive(int jobId, int changedUserId, bool isActive)
-        => await UpdatePropsAsync(c =>
-            c.SetProperty(j => j.ScheduleIsActive, isActive)
-            .SetProperty(j => j.ScheduleChangeUserId, changedUserId)
-            .SetProperty(j => j.ScheduleChangeDate, DateTime.UtcNow),
-            where: job => job.Id == jobId);
-
-    public async Task SetUserComment(int jobId, string? comment)
-        => await UpdatePropsAsync(c =>
-            c.SetProperty(j => j.UserComment, comment),
-            where: job => job.Id == jobId);
-
-    public async Task SetReleaseComment(string dbName, string? comment)
-        => await UpdatePropsAsync(c =>
-            c.SetProperty(j => j.ReleaseComment, j => comment),
-            where: job => job.DbName.ToUpper() == dbName.ToUpper());
-
     public async Task SetJobInProgressStatus(int jobId, string? userComment = null)
         => await UpdatePropsAsync(s =>
             s.SetProperty(j => j.InProgress, true)

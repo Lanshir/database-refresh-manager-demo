@@ -1,10 +1,7 @@
-using Demo.DbRefreshManager.Application.Features.DbRefreshing;
-using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
-using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ScheduledRefresh;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Repositories;
-using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Domain.Exceptions;
 using Demo.DbRefreshManager.WebApi.GraphQL.Subscriptons;
 using HotChocolate.Authorization;
@@ -76,24 +73,17 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetScheduledRefreshActive(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IUserIdentityProvider userIdentity,
-        IDbRefreshJobsRepository jobsRepository,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
+        ISetScheduledRefreshAvtiveCommandHandler setScheduledRefreshActive,
         int jobId,
         bool isActive,
         CancellationToken ct)
     {
-        var changeUserId = userIdentity.GetUserId();
-        var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
+        var result = await setScheduledRefreshActive.HandleAsync(new(jobId, isActive), ct);
 
-        if (userHasAccess.IsFailure)
-            throw new BusinessLogicException(userHasAccess.Error);
+        if (result.IsFailure)
+            throw new BusinessLogicException(result.Error);
 
-        await jobsRepository.SetJobScheduleActive(jobId, changeUserId, isActive);
-
-        var updatedJob = await getDbRefreshJobById.HandleAsync(jobId, ct);
-        var dto = updatedJob.ToDto();
+        var dto = result.Value!;
 
         await SendJobChangeEventAsync(eventSender, logger, dto);
 
@@ -109,33 +99,21 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetUserComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IDbRefreshJobsRepository jobsRepository,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
+        ISetDbRefreshJobUserComment setDbRefreshJobUserComment,
         int jobId,
         string? comment,
         CancellationToken ct)
     {
-        try
-        {
-            var userHasAccess = await checkUserHasAccess.HandleAsync(new(jobId), ct);
+        var result = await setDbRefreshJobUserComment.HandleAsync(new(jobId, comment), ct);
 
-            if (userHasAccess.IsFailure)
-                throw new BusinessLogicException(userHasAccess.Error);
+        if (result.IsFailure)
+            throw new BusinessLogicException(result.Error);
 
-            await jobsRepository.SetUserComment(jobId, comment);
+        var dto = result.Value!;
 
-            var updatedJob = await getDbRefreshJobById.HandleAsync(jobId, ct);
-            var dto = updatedJob.ToDto();
+        await SendJobChangeEventAsync(eventSender, logger, dto);
 
-            await SendJobChangeEventAsync(eventSender, logger, dto);
-
-            return dto;
-        }
-        catch (Exception exc)
-        {
-            throw new BusinessLogicException("Не удалось обновить пользовательский комментарий", exc);
-        }
+        return dto;
     }
 
     /// <summary>
@@ -147,40 +125,28 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetReleaseComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IDbRefreshJobsRepository jobsRepository,
-        IFindDbRefreshJobQueryHandler findDbRefreshJob,
+        ISetDbRefreshJobReleaseCommentCommandHandler setReleaseComment,
         string dbName,
         string? comment,
         bool isAppend = false,
         CancellationToken ct = default)
     {
-        try
-        {
-            // Поиск задачи, проверка прав.
-            var job = await findDbRefreshJob.HandleAsync(new(DbName: dbName), ct)
-                ?? throw new BusinessLogicException($"Задача для БД {dbName} не найдена");
+        var result = await setReleaseComment.HandleAsync(new(dbName, comment, isAppend), ct);
 
-            var releaseComment = isAppend ? (job.ReleaseComment + comment).Trim('\n') : comment;
+        if (result.IsFailure)
+            throw new BusinessLogicException(result.Error);
 
-            await jobsRepository.SetReleaseComment(dbName, releaseComment);
+        var dto = result.Value!;
 
-            job.ReleaseComment = releaseComment;
-            var dto = job.ToDto();
+        await SendJobChangeEventAsync(eventSender, logger, dto);
 
-            await SendJobChangeEventAsync(eventSender, logger, dto);
-
-            return dto;
-        }
-        catch (Exception exc)
-        {
-            throw new BusinessLogicException("Не удалось обновить комментарий релиза", exc);
-        }
+        return dto;
     }
 
     /// <summary>
     /// Отправить событие об изменении задачи на перезаливку.
     /// </summary>
-    private async Task SendJobChangeEventAsync(
+    private static async Task SendJobChangeEventAsync(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
         DbRefreshJobDto dto)

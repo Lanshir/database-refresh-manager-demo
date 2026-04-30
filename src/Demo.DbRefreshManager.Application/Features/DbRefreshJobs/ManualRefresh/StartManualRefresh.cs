@@ -1,12 +1,11 @@
-using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+using Demo.DbRefreshManager.Application.Features.DbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
 
-namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
+namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
 
 /// <summary>
 /// Запуск ручной перезаливки.
@@ -21,7 +20,7 @@ public static class StartManualRefresh
     internal class CommandHandler(
         IUserIdentityProvider userIdentity,
         ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISetManualRefreshStartedCommandHandler setManualRefreshStarted,
+        ISaveManualRefreshStartedCommandHandler saveManualRefreshStarted,
         IGetDbRefreshJobByIdQueryHandler getJobById)
         : IStartManualRefreshCommandHandler
     {
@@ -38,7 +37,7 @@ public static class StartManualRefresh
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await setManualRefreshStarted.HandleAsync(
+            await saveManualRefreshStarted.HandleAsync(
                 new(jobId, refreshDate, initiator, comment), ct);
 
             var updatedJob = await getJobById.HandleAsync(jobId, ct);

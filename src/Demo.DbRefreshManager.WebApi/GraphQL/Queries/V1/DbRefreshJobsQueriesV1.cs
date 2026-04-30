@@ -1,6 +1,6 @@
+using Demo.DbRefreshManager.Application.Features.DbAccesses;
 using Demo.DbRefreshManager.Application.Features.DbGroups;
 using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Repositories;
@@ -52,9 +52,8 @@ public class DbRefreshJobsQueriesV1
     /// </summary>
     [Authorize]
     public async Task<int[]> GetDbPersonalAccessIds(
-        IGetPersonalAccessJobIdsQueryHandler getPersonalAccessesQuery,
+        IGetPersonalAccessJobIdsQueryHandler getPersonalAccesses,
         IUserIdentityProvider userIdentity,
         CancellationToken ct)
-        => await getPersonalAccessesQuery
-            .HandleAsync(new(userIdentity.GetUserLogin()), ct);
+        => await getPersonalAccesses.HandleAsync(new(userIdentity.GetUserLogin()), ct);
 }

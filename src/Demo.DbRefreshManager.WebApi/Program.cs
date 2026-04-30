@@ -72,7 +72,7 @@ internal class Program
         app.UseDefaultFiles();
         app.MapStaticAssets();
 
-        app.MapApiEndpoints();
+        app.MapVersionedApiEndpoints();
 
         app.MapGraphQL().WithOptions(new()
         {

@@ -1,9 +1,9 @@
-using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+using Demo.DbRefreshManager.Application.Features.DbAccesses;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.DbRefreshManager.Infrastructure.Db.Features.UsersDbAccesses;
+namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbAccesses;
 
 internal class GetPersonalAccessJobIdsQueryHandler(
     IDbContextFactory<AppDbContext> contextFactory)

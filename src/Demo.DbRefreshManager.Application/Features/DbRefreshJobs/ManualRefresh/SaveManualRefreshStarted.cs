@@ -1,15 +1,14 @@
 using Demo.DbRefreshManager.Core.Handlers;
-using Demo.DbRefreshManager.Core.Results;
 
-namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
+namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
 
 /// <summary>
 /// Запись начала ручной перезаливки.
 /// </summary>
-public interface ISetManualRefreshStartedCommandHandler
-    : IAsyncHandler<bool, SetManualRefreshStarted.Command>;
+public interface ISaveManualRefreshStartedCommandHandler
+    : IAsyncHandler<bool, SaveManualRefreshStarted.Command>;
 
-public class SetManualRefreshStarted
+public class SaveManualRefreshStarted
 {
     public record struct Command(
         int JobId,

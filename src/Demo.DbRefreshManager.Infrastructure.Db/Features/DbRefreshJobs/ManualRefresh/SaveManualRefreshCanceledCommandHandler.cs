@@ -1,16 +1,16 @@
-using Demo.DbRefreshManager.Application.Features.DbRefreshing;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshing;
+namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs.ManualRefresh;
 
-internal class SetManualRefreshCanceledCommandHandler(
+internal class SaveManualRefreshCanceledCommandHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : ISetManualRefreshCanceledCommandHandler
+    : ISaveManualRefreshCanceledCommandHandler
 {
     public async Task<bool> HandleAsync(
-        SetManualRefreshCanceled.Command cmd,
+        SaveManualRefreshCanceled.Command cmd,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

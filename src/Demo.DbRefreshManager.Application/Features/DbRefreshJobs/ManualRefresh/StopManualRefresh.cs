@@ -1,11 +1,10 @@
-using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+using Demo.DbRefreshManager.Application.Features.DbAccesses;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
 
-namespace Demo.DbRefreshManager.Application.Features.DbRefreshing;
+namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
 
 /// <summary>
 /// Остановка ручной перезаливки БД.
@@ -19,7 +18,7 @@ public static class StopManualRefresh
 
     internal class CommandHandler(
         ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISetManualRefreshCanceledCommandHandler setManualRefreshCanceled,
+        ISaveManualRefreshCanceledCommandHandler saveManualRefreshCanceled,
         IGetDbRefreshJobByIdQueryHandler getJobById)
         : IStopManualRefreshCommandHandler
     {
@@ -30,7 +29,7 @@ public static class StopManualRefresh
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await setManualRefreshCanceled.HandleAsync(new(cmd.JobId), ct);
+            await saveManualRefreshCanceled.HandleAsync(new(cmd.JobId), ct);
 
             var updatedJob = await getJobById.HandleAsync(cmd.JobId, ct);
             var dto = updatedJob.ToDto();

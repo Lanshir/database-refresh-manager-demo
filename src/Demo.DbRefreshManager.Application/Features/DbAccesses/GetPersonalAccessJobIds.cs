@@ -1,6 +1,6 @@
 using Demo.DbRefreshManager.Core.Handlers;
 
-namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 
 /// <summary>
 /// Запрос id задач с персональным доступом для пользователя.

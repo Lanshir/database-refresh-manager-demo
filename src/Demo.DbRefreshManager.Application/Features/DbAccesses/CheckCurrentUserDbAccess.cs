@@ -3,7 +3,7 @@ using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Core.Results;
 using Demo.DbRefreshManager.Domain.Errors;
 
-namespace Demo.DbRefreshManager.Application.Features.UsersDbAccesses;
+namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 
 /// <summary>
 /// Проверка наличия у текущего пользователя доступа к задаче на перезаливку БД.
