@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbGroups;
 
-internal class GetUserDisplayGroupsQueryHandler(
+internal class GetUserDisplayGroupsHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : IGetUserDisplayGroupsQueryHandler, IDisposable
+    : IGetUserDisplayGroupsHandler, IDisposable
 {
     private readonly AppDbContext _ctx = contextFactory.CreateDbContext();
 

@@ -6,4 +6,4 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 /// <summary>
 /// Зарпос данных задачи на перезаливку по id.
 /// </summary>
-public interface IGetDbRefreshJobByIdQueryHandler : IAsyncHandler<DbRefreshJob, int>;
+public interface IGetDbRefreshJobByIdHandler : IAsyncHandler<DbRefreshJob, int>;

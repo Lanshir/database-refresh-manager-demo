@@ -9,18 +9,18 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh
 /// <summary>
 /// Остановка ручной перезаливки БД.
 /// </summary>
-public interface IStopManualRefreshCommandHandler
-    : IAsyncHandler<Result<DbRefreshJobDto>, StopManualRefresh.Command>;
+public interface IStopDbManualRefreshHandler
+    : IAsyncHandler<Result<DbRefreshJobDto>, StopDbManualRefresh.Command>;
 
-public static class StopManualRefresh
+public static class StopDbManualRefresh
 {
     public record struct Command(int JobId);
 
-    internal class CommandHandler(
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISaveManualRefreshCanceledCommandHandler saveManualRefreshCanceled,
-        IGetDbRefreshJobByIdQueryHandler getJobById)
-        : IStopManualRefreshCommandHandler
+    internal class Handler(
+        ICheckCurrentUserDbAccessHandler checkUserHasAccess,
+        IUpdateDbManualRefreshCanceledHandler updateDbManualRefreshCanceled,
+        IGetDbRefreshJobByIdHandler getJobById)
+        : IStopDbManualRefreshHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
@@ -29,7 +29,7 @@ public static class StopManualRefresh
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await saveManualRefreshCanceled.HandleAsync(new(cmd.JobId), ct);
+            await updateDbManualRefreshCanceled.HandleAsync(new(cmd.JobId), ct);
 
             var updatedJob = await getJobById.HandleAsync(cmd.JobId, ct);
             var dto = updatedJob.ToDto();

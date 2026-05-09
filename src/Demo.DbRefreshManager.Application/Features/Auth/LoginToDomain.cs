@@ -11,17 +11,16 @@ namespace Demo.DbRefreshManager.Application.Features.Auth;
 /// <summary>
 /// Вход пользователя в домен.
 /// </summary>
-public interface ILoginToDomainCommandHandler
-    : IHandler<Result<LdapUser>, LoginToDomain.Command>;
+public interface ILoginToDomainHandler : IHandler<Result<LdapUser>, LoginToDomain.Command>;
 
 public static class LoginToDomain
 {
     public record struct Command(string Login, string Password);
 
-    internal class CommandHandler(
+    internal class Handler(
         IDomainControllerService domainController,
         IOptions<LdapOptions> ldapOptions
-        ) : ILoginToDomainCommandHandler
+        ) : ILoginToDomainHandler
     {
         public Result<LdapUser> Handle(Command cmd)
         {

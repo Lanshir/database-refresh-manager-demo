@@ -5,10 +5,10 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh
 /// <summary>
 /// Запись начала ручной перезаливки.
 /// </summary>
-public interface ISaveManualRefreshStartedCommandHandler
-    : IAsyncHandler<bool, SaveManualRefreshStarted.Command>;
+public interface IUpdateDbManualRefreshStartedHandler
+    : IAsyncHandler<bool, UpdateDbManualRefreshStarted.Command>;
 
-public class SaveManualRefreshStarted
+public class UpdateDbManualRefreshStarted
 {
     public record struct Command(
         int JobId,

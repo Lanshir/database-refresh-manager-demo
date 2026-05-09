@@ -21,7 +21,7 @@ public class DbRefreshJobsQueriesV1
     /// <param name="dbName">Фильтр по названию БД.</param>
     [UseProjection]
     public async Task<IQueryable<DbRefreshJobDto>> GetDbRefreshJobs(
-        IGetDbRefreshJobsForDisplayQueryHandler getDbRefreshJobsForDisplay,
+        IGetDbRefreshJobsForDisplayHandler getDbRefreshJobsForDisplay,
         int? id = null,
         string? dbName = null)
         => getDbRefreshJobsForDisplay.Handle(new(id, dbName));
@@ -31,7 +31,7 @@ public class DbRefreshJobsQueriesV1
     /// </summary>
     [UseProjection]
     public async Task<IQueryable<DbGroupDto>> GetDbGroups(
-        IGetUserDisplayGroupsQueryHandler getUserDisplayGroups)
+        IGetUserDisplayGroupsHandler getUserDisplayGroups)
         => getUserDisplayGroups.Handle();
 
     /// <summary>
@@ -52,7 +52,7 @@ public class DbRefreshJobsQueriesV1
     /// </summary>
     [Authorize]
     public async Task<int[]> GetDbPersonalAccessIds(
-        IGetPersonalAccessJobIdsQueryHandler getPersonalAccesses,
+        IGetPersonalAccessJobIdsHandler getPersonalAccesses,
         IUserIdentityProvider userIdentity,
         CancellationToken ct)
         => await getPersonalAccesses.HandleAsync(new(userIdentity.GetUserLogin()), ct);

@@ -5,18 +5,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs;
 
-internal class GetDbRefreshJobByIdQueryHandler(
+internal class FindDbRefreshJobHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : IGetDbRefreshJobByIdQueryHandler
+    : IFindDbRefreshJobHandler
 {
-    public async Task<DbRefreshJob> HandleAsync(int jobId, CancellationToken ct)
+    public async Task<DbRefreshJob?> HandleAsync(
+        FindDbRefreshJob.Query query,
+        CancellationToken ct)
     {
+        var (JobId, DbName) = query;
         using var ctx = contextFactory.CreateDbContext();
 
         return await ctx.Set<DbRefreshJob>()
             .Include(j => j.ScheduleChangeUser)
             .Include(j => j.Group)
             .ThenInclude(g => g!.AccessRoles)
-            .FirstAsync(j => j.Id == jobId, ct);
+            .FirstOrDefaultAsync(j =>
+                (JobId != null || DbName != null)
+                && JobId != null && j.Id == JobId
+                && DbName != null && j.DbName.ToUpper() == DbName.ToUpper(),
+                ct);
     }
 }

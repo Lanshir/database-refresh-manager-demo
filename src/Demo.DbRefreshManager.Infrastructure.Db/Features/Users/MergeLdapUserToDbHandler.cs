@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.Users;
 
-internal class MergeLdapUserToDbCommandHandler(
+internal class MergeLdapUserToDbHandler(
     IDbContextFactory<AppDbContext> contextFactory
-    ) : IMergeLdapUserToDbCommandHandler
+    ) : IMergeLdapUserToDbHandler
 {
     public async Task<User> HandleAsync(LdapUser ldapUser, CancellationToken ct)
     {

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs;
 
-internal class GetDbRefreshJobsForDisplayQueryHandler(
+internal class GetDbRefreshJobsForDisplayHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : IGetDbRefreshJobsForDisplayQueryHandler, IDisposable
+    : IGetDbRefreshJobsForDisplayHandler, IDisposable
 {
     private readonly AppDbContext _ctx = contextFactory.CreateDbContext();
 

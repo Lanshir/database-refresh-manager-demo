@@ -21,7 +21,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StartManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IStartManualRefreshCommandHandler startManualRefresh,
+        IStartDbManualRefreshHandler startManualRefresh,
         int jobId,
         int delayMinutes,
         string? comment,
@@ -48,7 +48,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> StopManualRefresh(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        IStopManualRefreshCommandHandler stopManualRefresh,
+        IStopDbManualRefreshHandler stopManualRefresh,
         int jobId,
         CancellationToken ct)
     {
@@ -73,7 +73,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetScheduledRefreshActive(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        ISetScheduledRefreshAvtiveCommandHandler setScheduledRefreshActive,
+        ISetScheduledRefreshActiveHandler setScheduledRefreshActive,
         int jobId,
         bool isActive,
         CancellationToken ct)
@@ -99,7 +99,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetUserComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        ISetDbRefreshJobUserComment setDbRefreshJobUserComment,
+        ISetDbRefreshJobUserCommentHandler setDbRefreshJobUserComment,
         int jobId,
         string? comment,
         CancellationToken ct)
@@ -125,7 +125,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetReleaseComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        ISetDbRefreshJobReleaseCommentCommandHandler setReleaseComment,
+        ISetDbRefreshJobReleaseCommentHandler setReleaseComment,
         string dbName,
         string? comment,
         bool isAppend = false,

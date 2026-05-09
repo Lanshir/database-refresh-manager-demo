@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.Healthchecks;
 
-internal class EfCoreHealthcheckCommandHandler(
+internal class EfCoreHealthcheckHandler(
     IDbContextFactory<AppDbContext> ctxFactory
-    ) : IEfCoreHealthcheckCommandHandler
+    ) : IEfCoreHealthcheckHandler
 {
     public async Task HandleAsync(CancellationToken ct)
     {

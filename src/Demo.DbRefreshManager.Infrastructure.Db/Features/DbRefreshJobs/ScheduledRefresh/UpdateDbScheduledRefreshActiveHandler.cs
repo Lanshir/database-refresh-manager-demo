@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs.ScheduledRefresh;
 
-internal class SaveScheduledRefreshActiveCommandHandler(
+internal class UpdateDbScheduledRefreshActiveHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : ISaveScheduledRefreshActiveCommandHandler
+    : IUpdateDbScheduledRefreshActiveHandler
 {
     public async Task<bool> HandleAsync(
-        SaveScheduledRefreshActive.Command cmd,
+        UpdateDbScheduledRefreshActive.Command cmd,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

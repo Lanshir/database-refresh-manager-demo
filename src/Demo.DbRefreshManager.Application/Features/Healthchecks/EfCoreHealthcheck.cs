@@ -5,4 +5,4 @@ namespace Demo.DbRefreshManager.Application.Features.Healthchecks;
 /// <summary>
 /// Проверка работоспособности EfCore.
 /// </summary>
-public interface IEfCoreHealthcheckCommandHandler : IAsyncHandler;
+public interface IEfCoreHealthcheckHandler : IAsyncHandler;

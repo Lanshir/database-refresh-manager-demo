@@ -6,7 +6,7 @@ using Demo.DbRefreshManager.Domain.Errors;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
 
-public interface ISetDbRefreshJobReleaseCommentCommandHandler
+public interface ISetDbRefreshJobReleaseCommentHandler
     : IAsyncHandler<Result<DbRefreshJobDto>, SetDbRefreshJobReleaseComment.Command>;
 
 public class SetDbRefreshJobReleaseComment
@@ -20,9 +20,9 @@ public class SetDbRefreshJobReleaseComment
         bool IsAppend = false);
 
     internal class Handler(
-        IFindDbRefreshJobQueryHandler findDbRefreshJob,
-        ISaveDbRefreshJobReleaseCommentCommandHandler saveDbRefreshJobReleaseComment)
-        : ISetDbRefreshJobReleaseCommentCommandHandler
+        IFindDbRefreshJobHandler findDbRefreshJob,
+        IUpdateDbRefreshJobReleaseCommentHandler updateDbRefreshJobReleaseComment)
+        : ISetDbRefreshJobReleaseCommentHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
@@ -37,7 +37,7 @@ public class SetDbRefreshJobReleaseComment
 
             var newReleaseComment = isAppend ? (job.ReleaseComment + comment).Trim('\n') : comment;
 
-            await saveDbRefreshJobReleaseComment.HandleAsync(new(job.Id, newReleaseComment), ct);
+            await updateDbRefreshJobReleaseComment.HandleAsync(new(job.Id, newReleaseComment), ct);
 
             job.ReleaseComment = newReleaseComment;
 

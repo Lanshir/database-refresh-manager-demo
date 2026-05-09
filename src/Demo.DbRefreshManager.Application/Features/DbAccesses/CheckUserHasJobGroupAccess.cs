@@ -5,7 +5,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 /// <summary>
 /// Проверка наличия доступа к группе БД у пользователя.
 /// </summary>
-public interface ICheckUserHasJobGroupAccessQueryHandler
+public interface ICheckUserHasJobGroupAccessHandler
     : IAsyncHandler<bool, CheckUserHasJobGroupAccess.Query>;
 
 public static class CheckUserHasJobGroupAccess

@@ -5,7 +5,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 /// <summary>
 /// Проверка наличия персонального доступа к БД у пользователя.
 /// </summary>
-public interface ICheckUserHasPersonalDbAccessQueryHandler
+public interface ICheckUserHasPersonalDbAccessHandler
     : IAsyncHandler<bool, CheckUserHasPersonalDbAccess.Query>;
 
 public static class CheckUserHasPersonalDbAccess

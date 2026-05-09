@@ -19,7 +19,7 @@ public class DatabaseRefreshCallerJob(
     ILogger<DatabaseRefreshCallerJob> logger,
     IDbRefreshJobsRepository jobsRepository,
     IDbRefreshLogsRepository logsRepository,
-    IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById,
+    IGetDbRefreshJobByIdHandler getDbRefreshJobById,
     ITopicEventSender eventSender
     ) : IJob
 {

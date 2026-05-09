@@ -6,7 +6,7 @@ using Demo.DbRefreshManager.Core.Results;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
 
-public interface ISetDbRefreshJobUserComment
+public interface ISetDbRefreshJobUserCommentHandler
     : IAsyncHandler<Result<DbRefreshJobDto>, SetDbRefreshJobUserComment.Command>;
 
 public class SetDbRefreshJobUserComment
@@ -14,10 +14,10 @@ public class SetDbRefreshJobUserComment
     public record struct Command(int JobId, string? Comment);
 
     internal class Handler(
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISaveDbRefreshJobUserCommentCommandHandler saveDbRefreshJobUserComment,
-        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById
-        ) : ISetDbRefreshJobUserComment
+        ICheckCurrentUserDbAccessHandler checkUserHasAccess,
+        IUpdateDbRefreshJobUserCommentHandler updateDbRefreshJobUserComment,
+        IGetDbRefreshJobByIdHandler getDbRefreshJobById
+        ) : ISetDbRefreshJobUserCommentHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
@@ -26,7 +26,7 @@ public class SetDbRefreshJobUserComment
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await saveDbRefreshJobUserComment.HandleAsync(new(cmd.JobId, cmd.Comment), ct);
+            await updateDbRefreshJobUserComment.HandleAsync(new(cmd.JobId, cmd.Comment), ct);
 
             var updatedJob = await getDbRefreshJobById.HandleAsync(cmd.JobId, ct);
             var dto = updatedJob.ToDto();

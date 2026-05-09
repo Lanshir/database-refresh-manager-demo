@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs.Comments;
 
-internal class SaveDbRefreshJobUserCommentCommandHandler(
+internal class UpdateDbRefreshJobUserCommentHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : ISaveDbRefreshJobUserCommentCommandHandler
+    : IUpdateDbRefreshJobUserCommentHandler
 {
     public async Task<bool> HandleAsync(
-        SaveDbRefreshJobUserComment.Command cmd,
+        UpdateDbRefreshJobUserComment.Command cmd,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();

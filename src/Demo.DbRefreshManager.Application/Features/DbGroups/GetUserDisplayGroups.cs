@@ -6,4 +6,4 @@ namespace Demo.DbRefreshManager.Application.Features.DbGroups;
 /// <summary>
 /// Запрос групп БД для отображения пользователю.
 /// </summary>
-public interface IGetUserDisplayGroupsQueryHandler : IHandler<IQueryable<DbGroupDto>>;
+public interface IGetUserDisplayGroupsHandler : IHandler<IQueryable<DbGroupDto>>;

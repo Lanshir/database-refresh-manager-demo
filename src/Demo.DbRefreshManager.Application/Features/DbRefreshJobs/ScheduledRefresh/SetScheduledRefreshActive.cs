@@ -10,7 +10,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ScheduledRefr
 /// <summary>
 /// Переключение активности перезаливки по расписанию.
 /// </summary>
-public interface ISetScheduledRefreshAvtiveCommandHandler
+public interface ISetScheduledRefreshActiveHandler
     : IAsyncHandler<Result<DbRefreshJobDto>, SetScheduledRefreshActive.Command>;
 
 public class SetScheduledRefreshActive
@@ -19,10 +19,10 @@ public class SetScheduledRefreshActive
 
     internal class Handler(
         IUserIdentityProvider userIdentity,
-        ICheckCurrentUserDbAccessQueryHandler checkUserHasAccess,
-        ISaveScheduledRefreshActiveCommandHandler saveScheduledRefreshActive,
-        IGetDbRefreshJobByIdQueryHandler getDbRefreshJobById)
-        : ISetScheduledRefreshAvtiveCommandHandler
+        ICheckCurrentUserDbAccessHandler checkUserHasAccess,
+        IUpdateDbScheduledRefreshActiveHandler updateDbScheduledRefreshActive,
+        IGetDbRefreshJobByIdHandler getDbRefreshJobById)
+        : ISetScheduledRefreshActiveHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
@@ -32,7 +32,7 @@ public class SetScheduledRefreshActive
             if (userHasAccess.IsFailure)
                 return userHasAccess.Error;
 
-            await saveScheduledRefreshActive.HandleAsync(new(cmd.JobId, changeUserId, cmd.IsActive), ct);
+            await updateDbScheduledRefreshActive.HandleAsync(new(cmd.JobId, changeUserId, cmd.IsActive), ct);
 
             var updatedJob = await getDbRefreshJobById.HandleAsync(cmd.JobId, ct);
             var dto = updatedJob.ToDto();

@@ -6,8 +6,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 /// <summary>
 /// Поиск задачи на перезаливку БД.
 /// </summary>
-public interface IFindDbRefreshJobQueryHandler
-    : IAsyncHandler<DbRefreshJob?, FindDbRefreshJob.Query>;
+public interface IFindDbRefreshJobHandler : IAsyncHandler<DbRefreshJob?, FindDbRefreshJob.Query>;
 
 public static class FindDbRefreshJob
 {

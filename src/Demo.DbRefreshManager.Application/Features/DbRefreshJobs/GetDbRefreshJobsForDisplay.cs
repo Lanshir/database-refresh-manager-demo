@@ -6,7 +6,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
 /// <summary>
 /// Запрос задач на перезаливку БД для отображения пользователю.
 /// </summary>
-public interface IGetDbRefreshJobsForDisplayQueryHandler
+public interface IGetDbRefreshJobsForDisplayHandler
     : IHandler<IQueryable<DbRefreshJobDto>, GetDbRefreshJobsForDisplay.Query>;
 
 public static class GetDbRefreshJobsForDisplay

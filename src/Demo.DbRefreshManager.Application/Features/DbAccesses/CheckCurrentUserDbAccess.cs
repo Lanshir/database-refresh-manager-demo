@@ -8,18 +8,18 @@ namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 /// <summary>
 /// Проверка наличия у текущего пользователя доступа к задаче на перезаливку БД.
 /// </summary>
-public interface ICheckCurrentUserDbAccessQueryHandler
+public interface ICheckCurrentUserDbAccessHandler
     : IAsyncHandler<Result, CheckCurrentUserDbAccess.Query>;
 
 public static class CheckCurrentUserDbAccess
 {
     public record struct Query(int JobId);
 
-    internal class QueryHandler(
+    internal class Handler(
         IUserIdentityProvider userIdentity,
-        ICheckUserHasJobGroupAccessQueryHandler checkUserHasGroupAccess,
-        ICheckUserHasPersonalDbAccessQueryHandler checkUserHasPersonalAccess)
-        : ICheckCurrentUserDbAccessQueryHandler
+        ICheckUserHasJobGroupAccessHandler checkUserHasGroupAccess,
+        ICheckUserHasPersonalDbAccessHandler checkUserHasPersonalAccess)
+        : ICheckCurrentUserDbAccessHandler
     {
         public async Task<Result> HandleAsync(Query query, CancellationToken ct)
         {

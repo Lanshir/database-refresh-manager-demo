@@ -5,10 +5,10 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
 /// <summary>
 /// Установка релизного комментария задачи на перезаливку БД.
 /// </summary>
-public interface ISaveDbRefreshJobReleaseCommentCommandHandler
-    : IAsyncHandler<bool, SaveDbRefreshJobReleaseComment.Command>;
+public interface IUpdateDbRefreshJobReleaseCommentHandler
+    : IAsyncHandler<bool, UpdateDbRefreshJobReleaseComment.Command>;
 
-public class SaveDbRefreshJobReleaseComment
+public class UpdateDbRefreshJobReleaseComment
 {
     public record struct Command(int JobId, string? Comment);
 }

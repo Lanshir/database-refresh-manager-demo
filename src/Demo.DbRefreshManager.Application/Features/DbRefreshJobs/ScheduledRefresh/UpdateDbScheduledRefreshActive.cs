@@ -5,10 +5,10 @@ namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ScheduledRefr
 /// <summary>
 /// Установка активности перезаливки БД по расписанию.
 /// </summary>
-public interface ISaveScheduledRefreshActiveCommandHandler
-    : IAsyncHandler<bool, SaveScheduledRefreshActive.Command>;
+public interface IUpdateDbScheduledRefreshActiveHandler
+    : IAsyncHandler<bool, UpdateDbScheduledRefreshActive.Command>;
 
-public class SaveScheduledRefreshActive
+public class UpdateDbScheduledRefreshActive
 {
     /// <param name="JobId">Id задачи на перезаливку.</param>
     /// <param name="ChangeIssuerUserId">Id автора изменений.</param>

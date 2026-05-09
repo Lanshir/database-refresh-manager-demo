@@ -5,7 +5,7 @@ namespace Demo.DbRefreshManager.Application.Features.DbAccesses;
 /// <summary>
 /// Запрос id задач с персональным доступом для пользователя.
 /// </summary>
-public interface IGetPersonalAccessJobIdsQueryHandler
+public interface IGetPersonalAccessJobIdsHandler
     : IAsyncHandler<int[], GetPersonalAccessJobIds.Query>;
 
 public static class GetPersonalAccessJobIds

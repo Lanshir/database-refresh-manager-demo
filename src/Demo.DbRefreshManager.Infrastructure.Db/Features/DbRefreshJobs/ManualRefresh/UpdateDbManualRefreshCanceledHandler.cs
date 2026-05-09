@@ -1,30 +1,25 @@
 using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ManualRefresh;
-using Demo.DbRefreshManager.Core.Extensions;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbRefreshJobs.ManualRefresh;
 
-internal class SaveManualRefreshStartedCommandHandler(
+internal class UpdateDbManualRefreshCanceledHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : ISaveManualRefreshStartedCommandHandler
+    : IUpdateDbManualRefreshCanceledHandler
 {
     public async Task<bool> HandleAsync(
-        SaveManualRefreshStarted.Command cmd,
+        UpdateDbManualRefreshCanceled.Command cmd,
         CancellationToken ct)
     {
         using var ctx = contextFactory.CreateDbContext();
 
-        var refreshDate = cmd.RefreshDate.RoundToMinutes();
-        var comment = string.IsNullOrWhiteSpace(cmd.Comment) ? null : cmd.Comment.Trim();
-
         await ctx.Set<DbRefreshJob>()
-            .Where(job => job.Id == cmd.JobId)
+            .Where(j => j.Id == cmd.JobId)
             .ExecuteUpdateAsync(c =>
-                c.SetProperty(j => j.ManualRefreshDate, refreshDate)
-                .SetProperty(j => j.ManualRefreshInitiator, cmd.RefreshInitiator)
-                .SetProperty(j => j.UserComment, comment),
+                c.SetProperty(j => j.ManualRefreshDate, j => null)
+                .SetProperty(j => j.ManualRefreshInitiator, j => null),
                 ct);
 
         return true;

@@ -52,8 +52,8 @@ public class LoginEndpointsV1 : IEndpointsMapper
         HttpContext httpContext,
         IWebHostEnvironment environment,
         IUserIdentityProvider userIdentity,
-        ILoginToDomainCommandHandler loginToDomain,
-        IMergeLdapUserToDbCommandHandler mergeLdapUserToDb,
+        ILoginToDomainHandler loginToDomain,
+        IMergeLdapUserToDbHandler mergeLdapUserToDb,
         LoginInputDto input,
         CancellationToken ct)
     {

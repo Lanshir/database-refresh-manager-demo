@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.DbRefreshManager.Infrastructure.Db.Features.DbAccesses;
 
-internal class CheckUserHasPersonalDbAccessQueryHandler(
+internal class CheckUserHasPersonalDbAccessHandler(
     IDbContextFactory<AppDbContext> contextFactory)
-    : ICheckUserHasPersonalDbAccessQueryHandler
+    : ICheckUserHasPersonalDbAccessHandler
 {
     public async Task<bool> HandleAsync(
         CheckUserHasPersonalDbAccess.Query query,
