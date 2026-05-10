@@ -6,10 +6,13 @@ using Demo.DbRefreshManager.Domain.Errors;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
 
-public interface ISetDbRefreshJobReleaseCommentHandler
-    : IAsyncHandler<Result<DbRefreshJobDto>, SetDbRefreshJobReleaseComment.Command>;
+/// <summary>
+/// Изменить релизный комментарий БД.
+/// </summary>
+public interface ISetDbReleaseCommentHandler
+    : IAsyncHandler<Result<DbRefreshJobDto>, SetDbReleaseComment.Command>;
 
-public class SetDbRefreshJobReleaseComment
+public class SetDbReleaseComment
 {
     /// <param name="DbName">Название базы.</param>
     /// <param name="Comment">Комментарий.</param>
@@ -21,8 +24,8 @@ public class SetDbRefreshJobReleaseComment
 
     internal class Handler(
         IFindDbRefreshJobHandler findDbRefreshJob,
-        IUpdateDbRefreshJobReleaseCommentHandler updateDbRefreshJobReleaseComment)
-        : ISetDbRefreshJobReleaseCommentHandler
+        IUpdateDbReleaseCommentHandler updateDbRefreshJobReleaseComment)
+        : ISetDbReleaseCommentHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {

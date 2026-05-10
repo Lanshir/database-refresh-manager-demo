@@ -99,7 +99,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetUserComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        ISetDbRefreshJobUserCommentHandler setDbRefreshJobUserComment,
+        ISetDbUserCommentHandler setDbRefreshJobUserComment,
         int jobId,
         string? comment,
         CancellationToken ct)
@@ -125,7 +125,7 @@ public class DbRefreshJobsMutationsV1
     public async Task<DbRefreshJobDto> SetReleaseComment(
         ITopicEventSender eventSender,
         ILogger<DbRefreshJobsMutationsV1> logger,
-        ISetDbRefreshJobReleaseCommentHandler setReleaseComment,
+        ISetDbReleaseCommentHandler setReleaseComment,
         string dbName,
         string? comment,
         bool isAppend = false,

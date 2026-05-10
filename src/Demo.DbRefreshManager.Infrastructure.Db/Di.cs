@@ -57,7 +57,7 @@ public static class Di
             // регистрация в di под ближайшим реализованным интерфейсом.
             typeof(Di).Assembly
                 .GetTypes()
-                .Where(t => t.IsClass & t.IsAssignableTo(typeof(IHandlerBase)))
+                .Where(t => t.IsClass && t.IsAssignableTo(typeof(IHandlerBase)))
                 .ToList()
                 .ForEach(t => services.AddTransient(t.GetInterfaces().First(), t));
 

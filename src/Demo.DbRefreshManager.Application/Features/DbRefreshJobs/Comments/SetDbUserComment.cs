@@ -6,18 +6,21 @@ using Demo.DbRefreshManager.Core.Results;
 
 namespace Demo.DbRefreshManager.Application.Features.DbRefreshJobs.Comments;
 
-public interface ISetDbRefreshJobUserCommentHandler
-    : IAsyncHandler<Result<DbRefreshJobDto>, SetDbRefreshJobUserComment.Command>;
+/// <summary>
+/// Изменить пользовательский комментарий к БД.
+/// </summary>
+public interface ISetDbUserCommentHandler
+    : IAsyncHandler<Result<DbRefreshJobDto>, SetDbUserComment.Command>;
 
-public class SetDbRefreshJobUserComment
+public class SetDbUserComment
 {
     public record struct Command(int JobId, string? Comment);
 
     internal class Handler(
         ICheckCurrentUserDbAccessHandler checkUserHasAccess,
-        IUpdateDbRefreshJobUserCommentHandler updateDbRefreshJobUserComment,
+        IUpdateDbUserCommentHandler updateDbRefreshJobUserComment,
         IGetDbRefreshJobByIdHandler getDbRefreshJobById
-        ) : ISetDbRefreshJobUserCommentHandler
+        ) : ISetDbUserCommentHandler
     {
         public async Task<Result<DbRefreshJobDto>> HandleAsync(Command cmd, CancellationToken ct)
         {
