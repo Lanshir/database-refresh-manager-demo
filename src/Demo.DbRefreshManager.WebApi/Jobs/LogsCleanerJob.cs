@@ -1,4 +1,4 @@
-using Demo.DbRefreshManager.Application.Repositories;
+using Demo.DbRefreshManager.Application.Features.Logs;
 using Quartz;
 
 namespace Demo.DbRefreshManager.WebApi.Jobs;
@@ -8,14 +8,14 @@ namespace Demo.DbRefreshManager.WebApi.Jobs;
 /// </summary>
 public class LogsCleanerJob(
     ILogger<LogsCleanerJob> logger,
-    IDbRefreshLogsRepository logsRepository
+    IDeleteOldLogsHandler deleteOldLogs
     ) : IJob
 {
     public async Task Execute(IJobExecutionContext ctx)
     {
         try
         {
-            await logsRepository.CleanOld();
+            await deleteOldLogs.HandleAsync(ctx.CancellationToken);
         }
         catch (Exception exc)
         {

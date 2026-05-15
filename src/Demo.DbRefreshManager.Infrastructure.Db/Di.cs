@@ -1,7 +1,5 @@
-using Demo.DbRefreshManager.Application.Repositories.Base;
 using Demo.DbRefreshManager.Core.Handlers;
 using Demo.DbRefreshManager.Infrastructure.Db.Context;
-using Demo.DbRefreshManager.Infrastructure.Db.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,23 +25,6 @@ public static class Di
                 o.UseSqlite(connectionString);
                 o.EnableSensitiveDataLogging(enableSensitiveDataLogging);
             });
-
-            // Repositories injection.
-            var interfaces = typeof(IRepository<>).Assembly
-                .GetTypes()
-                .Where(t => t.IsInterface
-                    && t.GetInterfaces().Any(i => i.IsGenericType
-                        && i.GetGenericTypeDefinition() == typeof(IRepository<>)))
-                .ToArray();
-
-            foreach (var i in interfaces)
-            {
-                var implementation = typeof(BaseRepository<>).Assembly
-                    .GetTypes()
-                    .First(t => t.IsAssignableTo(i));
-
-                services.AddScoped(i, implementation);
-            }
 
             return services;
         }

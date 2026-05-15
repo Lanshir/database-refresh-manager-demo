@@ -1,7 +1,8 @@
 using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Features.DbRefreshJobs.ExecutionStatus;
+using Demo.DbRefreshManager.Application.Features.Logs;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.SshService;
-using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Core.Extensions;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
@@ -17,8 +18,11 @@ namespace Demo.DbRefreshManager.WebApi.Jobs;
 public class DatabaseRefreshCallerJob(
     IServiceProvider serviceProvider,
     ILogger<DatabaseRefreshCallerJob> logger,
-    IDbRefreshJobsRepository jobsRepository,
-    IDbRefreshLogsRepository logsRepository,
+    IGetReadyToRunJobsHandler getReadyToRunJobs,
+    IUpdateJobToInProgressStatusHandler updateJobToInProgress,
+    IUpdateJobToDefaultStatusHandler updateJobToDefaultStatus,
+    ILogDbRefreshStartedHandler logDbRefreshStarted,
+    ILogDbRefreshFinishedHandler logDbRefreshFinished,
     IGetDbRefreshJobByIdHandler getDbRefreshJobById,
     ITopicEventSender eventSender
     ) : IJob
@@ -27,7 +31,7 @@ public class DatabaseRefreshCallerJob(
     {
         try
         {
-            var jobsToRun = await jobsRepository.GetJobsToRun();
+            var jobsToRun = await getReadyToRunJobs.HandleAsync(ctx.CancellationToken);
             var tasks = new List<Task>();
 
             foreach (var job in jobsToRun)
@@ -57,12 +61,14 @@ public class DatabaseRefreshCallerJob(
             job.DbName, $"{DateTime.UtcNow:dd.MM.yyyy HH:mm}");
 
         var startDate = DateTime.UtcNow;
-        var isScheduled = CheckScheduledRefresh(job);
+        var isScheduled = IsScheduledRefresh(job);
         var initiator = isScheduled ? "Расписание" : job.ManualRefreshInitiator ?? "";
 
         try
         {
-            await logsRepository.LogDbRefreshStart(job.Id, startDate, initiator, job.SshScript);
+            await logDbRefreshStarted.HandleAsync(
+                new(job.Id, startDate, initiator, job.SshScript),
+                CancellationToken.None);
         }
         catch (Exception exc)
         {
@@ -77,7 +83,9 @@ public class DatabaseRefreshCallerJob(
             // Обновление статуса задачи.
             var userComment = isScheduled ? null : job.UserComment;
 
-            await jobsRepository.SetJobInProgressStatus(job.Id, userComment);
+            await updateJobToInProgress.HandleAsync(
+                new(job.Id, userComment),
+                CancellationToken.None);
 
             var updatedJob = await getDbRefreshJobById
                 .HandleAsync(job.Id, CancellationToken.None);
@@ -107,7 +115,8 @@ public class DatabaseRefreshCallerJob(
         finally
         {
             // Сброс статуса на начальный.
-            await jobsRepository.SetJobDefaultStatus(job.Id);
+            await updateJobToDefaultStatus
+                .HandleAsync(new(job.Id), CancellationToken.None);
 
             var updatedJob = await getDbRefreshJobById
                 .HandleAsync(job.Id, CancellationToken.None);
@@ -120,8 +129,9 @@ public class DatabaseRefreshCallerJob(
             // Log finish.
             try
             {
-                await logsRepository.LogDbRefreshFinish
-                    (job.Id, startDate, sshResult?.Code, sshResult?.Result, sshResult?.Error);
+                await logDbRefreshFinished.HandleAsync(
+                    new(job.Id, startDate, sshResult?.Code, sshResult?.Result, sshResult?.Error),
+                    CancellationToken.None);
             }
             catch (Exception exc)
             {
@@ -137,7 +147,7 @@ public class DatabaseRefreshCallerJob(
     /// <summary>
     /// Задача запущена по расписанию.
     /// </summary>
-    private static bool CheckScheduledRefresh(DbRefreshJob job)
+    private static bool IsScheduledRefresh(DbRefreshJob job)
         => job.ScheduleIsActive
             && job.ScheduleRefreshTime.UtcDateTime.TimeOfDay
                 == DateTime.UtcNow.CeilToMinutes().TimeOfDay;

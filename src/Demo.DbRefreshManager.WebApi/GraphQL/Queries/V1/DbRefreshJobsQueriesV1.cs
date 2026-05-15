@@ -1,9 +1,9 @@
 using Demo.DbRefreshManager.Application.Features.DbAccesses;
 using Demo.DbRefreshManager.Application.Features.DbGroups;
 using Demo.DbRefreshManager.Application.Features.DbRefreshJobs;
+using Demo.DbRefreshManager.Application.Features.Logs;
 using Demo.DbRefreshManager.Application.Mappings.DbRefreshJobs;
 using Demo.DbRefreshManager.Application.Models.DbRefreshJobs;
-using Demo.DbRefreshManager.Application.Repositories;
 using Demo.DbRefreshManager.Application.Services;
 using Demo.DbRefreshManager.Domain.Models.DbRefreshJobs;
 using Demo.DbRefreshManager.WebApi.GraphQL.Queries.Base;
@@ -40,11 +40,11 @@ public class DbRefreshJobsQueriesV1
     [Authorize]
     [UseProjection]
     public async Task<IQueryable<DbRefreshLogDto>> GetDbRefreshLogs(
-        IDbRefreshLogsRepository logsRepository,
+        IGetLogsForDisplayHandler getLogsForDisplay,
         int? jobId = null,
         DateTime? startDate = null)
-        => logsRepository
-            .GetUserDisplayLogsQuery(jobId, startDate)
+        => getLogsForDisplay
+            .Handle(new(jobId, startDate))
             .Select(DbRefreshLog.ToDtoProjectionExpression);
 
     /// <summary>
